@@ -1366,6 +1366,16 @@ main section#explore{display:none!important}
   .fa2-trust{gap:14px;font-size:12px;flex-wrap:wrap}.fa2-trust li:nth-child(2){display:none}
   .fa2-call{margin-top:22px!important}
 }
+
+/* ================= v33: ticket buttons, aligned ================= */
+.tk .tk-l{justify-content:center;
+  -webkit-mask:radial-gradient(circle var(--n) at calc(100% + 1px) 0,transparent calc(var(--n) - .5px),#000 var(--n)),radial-gradient(circle var(--n) at calc(100% + 1px) 100%,transparent calc(var(--n) - .5px),#000 var(--n));-webkit-mask-composite:source-in;
+  mask:radial-gradient(circle var(--n) at calc(100% + 1px) 0,transparent calc(var(--n) - .5px),#000 var(--n)),radial-gradient(circle var(--n) at calc(100% + 1px) 100%,transparent calc(var(--n) - .5px),#000 var(--n));mask-composite:intersect}
+.tk .tk-r{
+  -webkit-mask:radial-gradient(circle var(--n) at 1px 0,transparent calc(var(--n) - .5px),#000 var(--n)),radial-gradient(circle var(--n) at 1px 100%,transparent calc(var(--n) - .5px),#000 var(--n));-webkit-mask-composite:source-in;
+  mask:radial-gradient(circle var(--n) at 1px 0,transparent calc(var(--n) - .5px),#000 var(--n)),radial-gradient(circle var(--n) at 1px 100%,transparent calc(var(--n) - .5px),#000 var(--n));mask-composite:intersect}
+.tk .tk-l::after{left:10px;right:calc(var(--n) + 7px)}
+.tk .tk-r::after{left:calc(var(--n) + 5px);right:10px}
 </style>
 </head>
 <body>
