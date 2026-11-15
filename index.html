@@ -1245,6 +1245,73 @@ main section#explore{display:none!important}
   .vo-dots{justify-content:flex-start;margin-top:28px}
   #landing{background-position:62% 0}
 }
+
+/* ================= v30: a day aboard, sideways; owners with faces ================= */
+#onboard{--h:min(50vh,40vw);height:calc(100vh + var(--n) * var(--h) + var(--g) * 24px + 2 * var(--pad) - 100vw);padding:0;background:#fdfdfd}
+.obx-pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,3.2vh,36px);padding:calc(var(--nav-h) + 1vh) 0 3vh}
+#onboard .ob-top{margin:0;padding:0 var(--pad)}
+#onboard .ob-h{font-size:min(64px,5vw)}
+.obx-view{overflow:visible}
+.obx-track{display:flex;align-items:flex-start;gap:24px;padding:0 var(--pad);width:max-content;will-change:transform}
+.obx-m{margin:0;width:calc(var(--r) * var(--h));flex:none}
+.obx-ph{height:var(--h);border-radius:6px;overflow:hidden;background:#ece8e1}
+.obx-ph img{width:112%;height:100%;object-fit:cover;display:block;margin-left:-6%;will-change:transform}
+.obx-m figcaption{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin-top:14px;align-items:baseline}
+.obx-t{font:500 11px/1 var(--deck,var(--mono));letter-spacing:.12em;color:var(--accent)}
+.obx-h{font:400 17px/1.2 var(--sans);letter-spacing:-.01em;color:#1e1618}
+.obx-l{grid-column:2;font-size:14px;line-height:1.4;color:rgba(30,22,24,.56)}
+.obx-fig,.obx-end{flex:none;width:calc(var(--r) * var(--h));height:var(--h);display:flex;flex-direction:column;justify-content:flex-end;gap:14px;padding:0 0 4px;border-top:1px solid rgba(30,22,24,.14)}
+.obx-big{font:300 min(84px,calc(var(--h) * .2))/1 var(--sans);letter-spacing:-.05em;color:#1e1618}
+.obx-fig p,.obx-end p{margin:0;font-size:15px;line-height:1.45;color:rgba(30,22,24,.6);max-width:24ch}
+.obx-end{justify-content:center;border-top:0}
+.obx-endh{font:300 min(40px,calc(var(--h) * .1))/1.05 var(--sans)!important;letter-spacing:-.035em;color:#1e1618!important}
+.obx-end .cta{align-self:flex-start;margin-top:10px}
+.obx-route{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:16px;padding:0 var(--pad)}
+.obx-code{font:500 11px/1 var(--deck,var(--mono));letter-spacing:.14em;color:rgba(30,22,24,.6)}
+.obx-line{position:relative;height:1px;background:rgba(30,22,24,.14)}
+.obx-fill{position:absolute;left:0;top:0;height:1px;width:0;background:var(--accent)}
+.obx-jet{position:absolute;top:-8px;left:-8px;width:16px;height:16px;color:var(--accent)}
+.obx-read{margin-left:18px;font:500 11px/1 var(--deck,var(--mono));letter-spacing:.1em;text-transform:uppercase;color:rgba(30,22,24,.5);white-space:nowrap}
+.obx-read b{font-weight:500;color:#1e1618}
+
+#voices{display:block;padding:clamp(96px,14vh,150px) var(--pad);background:#efebe4}
+.vx-wrap{display:grid;grid-template-columns:minmax(220px,26%) 1fr;gap:clamp(32px,6vw,110px);align-items:center;max-width:1500px}
+.vx-face{position:relative;aspect-ratio:4/5;border-radius:8px;overflow:hidden;background:#e2ddd4}
+.vx-face img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity .8s ease,transform 1.4s cubic-bezier(.22,1,.36,1)}
+.vx-face img.on{opacity:1;transform:none}
+.vx-main{position:relative}
+.vx-head{display:flex;gap:18px;align-items:baseline;margin-bottom:clamp(26px,5vh,54px)}
+.vx-head .ob-eye{margin:0}
+.vx-mark{position:absolute;left:-.08em;top:clamp(30px,5vh,60px);font:300 min(150px,11vw)/1 var(--sans);color:var(--accent);opacity:.9;pointer-events:none}
+.vx-qs{display:grid;padding-top:min(96px,6.8vw)}
+.vx-q{grid-area:1/1;margin:0;opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .9s cubic-bezier(.22,1,.36,1);pointer-events:none}
+.vx-q.on{opacity:1;transform:none;pointer-events:auto}
+.vx-q blockquote{margin:0;font:300 min(46px,3.2vw)/1.15 var(--sans);letter-spacing:-.035em;color:#1e1618;max-width:22em}
+.vx-q figcaption{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:baseline;margin-top:clamp(24px,4vh,40px);font:500 11px/1 var(--deck,var(--mono));letter-spacing:.12em;text-transform:uppercase;color:rgba(30,22,24,.55)}
+.vx-q figcaption b{font:400 16px/1 var(--sans);letter-spacing:0;text-transform:none;color:#1e1618}
+.vx-route{color:var(--accent)}
+.vx-tabs{display:flex;gap:14px;margin-top:clamp(30px,5vh,56px)}
+.vx-tabs button{position:relative;width:52px;height:52px;padding:4px;border-radius:50%;cursor:pointer;--p:0}
+.vx-tabs img{width:100%;height:100%;border-radius:50%;object-fit:cover;filter:grayscale(1);opacity:.55;transition:filter .4s,opacity .4s}
+.vx-tabs button:hover img,.vx-tabs button.on img{filter:none;opacity:1}
+.vx-tabs svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.vx-tabs circle{fill:none;stroke:rgba(30,22,24,.14);stroke-width:1.2}
+.vx-tabs button.on circle{stroke:var(--accent);stroke-width:1.6;stroke-dasharray:119.4;stroke-dashoffset:calc(119.4 * (1 - var(--p)))}
+
+@media (max-width:900px){
+  #onboard{--h:min(42vh,74vw)}
+  .obx-pin{gap:16px;padding-top:calc(var(--nav-h) + 4px)}
+  #onboard .ob-h{font-size:36px}#onboard .ob-lede{display:none}
+  .obx-track{gap:16px}
+  .obx-h{font-size:15px}.obx-l{font-size:13px}
+  .obx-read{display:none}.obx-route{grid-template-columns:auto 1fr auto}
+  .vx-wrap{grid-template-columns:1fr;gap:28px}
+  .vx-face{width:46%;aspect-ratio:1;border-radius:50%}
+  .vx-mark{display:none}.vx-qs{padding-top:0}
+  .vx-q blockquote{font-size:26px;line-height:1.2}
+  .vx-head{margin-bottom:22px;flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){.vx-face img,.vx-q{transition:opacity .3s}}
 </style>
 </head>
 <body>
@@ -1703,25 +1770,33 @@ main section#explore{display:none!important}
     </div>
   </section>
 
-  <section id="onboard" aria-labelledby="ob-h">
-    <div class="ob-top"><div><p class="ob-eye">On board</p><h2 id="ob-h" class="ob-h reveal rise" data-from="rgba(30,22,24,.12)">A day at 15,000 m.</h2></div>
-      <p class="ob-lede">The lounge for the first hours, the suite for the long night, a window seat when the Alps come up.</p></div>
-    <div class="ob-shots">
-      <figure><img src="img/end-lounge.jpg" alt="The lounge: club seats, a divan and a walnut credenza" width="1600" height="900" loading="lazy" decoding="async"><figcaption><span>Lounge</span><span>Eight club seats</span></figcaption></figure>
-      <figure><img src="img/end-suite.jpg" alt="The aft suite with its queen bed" width="1600" height="900" loading="lazy" decoding="async"><figcaption><span>Suite</span><span>Queen bed, a door that closes</span></figcaption></figure>
-      <figure><img src="img/end-window.jpg" alt="The bed beside an oval window above the clouds" width="1600" height="900" loading="lazy" decoding="async"><figcaption><span>Cabin</span><span>Held at 1,800 m</span></figcaption></figure>
+  <section id="onboard" aria-labelledby="ob-h" style="--n:9.92;--g:8">
+    <div class="obx-pin">
+      <div class="ob-top"><div><p class="ob-eye">On board</p><h2 id="ob-h" class="ob-h reveal rise" data-from="rgba(30,22,24,.12)">A day at 15,000 m.</h2></div>
+        <p class="ob-lede">Montréal to Dubai, 11 h 30. The lounge for the first hours, the suite for the long night, a window seat when the Alps come up.</p></div>
+      <div class="obx-view"><div class="obx-track"><figure class="obx-m" style="--r:1.5"><div class="obx-ph"><img src="img/ob-coffee.jpg" alt="Espresso and a croissant on a walnut ledge beside a cream club seat" loading="eager" decoding="async"></div><figcaption><span class="obx-t">0:35</span><span class="obx-h">Coffee in the lounge</span><span class="obx-l">Club seats that turn to the window.</span></figcaption></figure><figure class="obx-m" style="--r:0.8"><div class="obx-ph"><img src="img/ob-work.jpg" alt="A walnut conference table with a notebook and a laptop" loading="eager" decoding="async"></div><figcaption><span class="obx-t">1:50</span><span class="obx-h">A table to work</span><span class="obx-l">Four seats, power at each, Wi-Fi all the way.</span></figcaption></figure><figure class="obx-m" style="--r:0.8"><div class="obx-ph"><img src="img/ob-lunch.jpg" alt="A plated lunch on white linen beside a cabin window" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">3:40</span><span class="obx-h">Lunch, plated aboard</span><span class="obx-l">Cooked in the galley, served on linen.</span></figcaption></figure><figure class="obx-m" style="--r:1.5"><div class="obx-ph"><img src="img/ob-divan.jpg" alt="A cream leather divan with a deep red throw" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">5:10</span><span class="obx-h">The long divan</span><span class="obx-l">Room to stretch out with a book.</span></figcaption></figure><figure class="obx-m" style="--r:1.5"><div class="obx-ph"><img src="img/ob-alps.jpg" alt="The snow-covered Alps at sunrise through an oval cabin window" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">6:30</span><span class="obx-h">The Alps come up</span><span class="obx-l">Every seat has its own window.</span></figcaption></figure><div class="obx-fig" style="--r:.7"><span class="obx-big">1,800&nbsp;m</span><p>Cabin altitude, held the whole flight. Lower than most airliners, so you land rested.</p></div><figure class="obx-m" style="--r:1.5"><div class="obx-ph"><img src="img/ob-suite.jpg" alt="The aft suite at night, a made queen bed under warm lamps" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">8:00</span><span class="obx-h">The suite</span><span class="obx-l">A queen bed, and a door that closes.</span></figcaption></figure><figure class="obx-m" style="--r:0.8"><div class="obx-ph"><img src="img/ob-shower.jpg" alt="A marble walk-in shower with rolled white towels" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">10:40</span><span class="obx-h">A real shower</span><span class="obx-l">Marble, hot water, real towels.</span></figcaption></figure><div class="obx-end" style="--r:.82"><span class="obx-t">11:30</span><p class="obx-endh">Wheels down in Dubai.</p><p>Your day aboard starts with one call.</p><a class="cta" href="book.html?from=Montreal&amp;to=Dubai">Plan a flight</a></div></div></div>
+      <div class="obx-route" aria-hidden="true">
+        <span class="obx-code">YUL</span>
+        <div class="obx-line"><i class="obx-fill"></i><svg class="obx-jet" viewBox="0 0 24 24"><path d="M2.5 13.4l7.4-1.6L14 4.2c.4-.7 1.6-.5 1.6.4l-1 7.4 5.6-.9c.9-.1 1.6.6 1.6 1.4s-.7 1.5-1.6 1.4l-5.6-.9 1 7.4c0 .9-1.2 1.1-1.6.4l-4.1-7.6-7.4-1.6c-.5-.1-.5-.9 0-1z" fill="currentColor"/></svg></div>
+        <span class="obx-code">DWC</span>
+        <span class="obx-read"><b class="obx-el">0h 00m</b> elapsed · 15,000 m · 950 km/h</span>
+      </div>
     </div>
   </section>
 
-  <section id="voices" aria-label="From our owners">
-    <div class="vo-side"><p class="ob-eye">From our owners</p><p class="vo-note">Illustrative quotes</p></div>
-    <div class="vo-main">
-      <div class="vo-q">
-        <blockquote class="on">“We left Montréal after dinner and woke up over the Alps. The car was on the tarmac in Nice before the bags were.”<cite>M.-C. L. · Shared owner</cite></blockquote>
-        <blockquote>“One call, one name, from the first quote to the hangar. I have not opened an invoice I did not expect.”<cite>D. R. · Full owner</cite></blockquote>
-        <blockquote>“The same two captains every time. My children know them by name now.”<cite>S. K. · Charter client</cite></blockquote>
+  <section id="voices" aria-labelledby="vx-h">
+    <div class="vx-wrap">
+      <div class="vx-face" aria-hidden="true"><img class="on" src="img/av-1.jpg" alt="" loading="lazy" decoding="async"><img class="" src="img/av-2.jpg" alt="" loading="lazy" decoding="async"><img class="" src="img/av-3.jpg" alt="" loading="lazy" decoding="async"><img class="" src="img/av-4.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="vx-main">
+        <div class="vx-head"><p class="ob-eye" id="vx-h">From our owners</p><p class="vo-note">Illustrative quotes and portraits</p></div>
+        <span class="vx-mark" aria-hidden="true">“</span>
+        <div class="vx-qs"><figure class="vx-q on" aria-hidden="false"><blockquote>We left Montréal after dinner and woke up over the Alps. The car was on the tarmac in Nice before the bags were.</blockquote>
+          <figcaption><b>Marie-Claire L.</b><span>Shared owner</span><span>since 2021</span><span>41 flights</span><span class="vx-route">YUL → NCE</span></figcaption></figure><figure class="vx-q" aria-hidden="true"><blockquote>One call, one name, from the first quote to the hangar. I have not opened an invoice I did not expect.</blockquote>
+          <figcaption><b>Dev R.</b><span>Full owner</span><span>since 2019</span><span>118 flights</span><span class="vx-route">YUL → TEB</span></figcaption></figure><figure class="vx-q" aria-hidden="true"><blockquote>The same two captains every time. My children know them by name now.</blockquote>
+          <figcaption><b>Sarah K.</b><span>Charter client</span><span>since 2023</span><span>12 flights</span><span class="vx-route">YUL → CUN</span></figcaption></figure><figure class="vx-q" aria-hidden="true"><blockquote>I asked on a Tuesday night for Aspen on Thursday. Nobody asked me anything twice.</blockquote>
+          <figcaption><b>Jean-Paul B.</b><span>Shared owner</span><span>since 2020</span><span>63 flights</span><span class="vx-route">YUL → ASE</span></figcaption></figure></div>
+        <div class="vx-tabs" role="tablist" aria-label="Owners"><button role="tab" class="on" aria-selected="true" aria-label="Marie-Claire L."><img src="img/av-1.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19"/></svg></button><button role="tab" class="" aria-selected="false" aria-label="Dev R."><img src="img/av-2.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19"/></svg></button><button role="tab" class="" aria-selected="false" aria-label="Sarah K."><img src="img/av-3.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19"/></svg></button><button role="tab" class="" aria-selected="false" aria-label="Jean-Paul B."><img src="img/av-4.jpg" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19"/></svg></button></div>
       </div>
-      <div class="vo-dots" role="tablist" aria-label="Quotes"><button class="on" aria-label="Quote 1"></button><button aria-label="Quote 2"></button><button aria-label="Quote 3"></button></div>
     </div>
   </section>
 
@@ -5245,14 +5320,43 @@ if (LAND) {
 </script>
 
 <script>
-{ // v26: owners' quotes, one at a time
-  const qs = [...document.querySelectorAll('#voices blockquote')], ds = [...document.querySelectorAll('#voices .vo-dots button')];
-  if (qs.length) {
-    let i = 0, t = 0, seen = false;
-    const show = n => { i = (n + qs.length) % qs.length; qs.forEach((q, k) => q.classList.toggle('on', k === i)); ds.forEach((d, k) => { d.classList.toggle('on', k === i); d.setAttribute('aria-selected', k === i); }); };
-    const arm = () => { clearInterval(t); if (seen && !matchMedia('(prefers-reduced-motion: reduce)').matches) t = setInterval(() => show(i + 1), 7000); };
-    ds.forEach((d, k) => d.addEventListener('click', () => { show(k); arm(); }));
-    new IntersectionObserver(es => { seen = es[0].isIntersecting; arm(); }, { threshold: .4 }).observe(document.getElementById('voices'));
+{ // v30: the day aboard slides sideways with the scroll; owners rotate with a ring timer
+  const sec = document.getElementById('onboard'), track = sec && sec.querySelector('.obx-track');
+  if (track) {
+    const imgs = [...track.querySelectorAll('.obx-ph img')], phs = imgs.map(i => i.parentNode);
+    const fill = sec.querySelector('.obx-fill'), jet = sec.querySelector('.obx-jet'), line = sec.querySelector('.obx-line'), el = sec.querySelector('.obx-el');
+    const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    let last = -1;
+    const tick = () => {
+      requestAnimationFrame(tick);
+      const r = sec.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) return;
+      const span = Math.max(1, r.height - innerHeight), p = Math.min(1, Math.max(0, -r.top / span));
+      const dist = Math.max(0, track.scrollWidth - innerWidth);
+      const key = Math.round(p * 2000) + ':' + innerWidth;
+      if (key === last) return; last = key;
+      track.style.transform = `translate3d(${(-p * dist).toFixed(1)}px,0,0)`;
+      phs.forEach((ph, i) => { const c = ph.getBoundingClientRect(), k = (c.left + c.width / 2 - innerWidth / 2) / innerWidth; imgs[i].style.transform = `translate3d(${(-k * 5).toFixed(2)}%,0,0)`; });
+      const w = line.clientWidth, e = ease(p); fill.style.width = (e * w).toFixed(1) + 'px'; jet.style.transform = `translateX(${(e * w).toFixed(1)}px)`;
+      const m = Math.round(e * 690); el.textContent = Math.floor(m / 60) + 'h ' + String(m % 60).padStart(2, '0') + 'm';
+    };
+    requestAnimationFrame(tick);
+  }
+  const vx = document.getElementById('voices');
+  if (vx) {
+    const qs = [...vx.querySelectorAll('.vx-q')], fs = [...vx.querySelectorAll('.vx-face img')], ts = [...vx.querySelectorAll('.vx-tabs button')];
+    const DUR = 8000, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let i = 0, t = 0, seen = false, hold = false, prev = 0;
+    const show = n => { i = (n + qs.length) % qs.length; t = 0;
+      qs.forEach((q, k) => { q.classList.toggle('on', k === i); q.setAttribute('aria-hidden', k !== i); });
+      fs.forEach((f, k) => f.classList.toggle('on', k === i));
+      ts.forEach((b, k) => { b.classList.toggle('on', k === i); b.setAttribute('aria-selected', k === i); b.style.setProperty('--p', 0); }); };
+    ts.forEach((b, k) => b.addEventListener('click', () => show(k)));
+    vx.addEventListener('pointerenter', () => hold = true); vx.addEventListener('pointerleave', () => hold = false);
+    new IntersectionObserver(es => { seen = es[0].isIntersecting; }, { threshold: .35 }).observe(vx);
+    const run = now => { requestAnimationFrame(run); const dt = Math.min(100, now - (prev || now)); prev = now;
+      if (!seen || hold || reduce) return; t += dt; ts[i].style.setProperty('--p', Math.min(1, t / DUR).toFixed(3)); if (t >= DUR) show(i + 1); };
+    requestAnimationFrame(run);
   }
 }
 </script>
