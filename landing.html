@@ -1376,6 +1376,25 @@ main section#explore{display:none!important}
   mask:radial-gradient(circle var(--n) at 1px 0,transparent calc(var(--n) - .5px),#000 var(--n)),radial-gradient(circle var(--n) at 1px 100%,transparent calc(var(--n) - .5px),#000 var(--n));mask-composite:intersect}
 .tk .tk-l::after{left:10px;right:calc(var(--n) + 7px)}
 .tk .tk-r::after{left:calc(var(--n) + 5px);right:10px}
+
+/* ================= v35: one base, one button ================= */
+.fa2-top{align-items:flex-end;margin-bottom:56px}
+.fa2-side{display:flex;flex-direction:column;align-items:flex-start;gap:24px;max-width:360px;padding-bottom:10px}
+.fa2-side .fa2-lede{margin:0}
+.fa2-book.tk{height:64px;align-self:stretch}
+.fa2-book.tk .tk-l{justify-content:center}
+.fa2-book.tk .tk-l{padding:0 40px;font-size:17px!important}
+.fa2-book.tk .tk-r{width:64px}
+.fa2-base{display:flex;align-items:center;gap:10px;margin:0;font:500 10.5px/1.4 var(--deck,var(--mono));letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.85);text-shadow:0 1px 12px rgba(6,24,58,.5)}
+.fa2-base::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.fa2-under{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-top:0;padding-top:22px;border-top:1px solid rgba(255,255,255,.28)}
+.fa2-under .fa2-call{margin:0!important}
+@media (max-width:900px){
+  .fa2-top{margin-bottom:32px}
+  .fa2-side{max-width:none;margin-top:18px;gap:18px}
+  .fa2-book.tk{width:100%;height:58px}.fa2-book.tk .tk-l{justify-content:center}
+  .fa2-under{flex-direction:column;align-items:flex-start;gap:14px}
+}
 </style>
 </head>
 <body>
@@ -1868,21 +1887,17 @@ main section#explore{display:none!important}
     <div class="fa2-fade" aria-hidden="true"></div>
     <div class="fa2">
       <div class="fa2-top">
-        <div><p class="fa-eye">Final approach</p><h2 class="fa-h reveal rise" data-ink="255,255,255" data-from="rgba(255,255,255,.12)">Where to<br>next?</h2></div>
-        <p class="fa2-lede">Name the city. A named advisor sends a complete quote within two hours, crew and catering included.</p>
+        <div><p class="fa-eye">Final approach</p><h2 class="fa-h reveal rise" data-ink="255,255,255" data-from="rgba(255,255,255,.12)">Wheels up<br>from Montréal.</h2></div>
+        <div class="fa2-side">
+          <p class="fa2-lede">One aircraft, one base. Tell us the day: an advisor confirms within two hours, crew and catering included.</p>
+          <a class="cta fa2-book" href="book.html?from=Montreal">Book now</a>
+          <p class="fa2-base">Montréal-Trudeau · YUL private terminal</p>
+        </div>
       </div>
-      <form class="fa2-bar" id="fa-bar" novalidate aria-label="Request a flight">
-        <label class="fa2-f"><span>From</span><input name="from" list="airports" value="Montreal" autocomplete="off"></label>
-        <label class="fa2-f fa2-to"><span>To</span><input name="to" list="airports" placeholder="Where to?" autocomplete="off"></label>
-        <label class="fa2-f"><span>Date</span><input name="date" type="text" placeholder="Any day" autocomplete="off" inputmode="none"></label>
-        <label class="fa2-f"><span>Guests</span><select name="pax"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option></select></label>
-        <button class="cta fa2-go" type="submit">Get my quote</button>
-      </form>
       <div class="fa2-under">
-        <div class="fa2-chips"><span class="fa2-lab">Popular from Montréal</span><button type="button" data-to="Nice">Nice<small>6h 45m</small></button><button type="button" data-to="Dubai">Dubai<small>11h 30m</small></button><button type="button" data-to="London">London<small>5h 50m</small></button><button type="button" data-to="Tokyo">Tokyo<small>11h 15m</small></button></div>
         <ul class="fa2-trust"><li>Quote within 2 hours</li><li>Guaranteed with 10 hours’ notice</li><li>No commitment</li></ul>
+        <p class="fa-call fa2-call">Rather talk? An advisor answers day and night: <a href="tel:+15145550142">+1 514 555 0142</a></p>
       </div>
-      <p class="fa-call fa2-call">Rather talk? An advisor answers day and night: <a href="tel:+15145550142">+1 514 555 0142</a></p>
     </div>
   </section>
 
