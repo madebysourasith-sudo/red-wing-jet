@@ -1395,6 +1395,129 @@ main section#explore{display:none!important}
   .fa2-book.tk{width:100%;height:58px}.fa2-book.tk .tk-l{justify-content:center}
   .fa2-under{flex-direction:column;align-items:flex-start;gap:14px}
 }
+
+/* ================= v36: header, logo, hero type, quote bar, white footer ================= */
+/* logo */
+#nav.rw .nav-logo{display:flex!important;align-items:center;gap:12px;font:inherit!important;letter-spacing:0!important;color:inherit;text-decoration:none}
+.rw-tile{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--accent);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 6px 18px rgba(150,10,30,.22)}
+.rw-wing{width:22px;height:22px;fill:#fff}
+#nav.rw .nav-logo b{font:500 23px/1 var(--sans);letter-spacing:-.025em;text-transform:none;white-space:nowrap}
+/* header bar */
+#nav.rw small{display:block;margin-bottom:6px;font:500 10px/1 var(--deck,var(--mono));letter-spacing:.16em;text-transform:uppercase;opacity:.55}
+.rw-g{font:400 14px/20px var(--sans);letter-spacing:-.005em;white-space:nowrap}
+.rw-g a,.rw-g span{color:inherit}
+#nav.rw .nav-book{display:inline-flex;align-items:center;gap:14px;height:44px;padding:0 8px 0 20px;border-radius:10px;background:var(--accent);color:#fff;font:500 14px/1 var(--sans);letter-spacing:-.005em;white-space:nowrap;
+  box-shadow:0 8px 24px rgba(160,12,32,.22);transition:background-color .3s,box-shadow .3s}
+#nav.rw .nav-book svg{width:28px;height:28px;padding:6px;border-radius:7px;background:rgba(255,255,255,.16);transition:transform .45s cubic-bezier(.22,1,.36,1)}
+#nav.rw .nav-book:hover svg{transform:translateX(3px)}
+@media (min-width:901px){
+  #nav.deck.rw{grid-template-columns:auto minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto!important;align-items:stretch!important;height:80px!important;padding:0 32px!important;
+    box-shadow:0 1px 0 rgba(30,22,24,.1)}
+  #nav.deck.rw.on-hero{background:linear-gradient(180deg,rgba(6,20,48,.28),rgba(6,20,48,0))!important;box-shadow:0 1px 0 rgba(255,255,255,.22)}
+  #nav.deck.rw.dark{box-shadow:0 1px 0 rgba(255,255,255,.1)}
+  #nav.deck.rw > *{display:flex!important;flex-direction:column;justify-content:center}
+  #nav.deck.rw .nav-logo{flex-direction:row!important;padding-right:32px}
+  #nav.deck.rw .rw-g{padding:0 28px;border-left:1px solid rgba(30,22,24,.12)}
+  #nav.deck.rw.on-hero .rw-g,#nav.deck.rw.dark .rw-g{border-left-color:rgba(255,255,255,.2)}
+  #nav.deck.rw .nav-right{flex-direction:row!important;align-items:center!important;align-self:stretch!important;height:auto!important;margin:0!important;justify-content:flex-end;padding-left:28px;border-left:1px solid rgba(30,22,24,.12)}
+  #nav.deck.rw.on-hero .nav-right,#nav.deck.rw.dark .nav-right{border-left-color:rgba(255,255,255,.2)}
+  #nav.deck.rw .nav-l{justify-self:auto;display:flex!important;gap:22px!important}
+  #nav.deck.rw .nav-l a{color:inherit!important;opacity:.72;font:400 14px/20px var(--sans)!important;transition:opacity .25s}
+  #nav.deck.rw .nav-l a:hover,#nav.deck.rw .nav-l a.on{opacity:1}
+  #nav.deck.rw .nav-l a::after{left:-9px!important;bottom:8px!important;margin:0!important}
+  #nav.deck.rw .rw-call a{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .4s cubic-bezier(.22,1,.36,1)}
+  #nav.deck.rw .rw-call a:hover{background-size:100% 1px}
+  #nav.deck.rw #menu-btn,#nav.deck.rw #menu-links{display:none!important}
+}
+@media (min-width:901px) and (max-width:1240px){ #nav.deck.rw .rw-base{display:none!important} #nav.deck.rw{grid-template-columns:auto minmax(0,1.6fr) minmax(0,1fr) auto!important} }
+@media (max-width:900px){
+  .rw-g{display:none}
+  .rw-tile{width:30px;height:30px;border-radius:8px}.rw-wing{width:19px;height:19px}
+  #nav.rw .nav-logo b{font-size:19px}
+  #nav.rw .nav-book{height:38px;padding:0 6px 0 14px;gap:10px;font-size:13px}
+  #nav.rw .nav-book svg{width:26px;height:26px}
+}
+
+/* hero type */
+.hero-title.rwx{position:absolute;inset:auto 0 0 0;top:auto;padding:0 var(--pad);pointer-events:none;font:inherit!important;letter-spacing:0!important;line-height:normal!important;text-transform:none!important;color:#fff}
+.rwx-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:32px;padding:0 0 20px;border-bottom:1px solid rgba(255,255,255,.4);
+  opacity:0;transform:translateY(14px);transition:opacity 1.2s ease .5s,transform 1.4s cubic-bezier(.22,1,.36,1) .5s}
+.rwx-sub{margin:0;font:300 19px/1.32 var(--sans);letter-spacing:-.012em;color:rgba(255,255,255,.86);text-shadow:0 1px 18px rgba(6,24,58,.35)}
+.rwx-sub b{font-weight:500;color:#fff}
+.rwx-facts{display:flex;gap:28px;margin:0;padding:0;list-style:none;font:500 10.5px/1 var(--deck,var(--mono));letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85);text-shadow:0 1px 14px rgba(6,24,58,.4)}
+.rwx-facts b{font:400 15px/1 var(--sans);letter-spacing:-.01em;text-transform:none;color:#fff;margin-right:6px}
+.rwx-cue{justify-self:end;display:flex;align-items:center;gap:14px;margin:0;font:500 10.5px/1 var(--deck,var(--mono));letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.rwx-cue i{position:relative;width:1px;height:34px;background:rgba(255,255,255,.3);overflow:hidden}
+.rwx-cue i::after{content:"";position:absolute;left:0;top:-40%;width:1px;height:40%;background:#fff;animation:rwxcue 2.2s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes rwxcue{to{top:100%}}
+.rwx-word{display:flex;justify-content:space-between;margin:0;padding:2.2vw 0 0;font:400 18.4vw/.74 var(--sans);letter-spacing:-.055em;text-transform:uppercase;color:#fff;white-space:nowrap;
+  filter:drop-shadow(0 4px 30px rgba(20,45,90,.28))}
+.rwx-word b{display:block;font-weight:400;opacity:0;transform:translateY(30%);clip-path:inset(0 0 100% 0);transition:opacity 1s ease .2s,transform 1.6s cubic-bezier(.22,1,.36,1) .2s,clip-path 1.6s cubic-bezier(.22,1,.36,1) .2s}
+.rwx-word b+b{transition-delay:.34s}
+.rwx-word{padding-bottom:calc(var(--pad) * .9)}
+.ready .rwx-row{opacity:1;transform:none}
+.ready .rwx-word b{opacity:1;transform:none;clip-path:inset(-10% -5% -10% -5%)}
+@media (max-width:900px){
+  .rwx-row{grid-template-columns:1fr;gap:14px;padding-bottom:16px}
+  .rwx-facts,.rwx-cue{display:none}
+  .rwx-sub{font-size:16px}
+  .rwx-word{font-size:20.5vw;padding-top:14px;padding-bottom:48px}
+}
+
+/* quote bar */
+.qbar-wrap{padding:36px var(--pad) 0!important}
+.qbar.qb{display:grid!important;grid-template-columns:1.05fr 1fr 1.25fr 1fr .9fr auto!important;align-items:stretch;gap:0;border:1px solid rgba(30,22,24,.09)!important;border-radius:20px;background:#fff;padding:10px;
+  box-shadow:0 1px 2px rgba(30,22,24,.04),0 24px 60px -24px rgba(30,22,24,.18)}
+.qb-head{display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 22px 0 18px}
+.qb-t{margin:0;font:400 26px/1 var(--sans);letter-spacing:-.035em;color:var(--ink)}
+.qb-s{margin:0;font:400 13px/1.35 var(--sans);color:rgba(30,22,24,.52)}
+.qb-f{position:relative;display:flex;flex-direction:column;justify-content:center;gap:5px;min-width:0;padding:14px 22px;border-radius:14px;border-left:1px solid rgba(30,22,24,.08);cursor:text;transition:background-color .25s}
+.qb-head+.qb-f{border-left-color:rgba(30,22,24,.08)}
+.qb-f:hover,.qb-f:focus-within{background:#f6f4f1}
+.qb-f:hover+.qb-f,.qb-f:focus-within+.qb-f,.qb-f:hover,.qb-f:focus-within{border-left-color:transparent}
+.qb-l{font:500 12px/1 var(--sans);letter-spacing:.01em;color:rgba(30,22,24,.5)}
+.qb .qb-v{display:flex;align-items:center;gap:9px;width:100%;min-width:0;margin:0;padding:0;border:0;background:none;outline:0;font:400 21px/28px var(--sans);letter-spacing:-.02em;color:var(--ink);text-overflow:ellipsis}
+.qb input.qb-v::placeholder{color:rgba(30,22,24,.32)}
+.qb-h{font:400 12px/1.2 var(--sans);color:rgba(30,22,24,.42);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qb-from{cursor:default}
+.qb-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(200,16,46,.12)}
+.qb-date{cursor:pointer}
+.qb-dv{color:rgba(30,22,24,.32)!important}.qb-dv.set{color:var(--ink)!important}
+.qb-date input[type=date]{position:absolute;left:22px;bottom:12px;width:1px;height:1px;opacity:0;pointer-events:none;border:0;padding:0}
+.qb-pax{cursor:default}
+.qb-step{display:flex;align-items:center;gap:6px}
+.qb-step .qb-v{width:auto!important;min-width:2ch;justify-content:center;font-variant-numeric:tabular-nums}
+.qb-step button{flex:none;display:grid;place-items:center;width:30px;height:30px;padding:0;border-radius:50%;border:1px solid rgba(30,22,24,.14);background:#fff;color:var(--ink);font:300 18px/1 var(--sans);cursor:pointer;transition:border-color .2s,background-color .2s}
+.qb-step button:hover{border-color:rgba(30,22,24,.4)}
+.qb-step button:disabled{opacity:.35;cursor:default}
+.qb-go{display:flex;align-items:center;justify-content:space-between;gap:22px;margin-left:8px;padding:0 12px 0 28px;min-width:230px;border:0;border-radius:14px;background:var(--accent);color:#fff;font:500 16px/1 var(--sans);letter-spacing:-.01em;cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 10px 28px -10px rgba(170,12,34,.6);transition:filter .3s}
+.qb-go i{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.16)}
+.qb-go svg{width:20px;height:20px;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.qb-go:hover{filter:brightness(1.06)}.qb-go:hover svg{transform:translateX(3px)}
+.qb-note{display:flex;justify-content:flex-end;min-height:20px;padding:12px 6px 0!important;margin-bottom:28px;font:400 13px/1 var(--sans);color:rgba(30,22,24,.5)}
+@media (max-width:1240px){ .qbar.qb{grid-template-columns:1fr 1.2fr 1fr .9fr auto!important} .qb-head{display:none} .qb-head+.qb-f{border-left-color:transparent} }
+@media (max-width:900px){
+  .qbar-wrap{padding-top:20px!important}
+  .qbar.qb{grid-template-columns:1fr 1fr!important;padding:8px;border-radius:18px}
+  .qb-f{padding:12px 14px;border-left:0!important;border-top:1px solid rgba(30,22,24,.08);border-radius:0}
+  .qb-from,.qb-to{grid-column:1/-1}.qb-from{border-top:0}
+  .qb-date{border-right:1px solid rgba(30,22,24,.08)}
+  .qb .qb-v{font-size:19px}
+  .qb-go{grid-column:1/-1;margin:8px 0 0;height:58px;min-width:0}
+}
+
+/* white footer */
+#landing{background-color:#fff!important}
+#landing::after{height:52%!important;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.5) 55%,#fff)!important}
+#contact.light-foot{--i:30,22,24;background:#fff;color:#1e1618}
+#contact.light-foot .foot-main{border-top:1px solid rgba(30,22,24,.14)!important}
+#contact.light-foot .ft-cols h4{color:rgba(30,22,24,.45)}
+#contact.light-foot .ft-cols li{color:rgba(30,22,24,.62)}
+#contact.light-foot .ft-cols a{color:#1e1618}
+#contact.light-foot .ft-mark span{background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;color:#1e1618!important;-webkit-text-fill-color:#1e1618!important}
+#contact.light-foot .foot-legal{border-top:1px solid rgba(30,22,24,.12)!important;color:rgba(30,22,24,.45)!important}
+#contact.light-foot .foot-legal p{color:rgba(30,22,24,.45)!important}
 </style>
 </head>
 <body>
@@ -1471,11 +1594,13 @@ main section#explore{display:none!important}
   };
 })();
 </script>
-<header id="nav" class="deck on-hero">
-  <a class="nav-logo" href="#hero" aria-label="Red Wing, private aviation">Red Wing</a>
-  <nav class="nav-l intro-fade" aria-label="Main"><a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a><a href="#book">Concierge</a></nav>
+<header id="nav" class="deck rw on-hero">
+  <a class="nav-logo" href="#hero" aria-label="Red Wing, private aviation"><i class="rw-tile"><svg class="rw-wing" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 25.5 20.6 9.6l2.9-5.1h2.3l-1.1 6.6L13.6 25.5z"/></svg></i><b>Red Wing</b></a>
+  <div class="rw-g rw-explore intro-fade"><small>Explore</small><nav class="nav-l" aria-label="Main"><a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a></nav></div>
+  <div class="rw-g rw-base intro-fade"><small>Based at</small><span>Montréal-Trudeau, YUL</span></div>
+  <div class="rw-g rw-call intro-fade"><small>Concierge, 24/7</small><a href="tel:+15145550142">+1 514 555 0142</a></div>
   <div class="nav-right intro-fade">
-    <a class="nav-book" href="book.html">Book</a>
+    <a class="nav-book" href="book.html"><span>Book a flight</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
     <button id="menu-btn" aria-expanded="false" aria-controls="menu-links"><span class="l-menu">menu</span><span class="l-close">close</span></button>
     <nav id="menu-links" aria-label="Sections">
       <a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a><a href="#book">Book a flight</a>
@@ -1492,7 +1617,14 @@ main section#explore{display:none!important}
     <div class="hero-card">
       <div class="hero-grad"></div>
       <video class="hero-vid" id="hero-vid" muted playsinline preload="auto" poster="redwing-oneshot-v3-poster.jpg" aria-label="Scroll to fly through the Red Wing: in through the windshield, down the cabin to the bedroom, out over the clouds, landing, airstair down"></video>
-      <h2 class="hero-title" aria-label="Red Wing"><span class="ht-a" aria-hidden="true">Red</span><span class="ht-b" aria-hidden="true">Wing</span></h2>
+      <div class="hero-title rwx" role="group" aria-label="Red Wing, private aviation from Montréal">
+        <div class="rwx-row">
+          <p class="rwx-sub"><b>Private aviation from Montréal.</b><br>Leave when you want, land where you want.</p>
+          <ul class="rwx-facts"><li><b>16</b> guests</li><li><b>13,900</b> km nonstop</li><li><b>Mach 0.90</b></li></ul>
+          <p class="rwx-cue">Scroll to board<i></i></p>
+        </div>
+        <p class="rwx-word" aria-hidden="true"><b>Red</b><b>Wing</b></p>
+      </div>
       <div class="hero-caps" aria-hidden="true"><p class="hc" data-a="1.9" data-b="3.7"><span class="hc-i">01 / 06</span><span class="hc-t">Your own jet.<br>Your own time.</span></p><p class="hc" data-a="3.9" data-b="5.8"><span class="hc-i">02 / 06</span><span class="hc-t">Sixteen seats. Only the<br>people you invite.</span></p><p class="hc" data-a="6.0" data-b="8.6"><span class="hc-i">03 / 06</span><span class="hc-t">A real bed,<br>above the weather.</span></p><p class="hc" data-a="9.1" data-b="11.5"><span class="hc-i">04 / 06</span><span class="hc-t">13,900 km nonstop.<br>Montréal to anywhere.</span></p><p class="hc" data-a="11.8" data-b="13.6"><span class="hc-i">05 / 06</span><span class="hc-t">Land where<br>you want.</span></p><p class="hc" data-a="13.9" data-b="99"><span class="hc-i">06 / 06</span><span class="hc-t">The door opens<br>where the car stops.</span></p></div>
       <svg class="hero-word" id="hero-word" hidden viewBox="0 0 1392 400" preserveAspectRatio="xMidYMin meet" aria-hidden="true"></svg>
     </div>
@@ -1504,14 +1636,15 @@ main section#explore{display:none!important}
   </section>
 
   <div class="qbar-wrap" id="quick">
-    <form class="qbar" id="qbar" novalidate>
-      <label class="field"><span>From</span><input name="from" list="airports" value="Montreal" autocomplete="off"></label>
-      <label class="field"><span>To</span><input name="to" list="airports" placeholder="Where to?" autocomplete="off"></label>
-      <label class="field"><span>Date</span><input name="date" type="date"></label>
-      <label class="field"><span>Guests</span><select name="pax"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option></select></label>
-      <button class="btn" type="submit">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+    <form class="qbar qb" id="qbar" novalidate>
+      <div class="qb-head"><p class="qb-t">Plan a flight</p><p class="qb-s">Answer within 2 hours,<br>no commitment.</p></div>
+      <div class="qb-f qb-from"><span class="qb-l">Departing</span><span class="qb-v"><i class="qb-dot"></i>Montréal</span><span class="qb-h">YUL · private terminal</span><input type="hidden" name="from" value="Montreal"></div>
+      <label class="qb-f qb-to"><span class="qb-l">Destination</span><input class="qb-v" name="to" list="airports" placeholder="Where to?" autocomplete="off"><span class="qb-h" id="qb-to-h">City or airport</span></label>
+      <label class="qb-f qb-date"><span class="qb-l">Date</span><span class="qb-v qb-dv" id="qb-dv">Choose a day</span><span class="qb-h" id="qb-dh">Flexible? Leave it blank</span><input name="date" type="date" tabindex="-1" aria-label="Departure date"></label>
+      <div class="qb-f qb-pax"><span class="qb-l">Guests</span><span class="qb-step"><button type="button" class="qb-m" aria-label="Fewer guests">−</button><output class="qb-v" id="qb-pv">4</output><button type="button" class="qb-p" aria-label="More guests">+</button></span><span class="qb-h">Up to 16 aboard</span><select name="pax" hidden><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option></select></div>
+      <button class="qb-go" type="submit"><span>Request a quote</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></button>
     </form>
-    <div class="qbar-note mono"><span>Quote within 2 hours, no commitment</span><span id="qbar-est"></span></div>
+    <div class="qbar-note qb-note"><span id="qbar-est"></span></div>
   </div>
   <datalist id="airports"></datalist>
 
@@ -1901,7 +2034,7 @@ main section#explore{display:none!important}
     </div>
   </section>
 
-  <footer id="contact" class="dark">
+  <footer id="contact" class="light-foot">
     <div class="foot-main">
       <div class="ft-cols">
         <div><h4>Fly</h4><ul><li><a href="#own">Charter</a></li><li><a href="#own">Shared ownership</a></li><li><a href="#own">Full ownership</a></li><li><a href="book.html">Request a quote</a></li></ul></div>
@@ -5042,7 +5175,7 @@ if (LAND) {
   let navDark = null, pillOff = null;
   const localFmt = () => { try { localEl.textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'America/Toronto', hour: '2-digit', minute: '2-digit', hour12: false }).replace(/\s?h\s?/, ':'); } catch (e) { } };
   localFmt(); setInterval(localFmt, 10000);
-  const rwLightEls = [...document.querySelectorAll('#onboard, #voices')];   // v26: light sections inside the dark run
+  const rwLightEls = [...document.querySelectorAll('#onboard, #voices, #landing, #contact')];   // v26: light sections inside the dark run
   const rwLight = () => rwLightEls.some(e => { const r = e.getBoundingClientRect(); return r.top < NAV * 0.6 && r.bottom > NAV * 0.6; });
   function chromeTick(y) {
     const vh = L.vh, dark = (y > L.hublot.top - NAV * 0.6 && y < L.hublot.top + L.hublot.h - NAV * 0.6) || (y > L.stats.top - NAV * 0.6 && y < L.stats.top + L.stats.h - NAV * 0.6) || (y > L.world.top - NAV * 0.6 && !rwLight());
@@ -5218,7 +5351,7 @@ if (LAND) {
 { // flight deck: ticket buttons, hero HUD, split-flap
   const ARW = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>';
   const ticket = el => { if (!el || el.classList.contains('tk')) return; const t = el.textContent.replace(/\s+/g, ' ').trim(); el.innerHTML = `<span class="tk-l">${t}</span><i class="tk-r">${ARW}</i>`; el.classList.add('tk'); };
-  ['.deck .nav-book', '#qbar .btn', '#pass-book', '#bform button[type=submit]', '#done-mail', '.cta'].forEach(s => document.querySelectorAll(s).forEach(ticket));
+  ['#qbar .btn', '#pass-book', '#bform button[type=submit]', '#done-mail', '.cta'].forEach(s => document.querySelectorAll(s).forEach(ticket));
   const pill = document.getElementById('pill');
   if (pill) { pill.classList.add('tk-pill'); const a = document.createElement('span'); a.className = 'tk'; a.innerHTML = `<span class="tk-l">Book a flight</span><i class="tk-r">${ARW}</i>`; pill.appendChild(a); }
 
@@ -5525,6 +5658,27 @@ if (LAND) {
       if (F.date.value) q.set('date', F.date.value);
       location.href = 'book.html?' + q.toString();
     });
+  }
+}
+
+{ // v36: quote bar date label + guest stepper
+  const f = document.getElementById('qbar');
+  if (f) {
+    const d = f.elements.date, dv = document.getElementById('qb-dv'), dh = document.getElementById('qb-dh');
+    const fmt = new Intl.DateTimeFormat('en-CA', { weekday: 'short', day: 'numeric', month: 'short' });
+    const showD = () => {
+      if (!d.value) { dv.textContent = 'Choose a day'; dv.classList.remove('set'); dh.textContent = 'Flexible? Leave it blank'; return; }
+      const t = new Date(d.value + 'T12:00'); dv.textContent = fmt.format(t); dv.classList.add('set');
+      const days = Math.round((t - new Date(new Date().toDateString())) / 864e5);
+      dh.textContent = days <= 0 ? 'Today' : days === 1 ? 'Tomorrow' : 'In ' + days + ' days';
+    };
+    d.addEventListener('change', showD); d.addEventListener('input', showD);
+    f.querySelector('.qb-date').addEventListener('click', e => { e.preventDefault(); try { d.showPicker(); } catch (_) { d.focus(); } });
+    const sel = f.elements.pax, pv = document.getElementById('qb-pv');
+    const setP = n => { n = Math.min(16, Math.max(1, n)); sel.value = String(n); pv.textContent = n; f.querySelector('.qb-m').disabled = n <= 1; f.querySelector('.qb-p').disabled = n >= 16; };
+    f.querySelector('.qb-m').addEventListener('click', () => setP(+sel.value - 1));
+    f.querySelector('.qb-p').addEventListener('click', () => setP(+sel.value + 1));
+    setP(+sel.value || 4); showD();
   }
 }
 </script>
