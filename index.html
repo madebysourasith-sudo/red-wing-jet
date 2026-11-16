@@ -1629,25 +1629,6 @@ main section#explore{display:none!important}
   #nav.deck.rw.on-hero{background:linear-gradient(180deg,rgba(6,20,48,.5),rgba(6,20,48,.12))!important}
   #nav.deck.rw.on-hero .rw-g,#nav.deck.rw.on-hero .nav-logo b{text-shadow:0 1px 10px rgba(6,20,48,.35)}
 }
-
-/* ================= v40: the 3D journey opens the page, the film moves down ================= */
-#hero{height:calc(100svh + 760svh)!important}
-#sheet{display:none!important}
-.vy-stage{position:absolute;inset:0;width:100%;height:100%;background:#cfdbe8;z-index:0}
-.vy-stage canvas{pointer-events:none!important}
-#hero .hero-grad{display:none}
-#hero .hero-title{z-index:2}
-.vy-wash{position:absolute;inset:0;background:var(--canvas,#f7f6f3);opacity:0;pointer-events:none;z-index:4}
-.vy-cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;
-  font:500 11px/1 var(--deck,var(--mono));letter-spacing:.16em;text-transform:uppercase;color:#fff;text-shadow:0 1px 8px rgba(6,20,48,.4);pointer-events:none}
-.vy-cue i{display:block;width:1px;height:34px;background:linear-gradient(#fff,rgba(255,255,255,0));animation:vyCue 1.8s ease-in-out infinite;transform-origin:top}
-@keyframes vyCue{0%{transform:scaleY(0);opacity:1}60%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
-@media (prefers-reduced-motion:reduce){.vy-cue i{animation:none}}
-@media (max-width:900px){.vy-cue{display:none}}
-.vy-caps{z-index:3}
-#flight-film{position:relative;height:calc(100svh + 420svh);overflow:clip;display:block;padding:0 var(--pad);background:var(--canvas,#f7f6f3)}
-#flight-film .hero-card{bottom:0!important;left:0!important;right:0!important;overflow:hidden}
-#flight-film .hero-grad{opacity:1}
 </style>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@600,700&display=swap">
 </head>
@@ -1727,14 +1708,14 @@ main section#explore{display:none!important}
 </script>
 <header id="nav" class="deck rw on-hero">
   <a class="nav-logo" href="#hero" aria-label="Red Wing, private aviation"><svg class="rw-fin" viewBox="0 0 30 34" aria-hidden="true"><path fill="#c8102e" d="M2 32 16.6 6.2h9.2L23.4 32z"/><path fill="#6d1322" d="M2 32h21.4l.9-9.8z"/><path fill="#fff" d="m4.6 31.4 19.9-11.2-.2 2.2L7.6 31.4z"/><path fill="#c8102e" d="M11.6 2.6h16.8l1 2.6H12.4z"/></svg><b>Red Wing</b></a>
-  <div class="rw-g rw-explore intro-fade"><small>Explore</small><nav class="nav-l" aria-label="Main"><a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#flight-film">Cabin</a><a href="#own">Ownership</a></nav></div>
+  <div class="rw-g rw-explore intro-fade"><small>Explore</small><nav class="nav-l" aria-label="Main"><a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a></nav></div>
   <div class="rw-g rw-base intro-fade"><small>Based at</small><span>Montréal-Trudeau, YUL</span></div>
   <div class="rw-g rw-call intro-fade"><small>Concierge, 24/7</small><a href="tel:+15145550142">+1 514 555 0142</a></div>
   <div class="nav-right intro-fade">
     <a class="nav-book" href="book.html">Book</a>
     <button id="menu-btn" aria-expanded="false" aria-controls="menu-links"><span class="l-menu">menu</span><span class="l-close">close</span></button>
     <nav id="menu-links" aria-label="Sections">
-      <a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#flight-film">Cabin</a><a href="#own">Ownership</a><a href="#book">Book a flight</a>
+      <a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a><a href="#book">Book a flight</a>
     </nav>
   </div>
 </header>
@@ -1747,14 +1728,12 @@ main section#explore{display:none!important}
   <section id="hero"><div class="hero-pin">
     <div class="hero-card">
       <div class="hero-grad"></div>
-      <div class="stage vy-stage" id="stage-voyage" aria-label="Scroll to walk up to the Red Wing, board, walk to the bathroom and leave through a window"><canvas class="poster"></canvas></div>
-      <div class="hero-caps vy-caps" aria-hidden="true"><p class="hc" data-a="5.5" data-b="17"><span class="hc-i">01 / 06</span><span class="hc-t">The stairs fold out<br>of the door.</span></p><p class="hc" data-a="33" data-b="40"><span class="hc-i">02 / 06</span><span class="hc-t">Ten metres from the car<br>to your seat.</span></p><p class="hc" data-a="42.5" data-b="50"><span class="hc-i">03 / 06</span><span class="hc-t">A lounge with a divan<br>and a 42-inch screen.</span></p><p class="hc" data-a="53" data-b="60.5"><span class="hc-i">04 / 06</span><span class="hc-t">A stateroom with a<br>real bed.</span></p><p class="hc" data-a="63" data-b="71"><span class="hc-i">05 / 06</span><span class="hc-t">A private bath,<br>not a lavatory.</span></p><p class="hc" data-a="79" data-b="90"><span class="hc-i">06 / 06</span><span class="hc-t">Then the window.<br>Then the sky.</span></p></div>
-      <div class="vy-wash" aria-hidden="true"></div>
-      <div class="vy-cue" aria-hidden="true"><span>Scroll to board</span><i></i></div>
+      <video class="hero-vid" id="hero-vid" muted playsinline preload="auto" poster="redwing-oneshot-v3-poster.jpg" aria-label="Scroll to fly through the Red Wing: in through the windshield, down the cabin to the bedroom, out over the clouds, landing, airstair down"></video>
       <div class="hero-title rwx rwx2" role="group" aria-label="Red Wing, private aviation from Montréal">
         <p class="rwx-word" aria-hidden="true"><b class="w1">Red</b><b class="w2">Wing</b></p>
         <p class="rwx-sub"><b>Private aviation from Montréal.</b><br>Leave when you want, land where you want. Your own jet, waiting for you.</p>
       </div>
+      <div class="hero-caps" aria-hidden="true"><p class="hc" data-a="1.9" data-b="3.7"><span class="hc-i">01 / 06</span><span class="hc-t">Your own jet.<br>Your own time.</span></p><p class="hc" data-a="3.9" data-b="5.8"><span class="hc-i">02 / 06</span><span class="hc-t">Sixteen seats. Only the<br>people you invite.</span></p><p class="hc" data-a="6.0" data-b="8.6"><span class="hc-i">03 / 06</span><span class="hc-t">A real bed,<br>above the weather.</span></p><p class="hc" data-a="9.1" data-b="11.5"><span class="hc-i">04 / 06</span><span class="hc-t">13,900 km nonstop.<br>Montréal to anywhere.</span></p><p class="hc" data-a="11.8" data-b="13.6"><span class="hc-i">05 / 06</span><span class="hc-t">Land where<br>you want.</span></p><p class="hc" data-a="13.9" data-b="99"><span class="hc-i">06 / 06</span><span class="hc-t">The door opens<br>where the car stops.</span></p></div>
       <svg class="hero-word" id="hero-word" hidden viewBox="0 0 1392 400" preserveAspectRatio="xMidYMin meet" aria-hidden="true"></svg>
     </div>
     <div class="hero-bottom">
@@ -1842,14 +1821,6 @@ main section#explore{display:none!important}
     </div>
     </div>
   </section>
-
-  <section id="flight-film" aria-label="The flight, filmed"><div class="hero-pin">
-    <div class="hero-card">
-      <div class="hero-grad"></div>
-      <video class="hero-vid" id="hero-vid" muted playsinline preload="auto" poster="redwing-oneshot-v3-poster.jpg" aria-label="Scroll to fly through the Red Wing: in through the windshield, down the cabin to the bedroom, out over the clouds, landing, airstair down"></video>
-      <div class="hero-caps" aria-hidden="true"><p class="hc" data-a="1.9" data-b="3.7"><span class="hc-i">01 / 06</span><span class="hc-t">Your own jet.<br>Your own time.</span></p><p class="hc" data-a="3.9" data-b="5.8"><span class="hc-i">02 / 06</span><span class="hc-t">Sixteen seats. Only the<br>people you invite.</span></p><p class="hc" data-a="6.0" data-b="8.6"><span class="hc-i">03 / 06</span><span class="hc-t">A real bed,<br>above the weather.</span></p><p class="hc" data-a="9.1" data-b="11.5"><span class="hc-i">04 / 06</span><span class="hc-t">13,900 km nonstop.<br>Montréal to anywhere.</span></p><p class="hc" data-a="11.8" data-b="13.6"><span class="hc-i">05 / 06</span><span class="hc-t">Land where<br>you want.</span></p><p class="hc" data-a="13.9" data-b="99"><span class="hc-i">06 / 06</span><span class="hc-t">The door opens<br>where the car stops.</span></p></div>
-    </div>
-  </div></section>
 
   <section id="sheet">
     <div class="sheet-sticky" id="sheet-sticky">
@@ -2190,7 +2161,7 @@ main section#explore{display:none!important}
     <div class="foot-main">
       <div class="ft-cols">
         <div><h4>Fly</h4><ul><li><a href="#own">Charter</a></li><li><a href="#own">Shared ownership</a></li><li><a href="#own">Full ownership</a></li><li><a href="book.html">Request a quote</a></li></ul></div>
-        <div><h4>Aircraft</h4><ul><li><a href="#aircraft">RW 30</a></li><li><a href="#flight-film">Cabin plan</a></li><li><a href="#stats">Routes</a></li><li><a href="explore.html">3D tour</a></li></ul></div>
+        <div><h4>Aircraft</h4><ul><li><a href="#aircraft">RW 30</a></li><li><a href="#sheet">Cabin plan</a></li><li><a href="#stats">Routes</a></li><li><a href="explore.html">3D tour</a></li></ul></div>
         <div><h4>Base</h4><ul><li>Montréal-Trudeau, YUL</li><li>Private terminal</li><li>Open 24/7</li></ul></div>
         <div><h4>Contact</h4><ul><li><a href="mailto:concierge@flyredwing.com">concierge@flyredwing.com</a></li><li><a href="tel:+15145550142">+1 514 555 0142</a></li></ul></div>
       </div>
@@ -4241,7 +4212,7 @@ function tickFrame() {
   const wantFov = insideNow ? clamp(cu.fov * clamp(S.zoom, 0.55, 1.25) * (camera.aspect < 1 ? 1.3 : 1), 20, 95) : cu.fov, wantNear = insideNow ? 0.06 : 0.3;
   if (Math.abs(camera.fov - wantFov) > 0.01 || camera.near !== wantNear) { camera.fov = wantFov; camera.near = wantNear; camera.updateProjectionMatrix(); }
   const aboard = !!STAGES[S.stage].cabin || insideNow;
-  if (EXPLORE) setDoor(X.door, !insideNow); else if (window.__rwVoyDoor != null) setDoor(window.__rwVoyDoor, !insideNow); else { const doorOpen = !insideNow && S.speed < 1 && S.air < 0.05; setDoor(doorOpen ? 1 : 0, !insideNow); }
+  if (EXPLORE) setDoor(X.door, !insideNow); else { const doorOpen = !insideNow && S.speed < 1 && S.air < 0.05; setDoor(doorOpen ? 1 : 0, !insideNow); }
   interior.visible = aboard;
   S.cabinLight = damp(S.cabinLight || 0, aboard ? 1 : 0, 2.5, dt); cabinFillU.value = S.cabinLight;
   renderer.toneMappingExposure = lerp(1.0, 1.0, S.cabinLight); bloom.strength = lerp(0.2, 0.26, S.cabinLight); bloom.radius = lerp(0.08, 0.12, S.cabinLight);
@@ -4639,8 +4610,7 @@ if (LAND) {
   const mkStage = (id, o = {}) => { const host = $(id); return { host, poster: host.querySelector('.poster'), vis: 0, ...o }; };
   const overlay = { host: $('#jet-layer'), overlay: true };
   const hublot = mkStage('#stage-window'), flight = mkStage('#stage-flight'), cabin = mkStage('#stage-cabin', { live: true }), explore = mkStage('#stage-explore', { live: true, explore: true });
-  const voyage = mkStage('#stage-voyage');
-  const panels = [hublot, flight, cabin, explore, voyage];
+  const panels = [hublot, flight, cabin, explore];
   let cur = null, pending = null, warming = false;
   const snapEnv = name => { S.envName = name; S.env = ENVS[name]; for (const k of ['air', 'alt', 'speed', 'runway', 'pitch', 'spin']) S[k] = S.env[k]; if (S.env.speed === 0) S.scroll = 0; };
   const setCam = c => { cam.to = c; cam.from = null; cam.k = 1; cam.fromInside = !!c.inside; };
@@ -4935,7 +4905,7 @@ if (LAND) {
   };
   requestAnimationFrame(ixTick);
   const pp0 = V3(), pp1 = V3();
-  function sheetTick(y) { if (L.sheet.h < 1) return;
+  function sheetTick(y) {
     const on = cur === overlay && y > L.sheet.top - L.vh && y < L.sheet.top + L.sheet.h;
     if (!on) { if (canvas.style.clipPath) canvas.style.clipPath = ''; if (CUT.y < 9) { CUT.y = 1.33; CUT.a = 9.9; CUT.b = 11.6; CUT.open = false; CUT.zc = 99; if (interiorG) interiorG.visible = false; planUI.style.opacity = '0'; } return; }
     const { sw, wipe } = sheetPhase(y), narrow = L.vw / L.vh < 0.9;
@@ -4985,7 +4955,7 @@ if (LAND) {
       if (introT < 0.2) S.gear = 1;
       S.gearT = y < L.hero.top + H * 0.12 ? 1 : 0;                                // wheels down at rest, tucked away once she starts to turn
     } else if (y < L.landStart) {
-      o = L.sheet.h > 1 ? specPose(y) : null; S.flapsT = 0;
+      o = specPose(y); S.flapsT = 0;
       const rr = o && o.ramp || 0, fd = o && o.fade || 0;
       if (o && o.tx) t = V3(o.tx, o.ty != null ? o.ty : 0.45, 0);
       if (o && o.fov) fov = o.fov;
@@ -5085,73 +5055,6 @@ if (LAND) {
     if (FILM) { stEl.style.opacity = 0; return; }
     stEl.style.opacity = (smooth(inv(0.42, 0.5, p)) * (1 - smooth(inv(0.8, 0.87, p)))).toFixed(3);
     paintReveal(stReveal, inv(0.46, 0.74, p));
-  };
-
-
-  /* v40 voyage: the hero pin walks you up to her, aboard, aft to the bathroom and out through a window */
-  const vyTitle = $('#hero .hero-title'), vyWash = $('#hero .vy-wash'), vyCue = $('#hero .vy-cue');
-  const VWIN = { x: -2.85, y: 0.30, side: 1, back: 0.4 };
-  let VY = null, vyEnv = '';
-  const inKey = (p, name, extra = {}) => { const P = poseOf(CAM[name]); return { p, E: P.dir.clone().multiplyScalar(P.d).add(P.t), G: P.dir.clone().negate(), fov: P.fov, vig: 0.06, ...extra }; };
-  const ptKey = (p, e, g, fov, vig) => { const E = V3(e[0], e[1], e[2] * VWIN.side); return { p, E, G: V3(g[0], g[1], g[2] * VWIN.side).sub(E).normalize(), fov, vig }; };
-  const turnKey = (p, name, g, fov) => { const P = poseOf(CAM[name]), E = P.dir.clone().multiplyScalar(P.d).add(P.t); return { p, E, G: V3(g[0], g[1], g[2] * VWIN.side).sub(E).normalize(), fov, vig: 0.2 }; };
-  function buildVoyage() {
-    const x = VWIN.x;
-    VY = {
-      out: [[0.00, 'xHero'], [0.05, 'xHero'], [0.20, 'xDoor']],
-      walk: [
-        inKey(0.32, 'cabinAft'), inKey(0.36, 'cabinAft'),
-        inKey(0.42, 'xLounge'), inKey(0.48, 'xLounge'),
-        inKey(0.53, 'xState'), inKey(0.59, 'xState'),
-        inKey(0.635, 'xLav'), inKey(0.695, 'xLav'),
-        turnKey(0.725, 'xLav', [x, VWIN.y, 1.25], 52),
-        ptKey(0.745, [-3.3, 0.36, -0.62], [x, VWIN.y, 1.25], 50, 0.3),
-        ptKey(0.765, [x, 0.34, -VWIN.back], [x, VWIN.y, 1.25], 44, 0.5),
-        ptKey(0.79, [x, 0.34, -VWIN.back], [x, VWIN.y, 1.25], 38, 0.9),
-        ptKey(0.845, [x, 0.30, 1.38], [x + 0.6, -0.6, 14], 48, 0.2),
-        ptKey(0.885, [x + 1.5, 0.9, 9], [x + 9, 3.5, 70], 50, 0.06),
-        ptKey(0.945, [12, 5.0, 44], [1.5, 0.2, 0], 32, 0.06),
-        ptKey(1.00, [11, 4.6, 40], [1.5, 0.2, 0], 32, 0.06),
-      ],
-    };
-  }
-  const vyEye = V3(), vyGaze = V3();
-  const vyP = y => clamp((y - L.hero.top) / Math.max(1, L.hero.h - L.vh), 0, 1);
-  voyage.enter = () => { S.stage = 0; vyEnv = ''; buildVoyage(); };
-  voyage.leave = () => { window.__rwVoyDoor = null; finish.uniforms.uVig.value = 0.06; fadeEl.style.opacity = '0'; vyEnv = ''; };
-  voyage.tick = (dt, y) => {
-    if (!VY) buildVoyage();
-    const p = dbg.vp != null ? dbg.vp : vyP(y); window.__vyP = p;
-    const inside = p >= 0.26;
-    const env = inside ? 'cruise' : 'ground';
-    if (env !== vyEnv) { vyEnv = env; snapEnv(env); S.gear = S.gearT = inside ? 0 : 1; S.flaps = S.flapsT = 0; if (inside) S.cabinLight = 1; }
-    S.xray = S.xrayT = XRAY_OFF; S.yaw = S.yawT = 0; S.pit = S.pitT = 0;
-    window.__rwVoyDoor = inside ? 0 : smooth(inv(0.09, 0.21, p));
-    let dip = 0;
-    if (p < 0.20) {                                   // on the ramp: the parked shot, then round to the door
-      const o = VY.out, i = p < o[1][0] ? 0 : 1, k = ease(inv(o[i][0], o[i + 1][0], p));
-      cam.from = poseOf(CAM[o[i][1]]); cam.fromInside = false; cam.to = CAM[o[i + 1][1]]; cam.k = k; S.zoom = S.zoomT = 1;
-      finish.uniforms.uVig.value = 0.06;
-    } else if (p < 0.32) {                            // up to the door, a blink, and you are standing in the forward cabin
-      const k = inv(0.20, 0.32, p);
-      if (k < 0.5) { cam.from = poseOf(CAM.xDoor); cam.fromInside = false; cam.to = CAM.cabinAft; cam.k = k; S.zoom = S.zoomT = 1; }
-      else { cam.from = poseOf(CAM.cabinAft); cam.fromInside = true; cam.to = CAM.cabinAft; cam.k = 1; S.zoom = S.zoomT = lerp(1.18, 1, ease((k - 0.5) * 2)); }
-      dip = 1 - smooth(inv(0.0, 0.16, Math.abs(k - 0.5)));
-      finish.uniforms.uVig.value = 0.06;
-    } else {                                          // aboard: the eye moves in straight lines, the gaze turns
-      const K = VY.walk; let i = 0; while (i < K.length - 2 && p > K[i + 1].p) i++;
-      const a = K[i], b = K[i + 1], k = ease(inv(a.p, b.p, p));
-      vyEye.lerpVectors(a.E, b.E, k);
-      q1.setFromUnitVectors(fwd, a.G); q2.setFromUnitVectors(fwd, b.G); q1.slerp(q2, k); vyGaze.copy(fwd).applyQuaternion(q1);
-      setCam({ t: vyEye.clone(), az: Math.atan2(-vyGaze.x, -vyGaze.z) / DEG, el: Math.asin(clamp(-vyGaze.y, -1, 1)) / DEG, d: 0, fov: lerp(a.fov, b.fov, k), inside: true });
-      S.zoom = S.zoomT = 1;
-      finish.uniforms.uVig.value = lerp(a.vig, b.vig, k);
-    }
-    dip = Math.max(dip, 1 - smooth(inv(0.0, 0.016, Math.abs(p - 0.741))));   // a blink through the bathroom door frame
-    fadeEl.style.opacity = dip.toFixed(3);
-    if (vyTitle) vyTitle.style.opacity = (1 - smooth(inv(0.012, 0.055, p))).toFixed(3);
-    if (vyCue) vyCue.style.opacity = (1 - smooth(inv(0.0, 0.02, p))).toFixed(3);
-    if (vyWash) vyWash.style.opacity = smooth(inv(0.972, 1.0, p)).toFixed(3);
   };
 
   /* flight: four moments of a flight, one tab each */
@@ -5502,14 +5405,14 @@ if (LAND) {
   const loop = () => { requestAnimationFrame(loop); viaRaf = true; try { tickFrame(); } catch (e) { console.error(e); } };
   addEventListener('load', () => { sizeKey = ''; }); document.fonts.ready.then(() => { sizeKey = ''; });
   const goY = y => { sizeKey = ''; tickFrame(); scroll.to(y, true); for (let i = 0; i < 4; i++) tickFrame(); return { y: scroll.y, stage: cur === overlay ? 'overlay' : cur.host.id, blank: !!S.blank }; };
-  Object.assign(window.__app, { land: { go: goY, dbg, L, voy: o => { Object.assign(VWIN, o); buildVoyage(); }, sheetPhase, hub: o => { Object.assign(WIN, o); buildHub(); }, scroll, tab: i => tabs[i].click(), stage: () => (cur === overlay ? 'overlay' : cur.host.id) } });
+  Object.assign(window.__app, { land: { go: goY, dbg, L, sheetPhase, hub: o => { Object.assign(WIN, o); buildHub(); }, scroll, tab: i => tabs[i].click(), stage: () => (cur === overlay ? 'overlay' : cur.host.id) } });
   if (QS.has('y')) { const y0 = +QS.get('y'); addEventListener('load', () => setTimeout(() => goY(y0), 60)); setTimeout(() => goY(y0), 500); }
   boot();
 }
 
 
 { // hero film, driven by scroll: the pin's progress is the film's time
-  const v = document.getElementById('hero-vid'), hero = document.getElementById('flight-film'), word = null;
+  const v = document.getElementById('hero-vid'), hero = document.getElementById('hero'), word = document.querySelector('.hero-title');
   const small = innerWidth < 900 || (navigator.connection && navigator.connection.saveData);
   const file = small ? 'redwing-hero-scrub-m.mp4' : 'redwing-hero-scrub.mp4';
   v.src = file;
@@ -5598,7 +5501,7 @@ if (LAND) {
 }
 
 { // hero captions: each scene's line slides in from the left edge and out to the right, on the film's own clock
-  const caps = [...document.querySelectorAll('#flight-film .hero-caps .hc')], wrap = document.querySelector('#flight-film .hero-caps');
+  const caps = [...document.querySelectorAll('.hero-caps .hc')], wrap = document.querySelector('.hero-caps');
   const sm = t => t * t * (3 - 2 * t), cl = x => Math.min(1, Math.max(0, x));
   let last = -1;
   const tick = () => {
@@ -5696,7 +5599,7 @@ if (LAND) {
     let on = false, since = 0;
     const tick = now => {
       const A = window.__app, L = A && A.land && A.land.L;
-      if (L && L.sheet && L.sheet.h > 1) {
+      if (L && L.sheet) {
         const u = (scrollY - L.sheet.top) / L.vh * 100, want = u > 802 && u < 892;
         if (want !== on) {
           on = want; host.classList.toggle('on', on);
@@ -5978,31 +5881,6 @@ if (LAND) {
     pops.pax.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) setP(+E.pax.value + +b.dataset.d); });
     setP(+E.pax.value || 4); label();
   }
-}
-</script>
-
-<script>
-{ // v40: voyage captions follow the hero pin
-  const caps = [...document.querySelectorAll('#hero .vy-caps .hc')], wrap = document.querySelector('#hero .vy-caps');
-  const sm = t => t * t * (3 - 2 * t), cl = x => Math.min(1, Math.max(0, x));
-  let last = -1;
-  const tick = () => {
-    const t = (window.__vyP || 0) * 100;
-    if (Math.abs(t - last) > 0.02) {
-      last = t; let any = 0;
-      caps.forEach(c => {
-        const a = +c.dataset.a, b = +c.dataset.b, ein = sm(cl((t - a) / 1.6)), eout = sm(cl((t - (b - 1.4)) / 1.4));
-        const on = ein * (1 - eout); any = Math.max(any, on);
-        c.style.setProperty('--o', on > 0.001 ? '1' : '0');
-        c.style.setProperty('--x', ((1 - ein) * -60 + eout * 60).toFixed(1) + 'px');
-        c.style.setProperty('--cr', ((1 - ein) * 100).toFixed(1) + '%');
-        c.style.setProperty('--cl', (eout * 100).toFixed(1) + '%');
-      });
-      wrap.style.setProperty('--scrim', any.toFixed(3));
-    }
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
 }
 </script>
 </body>
