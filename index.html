@@ -5095,10 +5095,12 @@ if (LAND) {
   const inKey = (p, name, extra = {}) => { const P = poseOf(CAM[name]); return { p, E: P.dir.clone().multiplyScalar(P.d).add(P.t), G: P.dir.clone().negate(), fov: P.fov, vig: 0.06, ...extra }; };
   const ptKey = (p, e, g, fov, vig) => { const E = V3(e[0], e[1], e[2] * VWIN.side); return { p, E, G: V3(g[0], g[1], g[2] * VWIN.side).sub(E).normalize(), fov, vig }; };
   const turnKey = (p, name, g, fov) => { const P = poseOf(CAM[name]), E = P.dir.clone().multiplyScalar(P.d).add(P.t); return { p, E, G: V3(g[0], g[1], g[2] * VWIN.side).sub(E).normalize(), fov, vig: 0.2 }; };
+  const vyHeroPose = () => { const narrow = view.w / Math.max(1, view.h) < 0.9; CAM.vyHero = C(2, -0.75, 0, 90, 0.7, narrow ? 10 : 25, 36); CAM.vyDoor = C(10.5, -0.75, 1.3, 42, 7, narrow ? 5.2 : 11.5, 36); };
   function buildVoyage() {
+    vyHeroPose();
     const x = VWIN.x;
     VY = {
-      out: [[0.00, 'xHero'], [0.05, 'xHero'], [0.20, 'xDoor']],
+      out: [[0.00, 'vyHero'], [0.05, 'vyHero'], [0.20, 'vyDoor']],
       walk: [
         inKey(0.32, 'cabinAft'), inKey(0.36, 'cabinAft'),
         inKey(0.42, 'xLounge'), inKey(0.48, 'xLounge'),
@@ -5121,6 +5123,7 @@ if (LAND) {
   voyage.leave = () => { window.__rwVoyDoor = null; finish.uniforms.uVig.value = 0.06; fadeEl.style.opacity = '0'; vyEnv = ''; };
   voyage.tick = (dt, y) => {
     if (!VY) buildVoyage();
+    if (!CAM.vyHero || (view.w / Math.max(1, view.h) < 0.9) !== (CAM.vyHero.d < 15)) vyHeroPose();
     const p = dbg.vp != null ? dbg.vp : vyP(y); window.__vyP = p;
     const inside = p >= 0.26;
     const env = inside ? 'cruise' : 'ground';
@@ -5134,7 +5137,7 @@ if (LAND) {
       finish.uniforms.uVig.value = 0.06;
     } else if (p < 0.32) {                            // up to the door, a blink, and you are standing in the forward cabin
       const k = inv(0.20, 0.32, p);
-      if (k < 0.5) { cam.from = poseOf(CAM.xDoor); cam.fromInside = false; cam.to = CAM.cabinAft; cam.k = k; S.zoom = S.zoomT = 1; }
+      if (k < 0.5) { cam.from = poseOf(CAM.vyDoor); cam.fromInside = false; cam.to = CAM.cabinAft; cam.k = k; S.zoom = S.zoomT = 1; }
       else { cam.from = poseOf(CAM.cabinAft); cam.fromInside = true; cam.to = CAM.cabinAft; cam.k = 1; S.zoom = S.zoomT = lerp(1.18, 1, ease((k - 0.5) * 2)); }
       dip = 1 - smooth(inv(0.0, 0.16, Math.abs(k - 0.5)));
       finish.uniforms.uVig.value = 0.06;
