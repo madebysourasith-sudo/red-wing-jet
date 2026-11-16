@@ -1406,10 +1406,6 @@ main section#explore{display:none!important}
 #nav.rw small{display:block;margin-bottom:6px;font:500 10px/1 var(--deck,var(--mono));letter-spacing:.16em;text-transform:uppercase;opacity:.55}
 .rw-g{font:400 14px/20px var(--sans);letter-spacing:-.005em;white-space:nowrap}
 .rw-g a,.rw-g span{color:inherit}
-#nav.rw .nav-book{display:inline-flex;align-items:center;gap:14px;height:44px;padding:0 8px 0 20px;border-radius:10px;background:var(--accent);color:#fff;font:500 14px/1 var(--sans);letter-spacing:-.005em;white-space:nowrap;
-  box-shadow:0 8px 24px rgba(160,12,32,.22);transition:background-color .3s,box-shadow .3s}
-#nav.rw .nav-book svg{width:28px;height:28px;padding:6px;border-radius:7px;background:rgba(255,255,255,.16);transition:transform .45s cubic-bezier(.22,1,.36,1)}
-#nav.rw .nav-book:hover svg{transform:translateX(3px)}
 @media (min-width:901px){
   #nav.deck.rw{grid-template-columns:auto minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto!important;align-items:stretch!important;height:80px!important;padding:0 32px!important;
     box-shadow:0 1px 0 rgba(30,22,24,.1)}
@@ -1434,8 +1430,6 @@ main section#explore{display:none!important}
   .rw-g{display:none}
   .rw-tile{width:30px;height:30px;border-radius:8px}.rw-wing{width:19px;height:19px}
   #nav.rw .nav-logo b{font-size:19px}
-  #nav.rw .nav-book{height:38px;padding:0 6px 0 14px;gap:10px;font-size:13px}
-  #nav.rw .nav-book svg{width:26px;height:26px}
 }
 
 /* hero type */
@@ -1518,6 +1512,81 @@ main section#explore{display:none!important}
 #contact.light-foot .ft-mark span{background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;color:#1e1618!important;-webkit-text-fill-color:#1e1618!important}
 #contact.light-foot .foot-legal{border-top:1px solid rgba(30,22,24,.12)!important;color:rgba(30,22,24,.45)!important}
 #contact.light-foot .foot-legal p{color:rgba(30,22,24,.45)!important}
+
+/* ================= v37: quote bar as tiles ================= */
+.qbar-wrap{position:relative;z-index:40}
+.qbar.rq{position:relative;display:grid!important;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.9fr) auto!important;align-items:center;gap:10px;
+  padding:10px;border:1px solid rgba(30,22,24,.07)!important;border-radius:22px;background:rgba(255,255,255,.86);
+  box-shadow:0 1px 2px rgba(30,22,24,.04),0 30px 70px -30px rgba(30,22,24,.22);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.rq-route{position:relative;display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:10px;min-width:0}
+.rq-t{position:relative;display:flex;align-items:center;gap:14px;min-width:0;height:72px;margin:0;padding:0 16px 0 18px;border:1px solid rgba(30,22,24,.09);border-radius:15px;background:#fff;color:var(--ink);font:inherit;text-align:left;cursor:pointer;
+  box-shadow:0 1px 2px rgba(30,22,24,.04);transition:border-color .25s,box-shadow .25s,background-color .25s}
+.rq-t:hover{border-color:rgba(30,22,24,.2)}
+.rq-t.act,.rq-t:focus-within,.rq-t:focus-visible{outline:0;border-color:rgba(200,16,46,.55);box-shadow:0 0 0 4px rgba(200,16,46,.09)}
+.rq-from{cursor:default;background:#faf8f5}.rq-from:hover{border-color:rgba(30,22,24,.09)}
+.rq-i{flex:none;width:22px;height:22px;fill:none;stroke:rgba(30,22,24,.5);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.rq-from .rq-i{stroke:var(--accent)}
+.rq-c{flex:none;width:18px;height:18px;margin-left:auto;fill:none;stroke:rgba(30,22,24,.45);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.rq-t.act .rq-c{transform:rotate(180deg)}
+.rq-tx{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}
+.rq-l{font:500 12px/1 var(--sans);letter-spacing:.005em;color:rgba(30,22,24,.5);cursor:inherit}
+.rq .rq-v{display:flex;align-items:center;gap:8px;width:100%;min-width:0;margin:0;padding:0;border:0;background:none;outline:0;font:500 17px/22px var(--sans);letter-spacing:-.015em;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rq input.rq-v::placeholder,.rq .rq-v.rq-ph{color:rgba(30,22,24,.36);font-weight:400}
+.rq-code{flex:none;font:500 10.5px/1 var(--deck,var(--mono));letter-spacing:.08em;font-style:normal;padding:4px 6px;border-radius:5px;background:rgba(30,22,24,.06);color:rgba(30,22,24,.62)}
+.rq-link{position:absolute;left:calc(43% - 1px);top:50%;z-index:2;display:grid;place-items:center;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;border:1px solid rgba(30,22,24,.1);box-shadow:0 2px 8px rgba(30,22,24,.08)}
+.rq-link svg{width:15px;height:15px;fill:var(--accent);transform:rotate(45deg)}
+.qbar.rq .tk{justify-self:end;margin-left:4px}
+/* panels */
+.rq-pop{position:absolute;z-index:5;left:0;top:0;opacity:0;visibility:hidden;transform:translateY(-6px) scale(.985);transform-origin:20% 0;
+  border:1px solid rgba(30,22,24,.08);border-radius:18px;background:#fff;box-shadow:0 2px 6px rgba(30,22,24,.05),0 30px 60px -20px rgba(30,22,24,.28);
+  transition:opacity .2s ease,transform .3s cubic-bezier(.22,1,.36,1),visibility 0s .3s}
+.rq-pop.on{opacity:1;visibility:visible;transform:none;transition:opacity .2s ease,transform .3s cubic-bezier(.22,1,.36,1)}
+.rq-dest{width:360px;padding:8px}
+.rq-ph-h{margin:8px 12px 6px;font:500 10.5px/1 var(--deck,var(--mono));letter-spacing:.14em;text-transform:uppercase;color:rgba(30,22,24,.42)}
+.rq-o{display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;border:0;border-radius:11px;background:none;font:400 15px/1.2 var(--sans);color:var(--ink);text-align:left;cursor:pointer}
+.rq-o.hi,.rq-o:hover{background:#f6f3ef}
+.rq-o-c{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rq-o-h{font:400 13px/1 var(--sans);color:rgba(30,22,24,.5);font-variant-numeric:tabular-nums}
+.rq-none{margin:10px 12px;font:400 14px/1.4 var(--sans);color:rgba(30,22,24,.6)}
+.rq-cal{width:316px;padding:16px}
+.rq-cal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.rq-cal-h b{font:500 15px/1 var(--sans);letter-spacing:-.01em}
+.rq-nav{display:grid;place-items:center;width:32px;height:32px;padding:0;border:1px solid rgba(30,22,24,.1);border-radius:50%;background:#fff;cursor:pointer}
+.rq-nav svg{width:16px;height:16px;fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.rq-nav:disabled{opacity:.3;cursor:default}
+.rq-wd,.rq-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px 0}
+.rq-wd span{padding:6px 0;text-align:center;font:500 11px/1 var(--sans);color:rgba(30,22,24,.4)}
+.rq-d{position:relative;height:38px;padding:0;border:0;background:none;font:400 14px/1 var(--sans);color:var(--ink);cursor:pointer;font-variant-numeric:tabular-nums}
+.rq-d::before{content:"";position:absolute;inset:2px 3px;border-radius:10px;z-index:-1;transition:background-color .15s}
+.rq-days{position:relative;z-index:0}
+.rq-d:hover::before{background:#f3efea}
+.rq-d.off{color:rgba(30,22,24,.22);cursor:default}.rq-d.off:hover::before{background:none}
+.rq-d.now{font-weight:600}
+.rq-d.in{background:rgba(200,16,46,.07)}
+.rq-d.sel{color:#fff;font-weight:500}.rq-d.sel::before{background:var(--accent)}
+.rq-cal-f{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(30,22,24,.08);font:400 12.5px/1.3 var(--sans);color:rgba(30,22,24,.55)}
+.rq-oneway{padding:7px 12px;border:1px solid rgba(30,22,24,.14);border-radius:999px;background:#fff;font:500 12.5px/1 var(--sans);color:var(--ink);cursor:pointer}
+.rq-pp{width:320px;padding:18px}
+.rq-pp-r{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.rq-pp-r b{display:block;font:500 15px/1.2 var(--sans)}.rq-pp-r small{display:block;margin-top:4px;font:400 12.5px/1.3 var(--sans);color:rgba(30,22,24,.5)}
+.rq-step{display:flex;align-items:center;gap:10px}
+.rq-step button{display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid rgba(30,22,24,.16);border-radius:50%;background:#fff;font:300 19px/1 var(--sans);color:var(--ink);cursor:pointer}
+.rq-step button:hover{border-color:rgba(30,22,24,.45)}.rq-step button:disabled{opacity:.3;cursor:default}
+.rq-step output{min-width:2ch;text-align:center;font:500 17px/1 var(--sans);font-variant-numeric:tabular-nums}
+.rq-pp-n{margin:14px 0 0;padding-top:12px;border-top:1px solid rgba(30,22,24,.08);font:400 12.5px/1.4 var(--sans);color:rgba(30,22,24,.55)}
+@media (max-width:1240px){ .qbar.rq{grid-template-columns:repeat(3,minmax(0,1fr)) auto!important} .rq-route{grid-column:1/-1} }
+@media (max-width:900px){
+  .qbar.rq{grid-template-columns:1fr 1fr!important;gap:8px;padding:8px;border-radius:20px}
+  .rq-route{grid-column:1/-1;grid-template-columns:1fr;gap:8px}
+  .rq-link{left:auto;right:18px;margin:-17px 0 0}
+  .rq-t{height:64px;padding:0 14px;gap:12px}
+  .rq-pax{grid-column:1/-1}
+  .rq-dep .rq-c,.rq-ret .rq-c{display:none}
+  .rq-dep,.rq-ret{padding:0 12px;gap:10px}
+  .rq .rq-v{font-size:16px}
+  .qbar.rq .tk{grid-column:1/-1;justify-self:stretch;margin:4px 0 0;width:100%}
+  .rq-dest,.rq-cal,.rq-pp{width:min(340px,calc(100vw - 2 * var(--pad) - 16px))}
+}
 </style>
 </head>
 <body>
@@ -1600,7 +1669,7 @@ main section#explore{display:none!important}
   <div class="rw-g rw-base intro-fade"><small>Based at</small><span>Montréal-Trudeau, YUL</span></div>
   <div class="rw-g rw-call intro-fade"><small>Concierge, 24/7</small><a href="tel:+15145550142">+1 514 555 0142</a></div>
   <div class="nav-right intro-fade">
-    <a class="nav-book" href="book.html"><span>Book a flight</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+    <a class="nav-book" href="book.html">Book</a>
     <button id="menu-btn" aria-expanded="false" aria-controls="menu-links"><span class="l-menu">menu</span><span class="l-close">close</span></button>
     <nav id="menu-links" aria-label="Sections">
       <a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a><a href="#book">Book a flight</a>
@@ -1636,13 +1705,28 @@ main section#explore{display:none!important}
   </section>
 
   <div class="qbar-wrap" id="quick">
-    <form class="qbar qb" id="qbar" novalidate>
-      <div class="qb-head"><p class="qb-t">Plan a flight</p><p class="qb-s">Answer within 2 hours,<br>no commitment.</p></div>
-      <div class="qb-f qb-from"><span class="qb-l">Departing</span><span class="qb-v"><i class="qb-dot"></i>Montréal</span><span class="qb-h">YUL · private terminal</span><input type="hidden" name="from" value="Montreal"></div>
-      <label class="qb-f qb-to"><span class="qb-l">Destination</span><input class="qb-v" name="to" list="airports" placeholder="Where to?" autocomplete="off"><span class="qb-h" id="qb-to-h">City or airport</span></label>
-      <label class="qb-f qb-date"><span class="qb-l">Date</span><span class="qb-v qb-dv" id="qb-dv">Choose a day</span><span class="qb-h" id="qb-dh">Flexible? Leave it blank</span><input name="date" type="date" tabindex="-1" aria-label="Departure date"></label>
-      <div class="qb-f qb-pax"><span class="qb-l">Guests</span><span class="qb-step"><button type="button" class="qb-m" aria-label="Fewer guests">−</button><output class="qb-v" id="qb-pv">4</output><button type="button" class="qb-p" aria-label="More guests">+</button></span><span class="qb-h">Up to 16 aboard</span><select name="pax" hidden><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option></select></div>
-      <button class="qb-go" type="submit"><span>Request a quote</span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></button>
+    <form class="qbar rq" id="qbar" novalidate>
+      <div class="rq-route">
+        <div class="rq-t rq-from"><svg class="rq-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 20.5h17"/><path d="M5.5 20.5V9.8L12 5.5l6.5 4.3v10.7"/><path d="M9.5 20.5v-5h5v5"/></svg><span class="rq-tx"><span class="rq-l">From · home base</span><span class="rq-v">Montréal <em class="rq-code">YUL</em></span></span></div>
+        <i class="rq-link" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 3.1c-1-.9-2.6-.6-3.9.7l-3.3 3.3L4.9 4.6 3.3 6.2l7.5 4.5-3.3 3.6-2.6-.5-1.3 1.3 3.4 1.9 1.9 3.4 1.3-1.3-.5-2.6 3.6-3.3 4.5 7.5 1.6-1.6-2.5-9.5 3.3-3.3c1.3-1.3 1.6-2.9.6-3.9z"/></svg></i>
+        <div class="rq-t rq-to" data-pop="dest"><svg class="rq-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg><span class="rq-tx"><label class="rq-l" for="rq-to">To</label><input class="rq-v" id="rq-to" name="to" placeholder="Where to?" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="rq-dest"></span><em class="rq-code" id="rq-tocode" hidden></em><svg class="rq-c" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></div>
+      </div>
+      <button type="button" class="rq-t rq-dep" data-pop="cal" data-which="date" aria-haspopup="dialog"><svg class="rq-i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span class="rq-tx"><span class="rq-l">Departure</span><span class="rq-v rq-ph" id="rq-dep">Choose a day</span></span><svg class="rq-c" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button>
+      <button type="button" class="rq-t rq-ret" data-pop="cal" data-which="ret" aria-haspopup="dialog"><svg class="rq-i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M14.5 13.5h-5l1.6-1.6M9.5 16.5h5l-1.6 1.6"/></svg><span class="rq-tx"><span class="rq-l">Return</span><span class="rq-v rq-ph" id="rq-ret">One way</span></span><svg class="rq-c" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button>
+      <button type="button" class="rq-t rq-pax" data-pop="pax" aria-haspopup="dialog"><svg class="rq-i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="3.7"/><path d="M4.8 20.5c.6-3.9 3.5-6.2 7.2-6.2s6.6 2.3 7.2 6.2"/></svg><span class="rq-tx"><span class="rq-l">Guests</span><span class="rq-v" id="rq-pax">4 guests</span></span><svg class="rq-c" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button>
+      <button class="btn" type="submit">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+      <input type="hidden" name="from" value="Montreal"><input type="hidden" name="date"><input type="hidden" name="ret"><select name="pax" hidden><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option></select>
+      <div class="rq-pop rq-dest" id="rq-dest" role="listbox" aria-label="Destinations"></div>
+      <div class="rq-pop rq-cal" id="rq-cal" role="dialog" aria-label="Choose a date">
+        <div class="rq-cal-h"><button type="button" class="rq-nav" data-m="-1" aria-label="Previous month"><svg viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></svg></button><b id="rq-month"></b><button type="button" class="rq-nav" data-m="1" aria-label="Next month"><svg viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></svg></button></div>
+        <div class="rq-wd"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+        <div class="rq-days" id="rq-days"></div>
+        <div class="rq-cal-f"><span id="rq-calnote"></span><button type="button" class="rq-oneway" id="rq-oneway">One way</button></div>
+      </div>
+      <div class="rq-pop rq-pp" id="rq-pp" role="dialog" aria-label="Guests">
+        <div class="rq-pp-r"><div><b>Guests</b><small>Up to 16 aboard, crew not counted</small></div><span class="rq-step"><button type="button" data-d="-1" aria-label="Fewer guests">−</button><output id="rq-pn">4</output><button type="button" data-d="1" aria-label="More guests">+</button></span></div>
+        <p class="rq-pp-n">Pets fly in the cabin with you. Tell the advisor.</p>
+      </div>
     </form>
     <div class="qbar-note qb-note"><span id="qbar-est"></span></div>
   </div>
@@ -5351,7 +5435,7 @@ if (LAND) {
 { // flight deck: ticket buttons, hero HUD, split-flap
   const ARW = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>';
   const ticket = el => { if (!el || el.classList.contains('tk')) return; const t = el.textContent.replace(/\s+/g, ' ').trim(); el.innerHTML = `<span class="tk-l">${t}</span><i class="tk-r">${ARW}</i>`; el.classList.add('tk'); };
-  ['#qbar .btn', '#pass-book', '#bform button[type=submit]', '#done-mail', '.cta'].forEach(s => document.querySelectorAll(s).forEach(ticket));
+  ['.deck .nav-book', '#qbar .btn', '#pass-book', '#bform button[type=submit]', '#done-mail', '.cta'].forEach(s => document.querySelectorAll(s).forEach(ticket));
   const pill = document.getElementById('pill');
   if (pill) { pill.classList.add('tk-pill'); const a = document.createElement('span'); a.className = 'tk'; a.innerHTML = `<span class="tk-l">Book a flight</span><i class="tk-r">${ARW}</i>`; pill.appendChild(a); }
 
@@ -5426,7 +5510,7 @@ if (LAND) {
   const pass = document.getElementById('pass-book');
   if (pass) pass.addEventListener('click', e => { e.stopImmediatePropagation(); e.preventDefault(); const c = document.getElementById('pass-city')?.textContent || ''; go(c.split('–').pop().trim()); }, true);
   const qbar = document.getElementById('qbar');
-  if (qbar) qbar.addEventListener('submit', e => { e.stopImmediatePropagation(); e.preventDefault(); const Q = qbar.elements; go(Q.to.value, { from: Q.from.value || 'Montreal', date: Q.date.value || '', pax: Q.pax ? Q.pax.value : '' }); }, true);
+  if (qbar) qbar.addEventListener('submit', e => { e.stopImmediatePropagation(); e.preventDefault(); const Q = qbar.elements; go(Q.to.value, { from: Q.from.value || 'Montreal', date: Q.date.value || '', pax: Q.pax ? Q.pax.value : '', ...(Q.ret && Q.ret.value ? { ret: Q.ret.value } : {}) }); }, true);
 }
 
 { // v14: the galley cabinet's top pokes through the roof near the door: keep it hidden (polls until the cabin has loaded)
@@ -5661,24 +5745,102 @@ if (LAND) {
   }
 }
 
-{ // v36: quote bar date label + guest stepper
+
+{ // v37: quote bar tiles + panels
   const f = document.getElementById('qbar');
-  if (f) {
-    const d = f.elements.date, dv = document.getElementById('qb-dv'), dh = document.getElementById('qb-dh');
-    const fmt = new Intl.DateTimeFormat('en-CA', { weekday: 'short', day: 'numeric', month: 'short' });
-    const showD = () => {
-      if (!d.value) { dv.textContent = 'Choose a day'; dv.classList.remove('set'); dh.textContent = 'Flexible? Leave it blank'; return; }
-      const t = new Date(d.value + 'T12:00'); dv.textContent = fmt.format(t); dv.classList.add('set');
-      const days = Math.round((t - new Date(new Date().toDateString())) / 864e5);
-      dh.textContent = days <= 0 ? 'Today' : days === 1 ? 'Tomorrow' : 'In ' + days + ' days';
+  if (f && f.classList.contains('rq')) {
+    const AP = [['Montreal', 'YUL', 45.47, -73.74], ['Quebec City', 'YQB', 46.79, -71.39], ['Toronto', 'YYZ', 43.68, -79.63], ['Ottawa', 'YOW', 45.32, -75.67], ['Vancouver', 'YVR', 49.19, -123.18],
+    ['New York', 'TEB', 40.85, -74.06], ['Boston', 'BOS', 42.36, -71.01], ['Miami', 'OPF', 25.91, -80.28], ['Aspen', 'ASE', 39.22, -106.87], ['Los Angeles', 'VNY', 34.21, -118.49],
+    ['Honolulu', 'HNL', 21.32, -157.92], ['Mexico City', 'MEX', 19.44, -99.07], ['Cancún', 'CUN', 21.04, -86.87], ['São Paulo', 'GRU', -23.43, -46.47], ['Paris', 'LBG', 48.97, 2.44],
+    ['London', 'FAB', 51.28, -0.78], ['Geneva', 'GVA', 46.24, 6.11], ['Nice', 'NCE', 43.66, 7.22], ['Milan', 'LIN', 45.45, 9.28], ['Reykjavik', 'KEF', 63.99, -22.61],
+    ['Marrakech', 'RAK', 31.61, -8.04], ['Cairo', 'CAI', 30.12, 31.41], ['Dubai', 'DWC', 24.9, 55.16], ['Cape Town', 'CPT', -33.97, 18.6], ['Tokyo', 'HND', 35.55, 139.78],
+    ['Seoul', 'ICN', 37.46, 126.44], ['Hong Kong', 'HKG', 22.31, 113.91], ['Singapore', 'XSP', 1.42, 103.87], ['Sydney', 'SYD', -33.95, 151.18]].filter(a => a[1] !== 'YUL'), YUL = [45.47, -73.74];
+    const km = (a, b) => { const r = Math.PI / 180, dl = (b[1] - a[1]) * r, p1 = a[0] * r, p2 = b[0] * r; return 6371 * Math.acos(Math.min(1, Math.sin(p1) * Math.sin(p2) + Math.cos(p1) * Math.cos(p2) * Math.cos(dl))); };
+    const hrs = a => { const d = km(YUL, [a[2], a[3]]), h = d / 956 + 0.35 + (d > 13900 ? 1 : 0), m = Math.round(h * 12) * 5; return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + String(m % 60).padStart(2, '0'); };
+    const norm = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const E = f.elements, $ = id => document.getElementById(id);
+    const pops = { dest: $('rq-dest'), cal: $('rq-cal'), pax: $('rq-pp') };
+    let open = null, openTile = null;
+    const place = (pop, tile) => {
+      const fr = f.getBoundingClientRect(), tr = tile.getBoundingClientRect(), w = pop.offsetWidth;
+      let x = tr.left - fr.left; if (innerWidth <= 900) x = (fr.width - w) / 2; x = Math.max(0, Math.min(x, fr.width - w));
+      pop.style.left = x + 'px'; pop.style.top = (tr.bottom - fr.top + 8) + 'px';
     };
-    d.addEventListener('change', showD); d.addEventListener('input', showD);
-    f.querySelector('.qb-date').addEventListener('click', e => { e.preventDefault(); try { d.showPicker(); } catch (_) { d.focus(); } });
-    const sel = f.elements.pax, pv = document.getElementById('qb-pv');
-    const setP = n => { n = Math.min(16, Math.max(1, n)); sel.value = String(n); pv.textContent = n; f.querySelector('.qb-m').disabled = n <= 1; f.querySelector('.qb-p').disabled = n >= 16; };
-    f.querySelector('.qb-m').addEventListener('click', () => setP(+sel.value - 1));
-    f.querySelector('.qb-p').addEventListener('click', () => setP(+sel.value + 1));
-    setP(+sel.value || 4); showD();
+    const close = () => { if (!open) return; open.classList.remove('on'); openTile.classList.remove('act'); openTile.querySelector('[aria-expanded]')?.setAttribute('aria-expanded', 'false'); open = openTile = null; };
+    const show = (name, tile) => { if (open === pops[name] && openTile === tile) return; close(); open = pops[name]; openTile = tile; tile.classList.add('act'); open.classList.add('on'); place(open, tile); };
+    addEventListener('resize', () => open && place(open, openTile));
+    document.addEventListener('pointerdown', e => { if (open && !open.contains(e.target) && !openTile.contains(e.target)) close(); });
+    f.addEventListener('keydown', e => { if (e.key === 'Escape') { close(); } });
+
+    // destination
+    const to = $('rq-to'), code = $('rq-tocode'), list = pops.dest; let hi = 0, rows = [];
+    const draw = () => {
+      const q = norm(to.value.trim());
+      rows = AP.filter(a => !q || norm(a[0]).includes(q) || norm(a[1]).startsWith(q)).slice(0, 7);
+      hi = Math.min(hi, Math.max(0, rows.length - 1));
+      list.innerHTML = (q ? '' : '<p class="rq-ph-h">Nonstop from Montréal</p>') + (rows.length ? rows.map((a, i) => `<button type="button" role="option" class="rq-o${i === hi ? ' hi' : ''}" data-i="${i}"><span class="rq-o-c">${a[0]}</span><em class="rq-code">${a[1]}</em><span class="rq-o-h">${hrs(a)}</span></button>`).join('') : `<p class="rq-none">Any airport works. Type it and an advisor plans the route.</p>`);
+    };
+    const pick = a => { to.value = a[0]; code.textContent = a[1]; code.hidden = false; to.dispatchEvent(new Event('input', { bubbles: true })); close(); };
+    const sync = () => { const a = AP.find(a => norm(a[0]) === norm(to.value.trim()) || norm(a[1]) === norm(to.value.trim())); code.hidden = !a; if (a) code.textContent = a[1]; };
+    const openDest = () => { draw(); show('dest', to.closest('.rq-t')); to.setAttribute('aria-expanded', 'true'); };
+    to.addEventListener('focus', openDest);
+    to.closest('.rq-t').addEventListener('click', () => { to.focus(); openDest(); });
+    to.addEventListener('input', e => { if (e.isTrusted) { hi = 0; draw(); if (!open) openDest(); } sync(); });
+    to.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!open) openDest(); hi = (hi + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % Math.max(1, rows.length); draw(); }
+      else if (e.key === 'Enter' && open === list && rows[hi]) { e.preventDefault(); pick(rows[hi]); }
+      else if (e.key === 'Tab') close();
+    });
+    list.addEventListener('click', e => { const b = e.target.closest('.rq-o'); if (b) pick(rows[+b.dataset.i]); });
+
+    // calendar
+    const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const parse = s => s ? new Date(s + 'T12:00') : null;
+    const today = new Date(); today.setHours(12, 0, 0, 0);
+    const fmt = new Intl.DateTimeFormat('en-CA', { weekday: 'short', month: 'short', day: 'numeric' }), mfmt = new Intl.DateTimeFormat('en-CA', { month: 'long', year: 'numeric' });
+    let which = 'date', view = new Date(today.getFullYear(), today.getMonth(), 1, 12);
+    const label = () => {
+      const d = parse(E.date.value), r = parse(E.ret.value);
+      $('rq-dep').textContent = d ? fmt.format(d) : 'Choose a day'; $('rq-dep').classList.toggle('rq-ph', !d);
+      $('rq-ret').textContent = r ? fmt.format(r) : 'One way'; $('rq-ret').classList.toggle('rq-ph', !r);
+    };
+    const drawCal = () => {
+      $('rq-month').textContent = mfmt.format(view);
+      const d = parse(E.date.value), r = parse(E.ret.value), min = which === 'ret' && d ? d : today;
+      const first = (view.getDay() + 6) % 7, n = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+      let h = '<span></span>'.repeat(first);
+      for (let i = 1; i <= n; i++) {
+        const day = new Date(view.getFullYear(), view.getMonth(), i, 12), s = iso(day), off = day < min;
+        const c = ['rq-d']; if (off) c.push('off'); if (s === iso(today)) c.push('now');
+        if (d && s === iso(d)) c.push('sel', 'a'); if (r && s === iso(r)) c.push('sel', 'b');
+        if (d && r && day > d && day < r) c.push('in');
+        h += `<button type="button" class="${c.join(' ')}" data-d="${s}"${off ? ' disabled' : ''}>${i}</button>`;
+      }
+      $('rq-days').innerHTML = h;
+      f.querySelector('.rq-nav[data-m="-1"]').disabled = view <= new Date(today.getFullYear(), today.getMonth(), 1, 12);
+      $('rq-calnote').textContent = which === 'ret' ? (d ? 'Back from ' + (E.to.value.trim() || 'your trip') : 'Pick the departure first') : 'Wheels up any day, any hour';
+      $('rq-oneway').hidden = which !== 'ret';
+    };
+    const openCal = (w, tile) => { which = w; const s = parse(E[w].value) || (w === 'ret' && parse(E.date.value)) || today; view = new Date(s.getFullYear(), s.getMonth(), 1, 12); drawCal(); show('cal', tile); };
+    f.querySelectorAll('[data-pop="cal"]').forEach(t => t.addEventListener('click', () => {
+      if (t.dataset.which === 'ret' && !E.date.value) return openCal('date', f.querySelector('.rq-dep'));
+      openCal(t.dataset.which, t);
+    }));
+    f.querySelectorAll('.rq-nav').forEach(b => b.addEventListener('click', () => { view = new Date(view.getFullYear(), view.getMonth() + +b.dataset.m, 1, 12); drawCal(); }));
+    $('rq-days').addEventListener('click', e => {
+      const b = e.target.closest('.rq-d'); if (!b || b.disabled) return;
+      if (which === 'date') { E.date.value = b.dataset.d; if (E.ret.value && E.ret.value <= E.date.value) E.ret.value = ''; label(); E.date.dispatchEvent(new Event('input', { bubbles: true })); close(); }
+      else { E.ret.value = b.dataset.d; label(); close(); }
+    });
+    $('rq-oneway').addEventListener('click', () => { E.ret.value = ''; label(); close(); });
+
+    // guests
+    const pn = $('rq-pn');
+    const setP = n => { n = Math.min(16, Math.max(1, n)); E.pax.value = String(n); pn.textContent = n; $('rq-pax').textContent = n + (n === 1 ? ' guest' : ' guests');
+      pops.pax.querySelector('[data-d="-1"]').disabled = n <= 1; pops.pax.querySelector('[data-d="1"]').disabled = n >= 16; };
+    f.querySelector('.rq-pax').addEventListener('click', e => { show('pax', e.currentTarget); });
+    pops.pax.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) setP(+E.pax.value + +b.dataset.d); });
+    setP(+E.pax.value || 4); label();
   }
 }
 </script>

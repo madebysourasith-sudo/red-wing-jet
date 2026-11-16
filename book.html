@@ -226,6 +226,7 @@ function pass() {
 }
 const Q = new URLSearchParams(location.search);
 for (const k of ['from', 'to', 'date', 'pax']) if (Q.get(k)) F[k].value = Q.get(k);
+if (Q.get('ret')) { F.trip.value = 'rt'; $('#ret').classList.remove('off'); F.ret.disabled = false; F.ret.value = Q.get('ret'); }
 if (PLANS[Q.get('plan')]) f.querySelector(`input[name=plan][value=${Q.get('plan')}]`).checked = true;
 pass();
 f.addEventListener('input', e => { e.target.closest('.field')?.classList.remove('bad'); $('#msg').textContent = ''; if (e.target.name === 'date') F.ret.min = e.target.value || today(); pass(); });
