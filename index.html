@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Red Wing — the long-range private jet, in interactive 3D</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%234f1f96%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%226%22 fill=%22%23c8177a%22/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23fff'/%3E%3Cg transform='translate(3.5 0) scale(.9 .94)'%3E%3Cpath fill='%23c8102e' d='M2 32 16.6 6.2h9.2L23.4 32z'/%3E%3Cpath fill='%236d1322' d='M2 32h21.4l.9-9.8z'/%3E%3Cpath fill='%23fff' d='m4.6 31.4 19.9-11.2-.2 2.2L7.6 31.4z'/%3E%3Cpath fill='%23c8102e' d='M11.6 2.6h16.8l1 2.6H12.4z'/%3E%3C/g%3E%3C/svg%3E">
 <meta name="description" content="Red Wing, a long-range private jet to explore in real-time 3D: walk around the aircraft, open the door and step aboard. Book your flight.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1587,6 +1587,32 @@ main section#explore{display:none!important}
   .qbar.rq .tk{grid-column:1/-1;justify-self:stretch;margin:4px 0 0;width:100%}
   .rq-dest,.rq-cal,.rq-pp{width:min(340px,calc(100vw - 2 * var(--pad) - 16px))}
 }
+
+/* ================= v38: hero contrast, no testimonials ================= */
+.hero-title.rwx::before{content:"";position:absolute;left:0;right:0;bottom:0;height:calc(100% + 26vh);z-index:-1;pointer-events:none;
+  background:linear-gradient(0deg,rgba(7,20,44,.62) 0%,rgba(7,20,44,.46) 38%,rgba(7,20,44,.18) 72%,rgba(7,20,44,0) 100%)}
+.rwx-sub{color:rgba(255,255,255,.92)!important;text-shadow:0 1px 2px rgba(7,20,44,.35),0 2px 22px rgba(7,20,44,.45)!important}
+.rwx-facts,.rwx-cue{color:#fff!important;text-shadow:0 1px 2px rgba(7,20,44,.4),0 2px 16px rgba(7,20,44,.45)!important}
+.rwx-facts{color:rgba(255,255,255,.88)!important}
+.rwx-cue i{background:rgba(255,255,255,.5)!important}
+.rwx-row{border-bottom-color:rgba(255,255,255,.55)!important}
+.rwx2{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"a ." "s b";align-items:end;column-gap:40px;padding-bottom:calc(var(--pad) + 4px)!important}
+.rwx2 .rwx-word{display:contents}
+.rwx2 .rwx-word b{font:400 15.2vw/.78 var(--sans);letter-spacing:-.055em;text-transform:uppercase;color:#fff;filter:drop-shadow(0 4px 30px rgba(7,20,44,.3))}
+.rwx2 .w1{grid-area:a;justify-self:start;margin-left:-.05em}
+.rwx2 .w2{grid-area:b;justify-self:end;margin-top:.04em}
+.rwx2 .rwx-sub{grid-area:s;align-self:end;max-width:380px;margin:0 0 .5vw;font:300 18px/1.38 var(--sans)!important;letter-spacing:-.012em}
+.rwx2 .rwx-sub b{font-weight:500}
+@media (max-width:900px){
+  .rwx2{grid-template-columns:1fr;grid-template-areas:"a" "b" "s";row-gap:0;padding-bottom:44px!important}
+  .rwx2 .rwx-word b{font-size:25vw}
+  .rwx2 .rwx-sub{margin-top:18px;font-size:15px!important;max-width:none}
+}
+.rw-fin{flex:none;width:32px;height:36px;filter:drop-shadow(0 2px 6px rgba(80,0,16,.18))}
+#nav.rw .nav-logo{gap:11px}
+@media (max-width:900px){.rw-fin{width:24px;height:28px}}
+#voices{display:none!important}
+.fa2-fade{background:linear-gradient(180deg,#fdfdfd,rgba(253,253,253,.86) 22%,rgba(236,240,246,.5) 50%,rgba(230,238,248,.16) 78%,rgba(230,238,248,0))!important}
 </style>
 </head>
 <body>
@@ -1664,7 +1690,7 @@ main section#explore{display:none!important}
 })();
 </script>
 <header id="nav" class="deck rw on-hero">
-  <a class="nav-logo" href="#hero" aria-label="Red Wing, private aviation"><i class="rw-tile"><svg class="rw-wing" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 25.5 20.6 9.6l2.9-5.1h2.3l-1.1 6.6L13.6 25.5z"/></svg></i><b>Red Wing</b></a>
+  <a class="nav-logo" href="#hero" aria-label="Red Wing, private aviation"><svg class="rw-fin" viewBox="0 0 30 34" aria-hidden="true"><path fill="#c8102e" d="M2 32 16.6 6.2h9.2L23.4 32z"/><path fill="#6d1322" d="M2 32h21.4l.9-9.8z"/><path fill="#fff" d="m4.6 31.4 19.9-11.2-.2 2.2L7.6 31.4z"/><path fill="#c8102e" d="M11.6 2.6h16.8l1 2.6H12.4z"/></svg><b>Red Wing</b></a>
   <div class="rw-g rw-explore intro-fade"><small>Explore</small><nav class="nav-l" aria-label="Main"><a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a></nav></div>
   <div class="rw-g rw-base intro-fade"><small>Based at</small><span>Montréal-Trudeau, YUL</span></div>
   <div class="rw-g rw-call intro-fade"><small>Concierge, 24/7</small><a href="tel:+15145550142">+1 514 555 0142</a></div>
@@ -1686,13 +1712,9 @@ main section#explore{display:none!important}
     <div class="hero-card">
       <div class="hero-grad"></div>
       <video class="hero-vid" id="hero-vid" muted playsinline preload="auto" poster="redwing-oneshot-v3-poster.jpg" aria-label="Scroll to fly through the Red Wing: in through the windshield, down the cabin to the bedroom, out over the clouds, landing, airstair down"></video>
-      <div class="hero-title rwx" role="group" aria-label="Red Wing, private aviation from Montréal">
-        <div class="rwx-row">
-          <p class="rwx-sub"><b>Private aviation from Montréal.</b><br>Leave when you want, land where you want.</p>
-          <ul class="rwx-facts"><li><b>16</b> guests</li><li><b>13,900</b> km nonstop</li><li><b>Mach 0.90</b></li></ul>
-          <p class="rwx-cue">Scroll to board<i></i></p>
-        </div>
-        <p class="rwx-word" aria-hidden="true"><b>Red</b><b>Wing</b></p>
+      <div class="hero-title rwx rwx2" role="group" aria-label="Red Wing, private aviation from Montréal">
+        <p class="rwx-word" aria-hidden="true"><b class="w1">Red</b><b class="w2">Wing</b></p>
+        <p class="rwx-sub"><b>Private aviation from Montréal.</b><br>Leave when you want, land where you want. Your own jet, waiting for you.</p>
       </div>
       <div class="hero-caps" aria-hidden="true"><p class="hc" data-a="1.9" data-b="3.7"><span class="hc-i">01 / 06</span><span class="hc-t">Your own jet.<br>Your own time.</span></p><p class="hc" data-a="3.9" data-b="5.8"><span class="hc-i">02 / 06</span><span class="hc-t">Sixteen seats. Only the<br>people you invite.</span></p><p class="hc" data-a="6.0" data-b="8.6"><span class="hc-i">03 / 06</span><span class="hc-t">A real bed,<br>above the weather.</span></p><p class="hc" data-a="9.1" data-b="11.5"><span class="hc-i">04 / 06</span><span class="hc-t">13,900 km nonstop.<br>Montréal to anywhere.</span></p><p class="hc" data-a="11.8" data-b="13.6"><span class="hc-i">05 / 06</span><span class="hc-t">Land where<br>you want.</span></p><p class="hc" data-a="13.9" data-b="99"><span class="hc-i">06 / 06</span><span class="hc-t">The door opens<br>where the car stops.</span></p></div>
       <svg class="hero-word" id="hero-word" hidden viewBox="0 0 1392 400" preserveAspectRatio="xMidYMin meet" aria-hidden="true"></svg>
