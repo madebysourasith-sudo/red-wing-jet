@@ -1629,6 +1629,129 @@ main section#explore{display:none!important}
   #nav.deck.rw.on-hero{background:linear-gradient(180deg,rgba(6,20,48,.5),rgba(6,20,48,.12))!important}
   #nav.deck.rw.on-hero .rw-g,#nav.deck.rw.on-hero .nav-logo b{text-shadow:0 1px 10px rgba(6,20,48,.35)}
 }
+
+.rw-dwg{position:fixed;inset:0;z-index:6;pointer-events:none;visibility:hidden;opacity:0}
+.rw-dwg svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.rw-dwg line{stroke:#141112;stroke-width:1;fill:none}
+.rw-dwg line.cl{stroke-width:.8;stroke-dasharray:18 4 2 4}
+.rw-dwg line.ex{stroke-width:.6}
+.rw-dwg line.tk{stroke-width:.8}
+.rw-dwg text{font:500 11px/1 var(--mono,ui-monospace),monospace;letter-spacing:.12em;fill:#141112;text-anchor:middle}
+.rw-tb{position:absolute;right:clamp(16px,2.4vw,40px);bottom:clamp(16px,3vh,36px);display:grid;grid-template-columns:auto auto;border:1px solid #141112;
+  font:500 10px/1 var(--mono,ui-monospace),monospace;letter-spacing:.12em;text-transform:uppercase;color:#141112;background:#fcfbf8}
+.rw-tb>*{padding:8px 12px;border-right:1px solid #141112;border-bottom:1px solid #141112}
+.rw-tb>:nth-child(2n+1){border-right:1px solid #141112}.rw-tb>:nth-child(2n){border-right:0}.rw-tb>:nth-last-child(-n+2){border-bottom:0}
+.rw-tb b{grid-column:1/-1;border-right:0;font-weight:600;font-size:11px}
+@media (max-width:700px){.rw-tb{display:none}}
+/* cabin labels: glass chips */
+.p3-lab{padding:8px 14px 8px 8px;border-radius:999px;align-items:center;
+  background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.34));-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.75);box-shadow:0 10px 28px -10px rgba(30,22,24,.28),0 1px 2px rgba(30,22,24,.06),inset 0 1px 0 rgba(255,255,255,.9)}
+.p3-lab b{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:999px;background:var(--accent);color:#fff;letter-spacing:.04em}
+.p3-lab span{font-weight:500}
+.p3-lab.on{background:rgba(255,255,255,.9)}
+.p3-lab.on b{padding:0 6px;border-radius:999px}
+#p3-svg line{stroke:rgba(30,22,24,.5)}
+@media (max-width:900px){.p3-lab{padding:6px 11px 6px 6px}.p3-lab b{min-width:20px;height:20px}}
+
+/* ---- A day at 15,000 m: warp carousel ---- */
+#onboard.wd{position:relative;height:560vh!important;padding:0!important;background:#fdfdfd}
+.wd-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.wd-warp{position:absolute;inset:0}
+.wd-warp .warp-cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+.wd-warp .warp-glow{position:absolute;left:50%;width:min(44vw,640px);height:120px;transform:translateX(-50%);filter:blur(28px);opacity:.7;pointer-events:none;mix-blend-mode:multiply}
+.wd-warp .warp-glow.t{top:calc(var(--nav-h, 80px) - 30px);opacity:.45}.wd-warp .warp-glow.b{bottom:8vh;opacity:.55}
+.wd-stage::after{content:'';position:absolute;left:0;right:0;bottom:0;height:22vh;background:linear-gradient(180deg,rgba(253,253,253,0),#fdfdfd 78%);z-index:4;pointer-events:none}
+.wd-stage::before{content:'';position:absolute;left:0;right:0;top:0;height:16vh;background:linear-gradient(0deg,rgba(253,253,253,0),#fdfdfd 70%);z-index:4;pointer-events:none}
+.wd-head{position:absolute;left:50%;transform:translateX(-50%);top:calc(var(--nav-h, 80px) + clamp(10px,2.4vh,28px));z-index:5;text-align:center;pointer-events:none;width:max-content;max-width:90vw}
+.wd-eye{margin:0 0 10px;font:500 11px/1 var(--deck,var(--mono));letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.wd-h{margin:0;font:700 clamp(26px,2.6vw,40px)/1 var(--sans);letter-spacing:-.04em;color:#1e1618}
+.wd-route{position:absolute;left:var(--pad);right:var(--pad);bottom:clamp(18px,3vh,30px);display:flex;align-items:center;gap:14px;z-index:5;font:500 11px/1 var(--deck,var(--mono));letter-spacing:.14em;color:rgba(30,22,24,.6)}
+.wd-route .ln{position:relative;flex:1;height:1px;background:rgba(30,22,24,.16)}
+.wd-route .ln i{position:absolute;left:0;top:0;height:1px;background:var(--accent)}
+.wd-route .ln s{position:absolute;top:-3px;width:1px;height:7px;background:rgba(30,22,24,.3)}
+.wd-route .now{min-width:52px;text-align:right;color:var(--accent)}
+.wd-cta{position:absolute;left:50%;bottom:clamp(56px,9vh,84px);transform:translate(-50%,12px);z-index:6;opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;
+  padding:14px 22px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;font:500 15px/1 var(--sans);box-shadow:0 14px 30px -12px rgba(200,16,46,.6)}
+.wd-cta.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+
+/* ---- ownership passes: dealt out, tilt + glare, foil on the red one ---- */
+#own .pl-grid{perspective:1400px}
+#own .pl{transform-style:preserve-3d;will-change:transform;transition:filter .3s}
+#own .pl-body,#own .pl-stub{position:relative;overflow:hidden}
+#own .pl-gl{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .35s;mix-blend-mode:soft-light;
+  background:radial-gradient(420px circle at var(--gx,50%) var(--gy,30%),rgba(255,255,255,.95),rgba(255,255,255,0) 60%)}
+#own .pl.tilt .pl-gl{opacity:1}
+#own .pl-fo{position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;opacity:.16;transition:opacity .35s;
+  background:linear-gradient(115deg,transparent 20%,rgba(255,200,170,.8) 36%,rgba(255,240,190,.8) 43%,rgba(190,255,235,.7) 50%,rgba(200,210,255,.75) 57%,rgba(255,200,235,.7) 63%,transparent 76%);
+  background-size:260% 100%;background-position:var(--fx,50%) 0}
+#own .pl.tilt .pl-fo{opacity:.3}
+#own .pl.dealt{filter:drop-shadow(0 30px 40px rgba(30,22,24,.12))}
+@media (hover:none){#own .pl-gl{display:none}}
+@media (prefers-reduced-motion:reduce){#own .pl{transform:none!important}}
+
+/* ---- tidy pass: decorative eyebrows, counters and reassurance strips hidden ---- */
+#own .own-top .own-eye,          /* "Ownership" */
+#own .tr-head, #own .tr-grid,    /* "Why owners trust us" + its four figures */
+.gear-body > .label.mono,        /* "Airframe" */
+.p3-eye,                         /* "Cabin plan · RW 30" */
+.wd-eye,                         /* "On board · Montréal → Dubai" */
+.bk-eye,                         /* "Request a flight" */
+#landing .fa-eye,                /* "Final approach" */
+#landing .fa2-base,              /* "Montréal-Trudeau · YUL private terminal" */
+#landing .fa2-under,             /* "Quote within 2 hours · … · Rather talk?" */
+.hero-caps .hc-i                 /* "01 / 06" counters on the hero captions */
+{display:none!important}
+
+/* ---- how a flight comes together: the flight plan stepper ---- */
+#howto{position:relative;height:320vh;background:#f3f0ea}
+#book{display:none!important}
+#howto::before,#howto::after{content:'';position:absolute;left:0;right:0;height:26vh;z-index:3;pointer-events:none}
+#howto::before{top:0;background:linear-gradient(180deg,#ebe7e1 8%,rgba(235,231,225,0))}      /* melts out of the ownership passes */
+#howto::after{bottom:0;background:linear-gradient(0deg,#fdfdfd 8%,rgba(253,253,253,0))}      /* and into the day aboard */   /* the flight plan now carries the booking call (its last step has the CTA) */
+.ht-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.ht-map{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;pointer-events:none;background:#f3f0ea}
+.ht-stage::before{content:'';position:absolute;inset:0 0 auto 0;height:calc(var(--nav-h,80px) + 30px);z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(243,240,234,.95),rgba(243,240,234,0))}
+.ht-panel{position:absolute;left:clamp(16px,3vw,48px);bottom:clamp(16px,5vh,48px);z-index:2;width:min(420px,calc(100vw - 32px));padding:28px 28px 24px;border-radius:22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.48));-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.85);box-shadow:0 30px 60px -30px rgba(30,22,24,.35),inset 0 1px 0 #fff}
+.ht-h{margin:0 0 22px;font:700 clamp(28px,2.6vw,40px)/.98 var(--sans);letter-spacing:-.045em;color:#1e1618}
+.ht-steps{position:relative;min-height:150px}
+.ht-s{position:absolute;inset:0 0 auto 0;opacity:0;transform:translateY(12px);transition:opacity .45s,transform .45s;pointer-events:none}
+.ht-s.on{opacity:1;transform:none;pointer-events:auto}
+.ht-n{margin:0 0 10px;font:500 11px/1 var(--deck,var(--mono));letter-spacing:.14em;color:rgba(30,22,24,.5)}
+.ht-n b{font-weight:500;color:var(--accent)}
+.ht-s h3{margin:0;font:500 22px/1.15 var(--sans);letter-spacing:-.02em;color:#1e1618}
+.ht-s p:not(.ht-n){margin:8px 0 0;font:400 15px/1.45 var(--sans);color:rgba(30,22,24,.66)}
+.ht-cta{display:inline-flex;margin-top:16px;padding:12px 18px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;font:500 14px/1 var(--sans);box-shadow:0 12px 26px -12px rgba(200,16,46,.6)}
+.ht-or{display:inline-block;margin:16px 0 0 14px;font:400 13px/1 var(--sans);color:rgba(30,22,24,.55)}.ht-or a{color:#1e1618;text-decoration:none;border-bottom:1px solid rgba(30,22,24,.25)}
+.ht-bar{position:relative;height:2px;margin-top:22px;background:rgba(30,22,24,.1);border-radius:2px;overflow:hidden}
+.ht-bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent)}
+@media (max-width:700px){.ht-map{height:calc(100% - 262px)}.ht-panel{left:12px;right:12px;bottom:12px;width:auto;padding:20px 20px 18px}.ht-h{font-size:26px;margin-bottom:14px}.ht-steps{min-height:132px}.ht-s h3{font-size:19px}.ht-s p:not(.ht-n){font-size:14px}}
+
+/* trim: the hero goes straight into Long range */
+#intro,#aircraft{display:none!important}
+
+/* ramp -> globe: the end of the #sheet section is night too, so nothing pale shows above the globe as the sky dissolves */
+#sheet{background:linear-gradient(180deg,var(--canvas) 0,var(--panel) 12%,var(--panel) 86%,#0a0a0a 91%,#0a0a0a 100%)!important}
+/* the globe opens from an inset card: keep its surround as dark as the night, so no pale band shows */
+#stats.anywhere{background:#0a0a0a!important}
+/* ramp -> globe: the night sky under the 3D layer */
+.rw-night{position:fixed;inset:0;z-index:117;pointer-events:none;opacity:0;visibility:hidden;
+  background:radial-gradient(120% 70% at 50% 110%,rgba(200,16,46,.10),rgba(200,16,46,0) 60%),linear-gradient(180deg,#0d0f15 0%,#0a0a0a 34%,#0a0a0a 100%)}
+.rw-night::before{content:'';position:absolute;inset:0;opacity:var(--st,0);
+  background-image:radial-gradient(1px 1px at 12% 18%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 72% 12%,#fff 50%,transparent 51%),
+  radial-gradient(1.2px 1.2px at 38% 32%,rgba(255,255,255,.9) 50%,transparent 51%),radial-gradient(1px 1px at 88% 41%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 22% 63%,rgba(255,255,255,.8) 50%,transparent 51%),radial-gradient(1.3px 1.3px at 57% 71%,#fff 50%,transparent 51%),
+  radial-gradient(1px 1px at 93% 82%,rgba(255,255,255,.7) 50%,transparent 51%),radial-gradient(1px 1px at 6% 88%,#fff 50%,transparent 51%);
+  background-size:520px 420px;opacity:calc(var(--st,0) * .55)}
+
+/* ---- seams: hero dissolve, dawn after the globe ---- */
+.rw-dissolve{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
+  background:linear-gradient(0deg,#f7f6f3 0%,rgba(247,246,243,.9) 20%,rgba(247,246,243,.45) 42%,rgba(247,246,243,0) 72%)}
+/* globe -> Three ways: no fade, the ownership section slides up over the pinned globe like a sheet */
+#own{margin-top:-100vh;margin-top:-100svh;z-index:3;border-radius:32px 32px 0 0;box-shadow:0 -40px 80px -20px rgba(0,0,0,.55);overflow:clip}
+@media (max-width:700px){#own{border-radius:22px 22px 0 0}}
 </style>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@600,700&display=swap">
 </head>
@@ -1684,38 +1807,40 @@ main section#explore{display:none!important}
   const left = ['0 0', ...edge.map(pt), '0 ' + H + 'px'], right = [...edge.map(pt), W + 'px ' + H + 'px', W + 'px 0'];
   const t0 = performance.now();
   const pre = () => { if (window.__rwPreStop) return;
-    const v = Math.floor(90 * (1 - Math.exp(-(performance.now() - t0) / 1400)));
+    const v = Math.floor(90 * (1 - Math.exp(-(performance.now() - t0) / 800)));
     if (String(v) !== cnt.textContent) cnt.textContent = v; window.__rwPre = v; requestAnimationFrame(pre); };
   requestAnimationFrame(pre);
   let done = false;
   // ?nointro (and anything else that calls start() directly): no tear, just go
   new MutationObserver(() => { if (!done && loader.classList.contains('out') && !loader.classList.contains('gone')) loader.classList.add('gone'); })
     .observe(loader, { attributes: true, attributeFilter: ['class'] });
+  setTimeout(() => { if (window.__app && window.__app.ready) return;
+    loader.classList.add('out', 'gone'); document.documentElement.classList.remove('is-loading'); document.body.classList.add('ready'); }, 8000);
   window.__rwTear = (start) => {
     if (done) return; done = true;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const open = () => { loader.classList.add('split'); start(); setTimeout(() => loader.classList.add('gone'), 1000); };
     if (reduce) { loader.classList.add('gone'); start(); return; }
-    setTimeout(() => wrap.classList.add('tug'), 90);                // a beat on 100, then the pull
+    setTimeout(() => wrap.classList.add('tug'), 60);                // a beat on 100, then the pull
     setTimeout(() => {
       wrap.querySelector('.tp-a .tp-face').style.clipPath = 'polygon(' + left.join(',') + ')';
       wrap.querySelector('.tp-b .tp-face').style.clipPath = 'polygon(' + right.join(',') + ')';
       wrap.classList.add('torn');
       requestAnimationFrame(() => requestAnimationFrame(() => { wrap.classList.add('fly'); setTimeout(open, 60); }));
-    }, 330);
+    }, 230);
   };
 })();
 </script>
 <header id="nav" class="deck rw on-hero">
   <a class="nav-logo" href="#hero" aria-label="Red Wing, private aviation"><svg class="rw-fin" viewBox="0 0 30 34" aria-hidden="true"><path fill="#c8102e" d="M2 32 16.6 6.2h9.2L23.4 32z"/><path fill="#6d1322" d="M2 32h21.4l.9-9.8z"/><path fill="#fff" d="m4.6 31.4 19.9-11.2-.2 2.2L7.6 31.4z"/><path fill="#c8102e" d="M11.6 2.6h16.8l1 2.6H12.4z"/></svg><b>Red Wing</b></a>
-  <div class="rw-g rw-explore intro-fade"><small>Explore</small><nav class="nav-l" aria-label="Main"><a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a></nav></div>
+  <div class="rw-g rw-explore intro-fade"><small>Explore</small><nav class="nav-l" aria-label="Main"><a href="#sheet">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a></nav></div>
   <div class="rw-g rw-base intro-fade"><small>Based at</small><span>Montréal-Trudeau, YUL</span></div>
   <div class="rw-g rw-call intro-fade"><small>Concierge, 24/7</small><a href="tel:+15145550142">+1 514 555 0142</a></div>
   <div class="nav-right intro-fade">
     <a class="nav-book" href="book.html">Book</a>
     <button id="menu-btn" aria-expanded="false" aria-controls="menu-links"><span class="l-menu">menu</span><span class="l-close">close</span></button>
     <nav id="menu-links" aria-label="Sections">
-      <a href="#aircraft">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a><a href="#book">Book a flight</a>
+      <a href="#sheet">Aircraft</a><a href="#stats">Routes</a><a href="#sheet">Cabin</a><a href="#own">Ownership</a><a href="#howto">Book a flight</a>
     </nav>
   </div>
 </header>
@@ -1790,35 +1915,6 @@ main section#explore{display:none!important}
         <p class="para reveal" data-from="rgba(30,22,24,.14)">Thirty metres of fuselage, a swept wing with nothing hanging beneath it, and two engines mounted at the tail.</p>
         <p class="para reveal" data-from="rgba(30,22,24,.14)">The wing stays clean and the cabin stays quiet: at Mach&nbsp;0.90, the noise stays behind you.</p>
       </div>
-    </div>
-  </section>
-
-  <section id="stats" class="dark anywhere">
-    <div class="world-sticky">
-      <canvas id="globe" hidden></canvas>
-      <iframe class="aw-globe" id="aw-globe" src="globe-redwing.html" title="" tabindex="-1" aria-hidden="true" loading="lazy"></iframe>
-      <div class="wheel-row"><span class="lead">Fly anywhere</span><span class="dash"></span><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M22 12c0-.9-.9-1.6-2-1.6h-5L9.6 3H7.4l2.7 7.4H5.6L3.9 8.2H2.2l1 3.8-1 3.8h1.7l1.7-2.2h4.5L7.4 21h2.2l5.4-7.4h5c1.1 0 2-.7 2-1.6z"/></svg><span class="dash"></span><div class="wheel"><ul id="wheel"></ul></div><div class="flap" id="aw-flap" aria-live="polite"></div></div>
-      <div class="pass" id="pass">
-        <div class="top"><div class="route"><span id="pass-route">YUL–CDG</span><small id="pass-city">Montreal – Paris</small></div><i class="bars"></i></div>
-        <dl><div><dt>Distance</dt><dd id="pass-d">—</dd></div><div><dt>Flight time</dt><dd id="pass-t">—</dd></div><div><dt>Stops</dt><dd>None</dd></div><div><dt>From</dt><dd id="pass-p">—</dd></div></dl>
-        <a class="book" href="#book" id="pass-book">Book this flight <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
-        </div>
-      <div class="world-word" aria-hidden="true">Anywhere</div>
-      <div class="aw-stats" aria-label="Performance">
-        <div><span class="v">13,900&nbsp;km</span><span class="k mono">Nonstop range</span></div>
-        <div><span class="v">Mach&nbsp;0.90</span><span class="k mono">Cruise speed</span></div>
-        <div><span class="v">15,500&nbsp;m</span><span class="k mono">Ceiling</span></div>
-      </div>
-      <div class="stats-legacy stats-sticky" hidden>
-      <svg class="stats-arc" id="stats-arc" aria-hidden="true"></svg>
-      <div class="stats-grid" id="stats-grid">
-        <div class="stats-tag mono" id="stats-tag">[&nbsp;&nbsp;<span>Distance</span>&nbsp;&nbsp;]</div>
-        <div class="stats-orb"><canvas id="orb-canvas" width="188" height="188"></canvas></div>
-        <div class="stat on"><span class="v">13,900&nbsp;km</span><span class="k mono">Range</span></div>
-        <div class="stat"><span class="v">Mach&nbsp;0.90</span><span class="k mono">Cruise speed</span></div>
-        <div class="stat"><span class="v">15,500&nbsp;m</span><span class="k mono">Ceiling</span></div>
-      </div>
-    </div>
     </div>
   </section>
 
@@ -2006,6 +2102,35 @@ main section#explore{display:none!important}
     <div class="explore-stage stage live" id="stage-explore"><canvas class="poster"></canvas></div>
   </section>
 
+  <section id="stats" class="dark anywhere">
+    <div class="world-sticky">
+      <canvas id="globe" hidden></canvas>
+      <iframe class="aw-globe" id="aw-globe" src="globe-redwing.html" title="" tabindex="-1" aria-hidden="true" loading="lazy"></iframe>
+      <div class="wheel-row"><span class="lead">Fly anywhere</span><span class="dash"></span><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M22 12c0-.9-.9-1.6-2-1.6h-5L9.6 3H7.4l2.7 7.4H5.6L3.9 8.2H2.2l1 3.8-1 3.8h1.7l1.7-2.2h4.5L7.4 21h2.2l5.4-7.4h5c1.1 0 2-.7 2-1.6z"/></svg><span class="dash"></span><div class="wheel"><ul id="wheel"></ul></div><div class="flap" id="aw-flap" aria-live="polite"></div></div>
+      <div class="pass" id="pass">
+        <div class="top"><div class="route"><span id="pass-route">YUL–CDG</span><small id="pass-city">Montreal – Paris</small></div><i class="bars"></i></div>
+        <dl><div><dt>Distance</dt><dd id="pass-d">—</dd></div><div><dt>Flight time</dt><dd id="pass-t">—</dd></div><div><dt>Stops</dt><dd>None</dd></div><div><dt>From</dt><dd id="pass-p">—</dd></div></dl>
+        <a class="book" href="#book" id="pass-book">Book this flight <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+        </div>
+      <div class="world-word" aria-hidden="true">Anywhere</div>
+      <div class="aw-stats" aria-label="Performance">
+        <div><span class="v">13,900&nbsp;km</span><span class="k mono">Nonstop range</span></div>
+        <div><span class="v">Mach&nbsp;0.90</span><span class="k mono">Cruise speed</span></div>
+        <div><span class="v">15,500&nbsp;m</span><span class="k mono">Ceiling</span></div>
+      </div>
+      <div class="stats-legacy stats-sticky" hidden>
+      <svg class="stats-arc" id="stats-arc" aria-hidden="true"></svg>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stats-tag mono" id="stats-tag">[&nbsp;&nbsp;<span>Distance</span>&nbsp;&nbsp;]</div>
+        <div class="stats-orb"><canvas id="orb-canvas" width="188" height="188"></canvas></div>
+        <div class="stat on"><span class="v">13,900&nbsp;km</span><span class="k mono">Range</span></div>
+        <div class="stat"><span class="v">Mach&nbsp;0.90</span><span class="k mono">Cruise speed</span></div>
+        <div class="stat"><span class="v">15,500&nbsp;m</span><span class="k mono">Ceiling</span></div>
+      </div>
+    </div>
+    </div>
+  </section>
+
   <section id="own" aria-label="Ownership">
     <div class="own-in">
       <div class="own-top"><p class="own-eye">Ownership</p><h2 class="own-h reveal rise" data-from="rgba(30,22,24,.14)">Three ways to make her yours.</h2></div>
@@ -2043,6 +2168,22 @@ main section#explore{display:none!important}
   </section>
 
   <section id="world" aria-hidden="true" style="height:0;overflow:hidden;padding:0;margin:0"></section>
+
+  <section id="howto" aria-labelledby="ht-h">
+    <div class="ht-stage">
+      <iframe class="ht-map" id="ht-map" title="Route map, Montréal to Nice" src="components/flight-plan.html?embed" loading="lazy" tabindex="-1"></iframe>
+      <div class="ht-panel" id="ht-panel">
+        <h2 id="ht-h" class="ht-h">From one call<br>to wheels up.</h2>
+        <div class="ht-steps" aria-live="polite">
+          <div class="ht-s on"><p class="ht-n"><b>01</b> / 04</p><h3>Tell us the day.</h3><p>One call or a two-minute request. An advisor answers day and night.</p></div>
+          <div class="ht-s"><p class="ht-n"><b>02</b> / 04</p><h3>A full quote in two hours.</h3><p>Aircraft, crew, catering and airport fees, in one all-in price.</p></div>
+          <div class="ht-s"><p class="ht-n"><b>03</b> / 04</p><h3>Board twenty minutes before.</h3><p>The private terminal at Montréal-Trudeau. Your car drives to the stairs.</p></div>
+          <div class="ht-s"><p class="ht-n"><b>04</b> / 04</p><h3>Land where you want.</h3><p>Nice in 7 h 40, nonstop. The crew handles the ground on arrival.</p><a class="ht-cta" href="book.html?from=Montreal&amp;to=Nice">Request a flight</a><span class="ht-or">or call <a href="tel:+15145550142">+1 514 555 0142</a></span></div>
+        </div>
+        <div class="ht-bar" aria-hidden="true"><i></i></div>
+      </div>
+    </div>
+  </section>
 
   <section id="book" class="dark">
     <div class="section-head">
@@ -2109,17 +2250,12 @@ main section#explore{display:none!important}
     </div>
   </section>
 
-  <section id="onboard" aria-labelledby="ob-h" style="--n:9.92;--g:8">
-    <div class="obx-pin">
-      <div class="ob-top"><div><p class="ob-eye">On board</p><h2 id="ob-h" class="ob-h reveal rise" data-from="rgba(30,22,24,.12)">A day at 15,000 m.</h2></div>
-        <p class="ob-lede">Montréal to Dubai, 11 h 30. The lounge for the first hours, the suite for the long night, a window seat when the Alps come up.</p></div>
-      <div class="obx-view"><div class="obx-track"><figure class="obx-m" style="--r:1.5"><div class="obx-ph"><img src="img/ob-coffee.jpg" alt="Espresso and a croissant on a walnut ledge beside a cream club seat" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">0:35</span><span class="obx-h">Coffee in the lounge</span><span class="obx-l">Club seats that turn to the window.</span></figcaption></figure><figure class="obx-m" style="--r:0.8"><div class="obx-ph"><img src="img/ob-work.jpg" alt="A walnut conference table with a notebook and a laptop" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">1:50</span><span class="obx-h">A table to work</span><span class="obx-l">Four seats, power at each, Wi-Fi all the way.</span></figcaption></figure><figure class="obx-m" style="--r:0.8"><div class="obx-ph"><img src="img/ob-lunch.jpg" alt="A plated lunch on white linen beside a cabin window" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">3:40</span><span class="obx-h">Lunch, plated aboard</span><span class="obx-l">Cooked in the galley, served on linen.</span></figcaption></figure><figure class="obx-m" style="--r:1.5"><div class="obx-ph"><img src="img/ob-divan.jpg" alt="A cream leather divan with a deep red throw" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">5:10</span><span class="obx-h">The long divan</span><span class="obx-l">Room to stretch out with a book.</span></figcaption></figure><figure class="obx-m" style="--r:1.5"><div class="obx-ph"><img src="img/ob-alps.jpg" alt="The snow-covered Alps at sunrise through an oval cabin window" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">6:30</span><span class="obx-h">The Alps come up</span><span class="obx-l">Every seat has its own window.</span></figcaption></figure><div class="obx-fig" style="--r:.7"><span class="obx-big">1,800&nbsp;m</span><p>Cabin altitude, held the whole flight. Lower than most airliners, so you land rested.</p></div><figure class="obx-m" style="--r:1.5"><div class="obx-ph"><img src="img/ob-suite.jpg" alt="The aft suite at night, a made queen bed under warm lamps" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">8:00</span><span class="obx-h">The suite</span><span class="obx-l">A queen bed, and a door that closes.</span></figcaption></figure><figure class="obx-m" style="--r:0.8"><div class="obx-ph"><img src="img/ob-shower.jpg" alt="A marble walk-in shower with rolled white towels" loading="lazy" decoding="async"></div><figcaption><span class="obx-t">10:40</span><span class="obx-h">A real shower</span><span class="obx-l">Marble, hot water, real towels.</span></figcaption></figure><div class="obx-end" style="--r:.82"><span class="obx-t">11:30</span><p class="obx-endh">Wheels down in Dubai.</p><p>Your day aboard starts with one call.</p><a class="cta" href="book.html?from=Montreal&amp;to=Dubai">Plan a flight</a></div></div></div>
-      <div class="obx-route" aria-hidden="true">
-        <span class="obx-code">YUL</span>
-        <div class="obx-line"><i class="obx-fill"></i><svg class="obx-jet" viewBox="0 0 24 24"><path d="M2.5 13.4l7.4-1.6L14 4.2c.4-.7 1.6-.5 1.6.4l-1 7.4 5.6-.9c.9-.1 1.6.6 1.6 1.4s-.7 1.5-1.6 1.4l-5.6-.9 1 7.4c0 .9-1.2 1.1-1.6.4l-4.1-7.6-7.4-1.6c-.5-.1-.5-.9 0-1z" fill="currentColor"/></svg></div>
-        <span class="obx-code">DWC</span>
-        <span class="obx-read"><b class="obx-el">0h 00m</b> elapsed · 15,000 m · 950 km/h</span>
-      </div>
+  <section id="onboard" class="wd" aria-labelledby="ob-h">
+    <div class="wd-stage">
+      <div class="wd-warp" id="wd-warp" role="img" aria-label="A day aboard, Montréal to Dubai: coffee in the lounge at 0:35, a table to work at 1:50, lunch at 3:40, the long divan at 5:10, the Alps at 6:30, the suite at 8:00, a real shower at 10:40, wheels down in Dubai at 11:30."></div>
+      <div class="wd-head"><p class="wd-eye">On board · Montréal → Dubai</p><h2 id="ob-h" class="wd-h">A day at 15,000&nbsp;m.</h2></div>
+      <a class="wd-cta" id="wd-cta" href="book.html?from=Montreal&amp;to=Dubai">Plan a flight</a>
+      <div class="wd-route" id="wd-route" aria-hidden="true"></div>
     </div>
   </section>
 
@@ -2161,7 +2297,7 @@ main section#explore{display:none!important}
     <div class="foot-main">
       <div class="ft-cols">
         <div><h4>Fly</h4><ul><li><a href="#own">Charter</a></li><li><a href="#own">Shared ownership</a></li><li><a href="#own">Full ownership</a></li><li><a href="book.html">Request a quote</a></li></ul></div>
-        <div><h4>Aircraft</h4><ul><li><a href="#aircraft">RW 30</a></li><li><a href="#sheet">Cabin plan</a></li><li><a href="#stats">Routes</a></li><li><a href="explore.html">3D tour</a></li></ul></div>
+        <div><h4>Aircraft</h4><ul><li><a href="#sheet">RW 30</a></li><li><a href="#sheet">Cabin plan</a></li><li><a href="#stats">Routes</a></li><li><a href="explore.html">3D tour</a></li></ul></div>
         <div><h4>Base</h4><ul><li>Montréal-Trudeau, YUL</li><li>Private terminal</li><li>Open 24/7</li></ul></div>
         <div><h4>Contact</h4><ul><li><a href="mailto:concierge@flyredwing.com">concierge@flyredwing.com</a></li><li><a href="tel:+15145550142">+1 514 555 0142</a></li></ul></div>
       </div>
@@ -3552,6 +3688,65 @@ const composerO = new EffectComposer(renderer, new THREE.WebGLRenderTarget(4, 4,
     .replace('gl_FragColor = texture2D( tDiffuse, vUv );', 'gl_FragColor = texture2D( tDiffuse, vUv ); if(gl_FragColor.a>0.0) gl_FragColor.rgb/=gl_FragColor.a;')
     .replace(/\}\s*$/, ' gl_FragColor.a=clamp(gl_FragColor.a,0.0,1.0); gl_FragColor.rgb*=gl_FragColor.a; }');
   composerO.addPass(out);
+
+  // RW 30: a real plan drawing. Lines come from the geometry (a normal + depth pass), not from the shaded picture:
+  // silhouettes heavy, creases light, black ink on white paper, swept along her axis; off unless the sheet asks
+  const nRT = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, depthTexture: new THREE.DepthTexture(4, 4) });
+  const nMats = new Map(), nSwap = [];
+  const nMat = m => { let n = nMats.get(m); if (!n) { n = new THREE.MeshNormalMaterial({ side: m.side }); n.clippingPlanes = m.clippingPlanes; n.clipIntersection = m.clipIntersection; nMats.set(m, n); } return n; };
+  const drawPass = new ShaderPass({
+    uniforms: { tDiffuse: { value: null }, tN: { value: nRT.texture }, tD: { value: nRT.depthTexture }, uNear: { value: 0.1 }, uFar: { value: 1000 },
+      uIn: { value: 0 }, uBack: { value: 0 }, uN: { value: new THREE.Vector2() }, uT: { value: new THREE.Vector2() }, uPx: { value: 1 },
+      uPaper: { value: new THREE.Color(0xfcfbf8) }, uInk: { value: new THREE.Color(0x141112) } },
+    vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.0,1.0); }`,
+    fragmentShader: /* glsl */`uniform sampler2D tDiffuse, tN, tD; uniform float uNear, uFar, uIn, uBack, uPx; uniform vec2 uN, uT; uniform vec3 uPaper, uInk; varying vec2 vUv;
+      vec2 D;
+      float lz(vec2 uv){ float d = texture2D(tD, uv).x; return uNear * uFar / (uFar - d * (uFar - uNear)); }
+      vec4 nn(vec2 uv){ vec4 t = texture2D(tN, uv); return vec4(normalize(t.rgb * 2.0 - 1.0 + 1e-5), t.a); }
+      float edgeAt(vec2 o){
+        vec4 a = nn(vUv), b = nn(vUv + o), c = nn(vUv - o);
+        float za = lz(vUv), zb = lz(vUv + o), zc = lz(vUv - o);
+        float sil = max(abs(a.w - b.w), abs(a.w - c.w));
+        float both = a.w * b.w * c.w;
+        float crease = both * smoothstep(0.12, 0.35, max(1.0 - dot(a.xyz, b.xyz), 1.0 - dot(a.xyz, c.xyz)));
+        float dep = both * smoothstep(0.006, 0.02, max(abs(za - zb), abs(za - zc)) / za);
+        return max(sil, max(dep, crease * 0.55));
+      }
+      void main(){
+        D = uPx / vec2(textureSize(tN, 0));
+        vec4 c = texture2D(tDiffuse, vUv);
+        float e1 = max(max(edgeAt(vec2(D.x, 0.0)), edgeAt(vec2(0.0, D.y))), max(edgeAt(D), edgeAt(vec2(D.x, -D.y))) * 0.8);
+        // silhouettes a touch heavier: test the coverage a little further out
+        float cov = texture2D(tN, vUv).a, s2 = 0.0;
+        for (int i = 0; i < 4; i++) { float an = float(i) * 1.5708 + 0.785; s2 = max(s2, abs(cov - texture2D(tN, vUv + vec2(cos(an), sin(an)) * D * 1.6).a)); }
+        float ink = clamp(max(e1, s2), 0.0, 1.0);
+        float a = max(cov, ink);
+        vec3 col = mix(uPaper, uInk, a > 0.0 ? ink / a : 0.0);
+        vec4 dr = vec4(col * a, a);
+        vec2 ax = uT - uN; float sx = clamp(dot(vUv - uN, ax) / max(dot(ax, ax), 1e-6), -0.2, 1.2);
+        float k = smoothstep(sx - 0.08, sx + 0.02, uIn * 1.3 - 0.1) * (1.0 - smoothstep(1.0 - sx - 0.08, 1.0 - sx + 0.02, uBack * 1.3 - 0.1));
+        gl_FragColor = mix(c, dr, k);
+      }`,
+  });
+  drawPass.uniforms.tN.value = nRT.texture; drawPass.uniforms.tD.value = nRT.depthTexture;   // ShaderPass clones its uniforms (textures included)
+  const drawRender = drawPass.render.bind(drawPass);
+  drawPass.render = (r, wb, rb, dt, mask) => {
+    const w = rb.width, h = rb.height;
+    if (nRT.width !== w || nRT.height !== h) nRT.setSize(w, h);
+    nSwap.length = 0;
+    scene.traverse(o => { if (!o.isMesh || !o.visible) return; const m = o.material;
+      if (Array.isArray(m) || m.transparent || m.isShaderMaterial || m.blending !== THREE.NormalBlending || m.isMeshBasicMaterial && !m.map) { nSwap.push([o, m, true]); o.visible = false; return; }
+      nSwap.push([o, m, false]); o.material = nMat(m); });
+    const bg = scene.background, cc = r.getClearAlpha(), prt = r.getRenderTarget(); scene.background = null;
+    r.setRenderTarget(nRT); r.setClearColor(0x000000, 0); r.clear(); r.render(scene, camera);
+    r.setRenderTarget(prt); r.setClearColor(0x000000, cc); scene.background = bg;
+    for (const [o, m, hid] of nSwap) { if (hid) o.visible = true; else o.material = m; }
+    drawPass.uniforms.uNear.value = camera.near; drawPass.uniforms.uFar.value = camera.far; drawPass.uniforms.uPx.value = Math.max(1, DPR * 0.75);
+    drawRender(r, wb, rb, dt, mask);
+  };
+  drawPass.enabled = false;
+  composerO.addPass(drawPass);
+  window.__rwDraw = drawPass; 
 }
 const view = { w: 0, h: 0 };                       // size of the element the canvas currently sits in
 let DPR = 1;
@@ -4212,7 +4407,7 @@ function tickFrame() {
   const wantFov = insideNow ? clamp(cu.fov * clamp(S.zoom, 0.55, 1.25) * (camera.aspect < 1 ? 1.3 : 1), 20, 95) : cu.fov, wantNear = insideNow ? 0.06 : 0.3;
   if (Math.abs(camera.fov - wantFov) > 0.01 || camera.near !== wantNear) { camera.fov = wantFov; camera.near = wantNear; camera.updateProjectionMatrix(); }
   const aboard = !!STAGES[S.stage].cabin || insideNow;
-  if (EXPLORE) setDoor(X.door, !insideNow); else { const doorOpen = !insideNow && S.speed < 1 && S.air < 0.05; setDoor(doorOpen ? 1 : 0, !insideNow); }
+  if (EXPLORE) setDoor(X.door, !insideNow); else { const doorOpen = !insideNow && S.speed < 1 && S.air < 0.05 && !S.takeoff; setDoor(doorOpen ? 1 : 0, !insideNow); }
   interior.visible = aboard;
   S.cabinLight = damp(S.cabinLight || 0, aboard ? 1 : 0, 2.5, dt); cabinFillU.value = S.cabinLight;
   renderer.toneMappingExposure = lerp(1.0, 1.0, S.cabinLight); bloom.strength = lerp(0.2, 0.26, S.cabinLight); bloom.radius = lerp(0.08, 0.12, S.cabinLight);
@@ -4597,7 +4792,7 @@ if (LAND) {
     L.statsPin = L.stats.h - vh; L.cabinPin = L.cabin.h - (vh - NAV); L.hubPin = L.hublot.h - vh; L.sheetPin = L.sheet.h - vh; L.worldPin = L.world.h - vh;
     L.max = Math.max(1, html.scrollHeight - vh);
     { const ws = document.querySelectorAll('.sheet-words .big'), a = ws[0].getBoundingClientRect(), b = ws[1].getBoundingClientRect(); L.gapX = vw / vh < 0.9 ? 0.5 : clamp((a.right + b.left) / 2 / vw, 0.25, 0.75); }   // where the jet threads between the two words
-    L.overlayEnd = L.stats.top + L.statsPin + vh * 0.6;
+    L.jetOut = L.hero.top + L.hero.h - vh * 0.6; L.overlayEnd = L.hero.top + L.hero.h - vh * 0.5;   // intro + aircraft gone: no overlay jet after the hero film   // globe moved: she climbs away where it used to start
     L.landStart = Math.min(L.landing.top - vh * 0.42, L.max - 300);
     const gr = $('#stats-grid').getBoundingClientRect(), sticky = $('.stats-sticky').getBoundingClientRect();
     statsArc.layout(vw / 2, gr.top - sticky.top, Math.max(160, Math.min(345 * (vw / 1440), vh * 0.42, vw * 0.45)));
@@ -4650,7 +4845,7 @@ if (LAND) {
   let keys = [], ptrX = 0, ptrY = 0, introT = NO_INTRO ? 9 : -1;
   addEventListener('pointermove', e => { if (e.pointerType === 'mouse') { ptrX = e.clientX / innerWidth * 2 - 1; ptrY = e.clientY / innerHeight * 2 - 1; } }, { passive: true });
   function buildKeys() {
-    const H = L.vh, h0 = L.hero.top + L.hero.h - L.vh, g = L.aircraft.top, st = L.stats.top, wide = L.vw / L.vh, narrow = wide < 0.9;
+    const H = L.vh, h0 = L.hero.top + L.hero.h - L.vh, g = L.aircraft.top, st = L.jetOut, wide = L.vw / L.vh, narrow = wide < 0.9;
     const zk = clamp(L.vw / 1440, 0.8, 1);            // narrower pages: the text column is tighter, so she sits a little smaller
     // az: degrees from abeam toward the nose · el: elevation · w: the 30 m airframe as a share of the page width
     if (narrow) keys = [                                // phones: she leaves with the hero and comes back for the figures
@@ -4678,11 +4873,11 @@ if (LAND) {
     if (y <= k[0].y) return { ...k[0], sy: k[0].sy + (k[0].y - y) / L.vh };          // still arriving: she rides up with her section
     for (let i = 0; i < k.length - 1; i++) if (y <= k[i + 1].y) { if (k[i + 1].cut) return { ...k[i] }; const u = inv(k[i].y, k[i + 1].y, y), t = k[i + 1].lin ? u : ease(u); for (const p of KP) o[p] = lerp(k[i][p], k[i + 1][p], t); return o; }
     // pinned over the figures: profile, three-quarter rear, then climbing away, one station per figure
-    const p = (y - L.stats.top) / L.statsPin, e = smooth(inv(-0.02, 0.14, p));
+    const p = (y - L.jetOut) / (L.vh * 1.2), e = smooth(inv(-0.02, 0.3, p));
     const w0 = keys[keys.length - 1].w;
     o.az = lerp(0, 30, e); o.el = lerp(2, -10, e); o.w = w0 * lerp(1, 0.6, e);
     o.sx = lerp(0.5, 0.6, e); o.sy = 0.34 - 1.3 * e; o.bank = -0.12 * e; o.pitch = lerp(0, 9, e);
-    if (p > 1) o.sy -= (y - (L.stats.top + L.statsPin)) / L.vh;
+    
     return o;
   }
   overlay.enter = () => { S.stage = 0; S.envName = 'studio'; S.env = STUDIO; for (const k in STUDIO) S[k] = STUDIO[k]; S.flaps = S.flapsT = 0; };
@@ -4707,12 +4902,13 @@ if (LAND) {
       tilt: smooth(inv(325, 430, u)), grow: smooth(inv(345, 420, u)), head: smooth(inv(255, 285, u)) * (1 - smooth(inv(318, 342, u))) }; };
   const IX = { on: 0, az: 0, el: 0, taz: 0, tel: 0, f: -1, fx: 3.4, fk: 0 };
   function specPose(y) {
-    const H = L.vh, W = L.vw, u = (y - L.sheet.top) / H, narrow = W / H < 0.9;
-    if (u < -0.6 || y > L.sheet.top + L.sheet.h) return null;
+    const H = L.vh, W = L.vw, u = (Math.min(y, L.sheet.top + L.sheetPin) - L.sheet.top) / H, narrow = W / H < 0.9;
+    const y0 = y; if (u < -0.6 || y0 > L.stats.top + L.stats.h) return null;
+    y = Math.min(y, L.sheet.top + L.sheetPin);   // past the ramp: the ramp pose is where the flight to the globe starts
     const { sw } = sheetPhase(y);
     // seen from straight above, nose to the right: she flies in from the left between "Long" and "courrier"
     const big = narrow ? 0.42 : 0.72, small = narrow ? 0.4 : 0.7;
-    const arrive = smooth(inv(-0.55, 0.04, u));
+    const arrive = smooth(inv(-0.05, 0.42, u));
     let sx = lerp(-0.7, 0.5, arrive), sy = 0.5, w = big;
     const mid = narrow ? 0.5 : clamp((($('.ss-left').getBoundingClientRect().right + $('.ss-right').getBoundingClientRect().left) / 2) / W, 0.4, 0.65);   // centred between the two text columns
     sx = lerp(sx, mid, sw); sy = lerp(sy, narrow ? 0.52 : 0.55, sw); w = lerp(big, small, sw);
@@ -4746,9 +4942,18 @@ if (LAND) {
       }
       o.ramp = rmp;
     }
-    const after = y - (L.sheet.top + L.sheetPin);
+    const after = y0 - (L.sheet.top + L.sheetPin);
     o.fade = smooth(inv(700, 790, ph.u)) * (1 - smooth(inv(0, H * 0.45, after)));
-    if (after > 0) o.sy -= after / H;   // the ramp fades back to the page and she leaves with it
+    if (after > 0) { const k = after / H, e = smooth(inv(0, 1, k * 1.08)), lift = Math.sin(Math.PI * e) * 0.1;   // wheels up and over to the globe
+      const G = narrow ? { az: 6, el: 4, w: 0.62, sx: 0.5, sy: 0.33 } : { az: 6, el: 4, w: 0.27, sx: 0.5, sy: 0.415 };
+      const dz = ((G.az - o.az + 540) % 360) - 180;
+      o.az += dz * e; o.el = lerp(o.el || 6, G.el, e); o.w = lerp(o.w, G.w, smooth(inv(0, 0.85, e))); o.sx = lerp(o.sx, G.sx, e); o.sy = lerp(o.sy, G.sy, e) - lift;
+      o.tx = lerp(o.tx || 0, 0, e); o.ty = lerp(o.ty != null ? o.ty : 0.45, 0.45, e); o.fov = lerp(o.fov || 22, 22, e);
+      o.bank = -0.16 * Math.sin(Math.PI * e); o.pitch = 7 * Math.sin(Math.PI * Math.min(1, e * 1.4)); o.takeoff = 1;
+      // over the globe: she holds abeam a moment, then turns away and dives into it, smaller and smaller, and is gone
+      const p = (y0 - L.stats.top) / L.statsPin, d = smooth(inv(0.1, 0.42, p));
+      if (d > 0) { o.az += -48 * d; o.el += 10 * d; o.w *= lerp(1, 0.04, Math.pow(d, 0.7)); o.sx += 0.05 * d; o.sy += (narrow ? 0.2 : 0.17) * d; o.bank += 0.2 * Math.sin(Math.PI * d); o.pitch -= 6 * d; }
+      if (d > 0.985) o.sy = 9; }
     return o;
   }
   // cabin plan, drawn in aircraft metres (x toward the nose, z to starboard) and laid exactly over her projected fuselage
@@ -4824,9 +5029,69 @@ if (LAND) {
   const labEls = [...p3labs.children];
   const _pv = V3();
   const scr = (x, yy, z, top) => { _pv.set(x, yy, z).applyMatrix4(jet.matrixWorld).project(camera); return [(_pv.x * 0.5 + 0.5) * view.w, (1 - (_pv.y * 0.5 + 0.5)) * view.h - top]; };
+  const _dn = V3(), _dt = V3(), cabBase = { set: false, x: 0, s: 1 };
+  function drawTick(ph) {
+    const dp = window.__rwDraw; if (!dp) return;
+    const u = ph.u, din = smooth(inv(118, 165, u)), back = smooth(inv(250, 288, u)), on = din > 0.001 && back < 0.999 && u < 300;
+    dp.enabled = on;
+    // the structure comes up out of the drawing: the cabin swells towards you and settles back into the hull
+    if (interiorG) {
+      if (!cabBase.set) { cabBase.set = true; cabBase.x = interiorG.position.x; }
+      const pop = Math.sin(Math.PI * smooth(inv(212, 262, u))), sc = 1 + 0.22 * pop, cx = 3.4;
+      interiorG.scale.set(sc, 1 + 0.05 * pop, sc); interiorG.position.x = cabBase.x + cx * (1 - sc);
+    }
+    const dk = on ? din * (1 - back) : 0;
+    dwg.style.opacity = dk.toFixed(3); dwg.style.visibility = dk > 0.002 ? 'visible' : 'hidden';
+    if (!on) return;
+    dp.uniforms.uIn.value = din; dp.uniforms.uBack.value = back;
+    jet.updateMatrixWorld(); camera.updateMatrixWorld();
+    _dn.set(PLAN.x1, 0, 0).applyMatrix4(jet.matrixWorld).project(camera); _dt.set(PLAN.wipeEnd, 0, 0).applyMatrix4(jet.matrixWorld).project(camera);
+    dp.uniforms.uN.value.set(_dn.x * 0.5 + 0.5, _dn.y * 0.5 + 0.5); dp.uniforms.uT.value.set(_dt.x * 0.5 + 0.5, _dt.y * 0.5 + 0.5);
+    dwgTick(u);
+  }
+  // drawing furniture: centre line, overall length and span with arrows, title block. Measured off the model once.
+  const dwg = document.createElement('div'); dwg.className = 'rw-dwg'; dwg.innerHTML = '<svg></svg><div class="rw-tb"><b>Red Wing · RW 30</b><span>Plan view</span><span>Scale 1 : 200 · mm</span><span>Dwg RW30-001 · Rev C</span></div>';
+  document.body.appendChild(dwg); window.__rwDwgHide = () => { dwg.style.opacity = '0'; dwg.style.visibility = 'hidden'; };
+  const dsvg = dwg.querySelector('svg'), BB = { done: false };
+  const _q = V3();
+  function dwgBounds() {
+    BB.done = true; jet.updateMatrixWorld(); const inv = jet.matrixWorld.clone().invert(); let x0 = 1e9, x1 = -1e9, zt = 0, xt = 0;
+    jet.traverse(o => { if (!o.isMesh || !o.geometry || !o.geometry.attributes.position) return; for (let q = o; q && q !== jet; q = q.parent) if (q === interiorG) return;
+      const pa = o.geometry.attributes.position, m = new THREE.Matrix4().multiplyMatrices(inv, o.matrixWorld), step = Math.max(1, Math.floor(pa.count / 4000));
+      for (let i = 0; i < pa.count; i += step) { _q.fromBufferAttribute(pa, i).applyMatrix4(m); if (Math.abs(_q.y) > 6) continue; x0 = Math.min(x0, _q.x); x1 = Math.max(x1, _q.x); if (Math.abs(_q.z) > zt) { zt = Math.abs(_q.z); xt = _q.x; } } });
+    Object.assign(BB, { x0, x1, zt, xt });
+  }
+  function dwgTick(u) {
+    if (!BB.done) dwgBounds();
+    const R = canvas.getBoundingClientRect(), P = (x, z) => { _q.set(x, 0, z).applyMatrix4(jet.matrixWorld).project(camera); return [R.left + (_q.x * 0.5 + 0.5) * R.width, R.top + (1 - (_q.y * 0.5 + 0.5)) * R.height]; };
+    const dimK = 1 - smooth(inv(186, 200, u));                              // the dimensions only make sense while she is seen whole
+    const f = n => n.toFixed(1), L = (a, b, cls) => `<line class="${cls}" x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}"/>`;
+    const { x0, x1, zt, xt } = BB, len = x1 - x0, span = zt * 2;
+    const g2 = 1.3;                                                // gap from the part, dimension offset (m)
+    let o = '';
+    // centre line
+    o += L(P(x1 + 1.2, 0), P(x0 - 1.2, 0), 'cl');
+    // overall length, on the far side of the right wing tip
+    const zl = -(zt + g2);
+    o += L(P(x1, -0.5), P(x1, zl - 0.5), 'ex') + L(P(x0, -0.5), P(x0, zl - 0.5), 'ex') + L(P(x1, zl), P(x0, zl), 'dm');
+    const a1 = P(x1, zl), a0 = P(x0, zl), m1 = P((x0 + x1) / 2, zl);
+    const ang = Math.atan2(a0[1] - a1[1], a0[0] - a1[0]) * 180 / Math.PI;
+    o += `<text x="${f(m1[0])}" y="${f(m1[1])}" transform="rotate(${f(((ang + 90) % 180) - 90)} ${f(m1[0])} ${f(m1[1])})" dy="-7">${len.toFixed(2)} m</text>`;
+    // wingspan, behind the tail
+    const xs = x0 - g2;
+    o += L(P(xt, zt), P(xs - 0.5, zt), 'ex') + L(P(xt, -zt), P(xs - 0.5, -zt), 'ex') + L(P(xs, zt), P(xs, -zt), 'dm');
+    const s1 = P(xs, zt), s0 = P(xs, -zt), m2 = P(xs, 0), ang2 = Math.atan2(s0[1] - s1[1], s0[0] - s1[0]) * 180 / Math.PI;
+    o += `<text x="${f(m2[0])}" y="${f(m2[1])}" transform="rotate(${f(((ang2 + 90) % 180) - 90)} ${f(m2[0])} ${f(m2[1])})" dy="-7">${span.toFixed(2)} m</text>`;
+    // station ticks along the centre line every 2 m
+    for (let x = Math.ceil(x0 / 2) * 2; x <= x1; x += 2) o += L(P(x, -0.18), P(x, 0.18), 'tk');
+    dsvg.innerHTML = `<g style="opacity:${dimK.toFixed(3)}">${o}</g>`;
+    dsvg.querySelectorAll('line.dm').forEach(l => { l.setAttribute('marker-start', 'url(#rw-ar)'); l.setAttribute('marker-end', 'url(#rw-ar)'); });
+    dsvg.insertAdjacentHTML('afterbegin', '<defs><marker id="rw-ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 1.5 L10 5 L0 8.5" fill="none" stroke="#141112" stroke-width="1.4"/></marker></defs>');
+  }
   function planTick(y, ph) {
+    drawTick(ph);
     const live = ph.zoom > 0 && ph.u < 1020;
-    CUT.y = live ? lerp(lerp(1.4, 0.33, ph.cut), 1.6, smooth(inv(605, 655, ph.u))) : 9; CUT.zc = live ? lerp(1.0, 40, ph.grow) : 99;
+    CUT.y = live ? lerp(lerp(1.4, 0.33, ph.cut), 1.6, smooth(inv(605, 655, ph.u))) : 9; CUT.zc = live ? lerp(lerp(16, 1.0, smooth(inv(196, 238, ph.u))), 40, ph.grow) : 99;
     CUT.open = live && CUT.y < 1.5; if (CUT.open) { CUT.a = -4.75; CUT.b = 11.5; } else { CUT.y = 1.33; CUT.a = 9.9; CUT.b = 11.6; }
     if (interiorG) interiorG.visible = CUT.open && ph.cut > 0;
     const op = Math.min(ph.head, 1); planUI.style.opacity = live ? '1' : '0';
@@ -4837,18 +5102,30 @@ if (LAND) {
     const top = 0, narrow = L.vw / L.vh < 0.9;
     const half = Math.abs(scr(4, 0, 1.3, top)[narrow ? 0 : 1] - scr(4, 0, -1.3, top)[narrow ? 0 : 1]) / 2;
     let svg = '';
+    const chip = [];
+    {
+      // chips sit beside her, off the upper side of her axis on screen, alternating near/far; then pushed apart until none overlap
+      const n0 = scr(10.6, -0.1, 0, top), t0 = scr(-3.95, -0.1, 0, top); let dx = t0[0] - n0[0], dy = t0[1] - n0[1]; const dl = Math.hypot(dx, dy) || 1; dx /= dl; dy /= dl;
+      let nx = dy, ny = -dx; if (ny > 0) { nx = -nx; ny = -ny; }
+      const C = ZONES.map((z, i) => { const [ax, ay] = scr(z[0], -0.1, 0, top), d = narrow ? (i % 2 ? 100 : 58) : (i % 2 ? 128 : 78), w = labEls[i].offsetWidth, h = labEls[i].offsetHeight || 36;
+        return { i, x: ax + nx * d, y: ay + ny * d, w, h }; });
+      for (let it = 0; it < 24; it++) for (let a = 0; a < C.length; a++) for (let b = a + 1; b < C.length; b++) {
+        const A = C[a], B = C[b], ox = (A.w + B.w) / 2 + 10 - Math.abs(A.x - B.x), oy = (A.h + B.h) / 2 + 8 - Math.abs(A.y - B.y);
+        if (ox > 0 && oy > 0) { const s = Math.sign((B.x - A.x) * dx + (B.y - A.y) * dy) || 1, k = Math.min(ox, oy * 2) / 2 + 1; A.x -= dx * k * s; A.y -= dy * k * s; B.x += dx * k * s; B.y += dy * k * s; } }
+      C.forEach(c => { c.x = Math.min(Math.max(c.x, 20 + c.w / 2), L.vw - 20 - c.w / 2); c.y = Math.max(c.y, L.vh * 0.14 + c.h); chip[c.i] = c; });
+    }
     ZONES.forEach((z, i) => {
       const [ax, ay] = scr(z[0], -0.1, 0, top), side = i % 2 ? 1 : -1, el = labEls[i];
       const pd = narrow ? [side * (half + 26), 0] : [0, side * (half + 46)];
-      const lw = el.offsetWidth, lh = 16;
+      const lw = el.offsetWidth, lh = el.offsetHeight || 16;
       let pbx = ax + pd[0], pby = ay + pd[1];
       let pl = narrow ? (pd[0] < 0 ? pbx - lw - 6 : pbx + 6) : pbx - lw / 2, pt = narrow ? pby - lh / 2 : (pd[1] < 0 ? pby - lh - 6 : pby + 6);
       // 3D: a tidy legend; desktop in three rows above her, phones a column at the top left
-      const tby = narrow ? L.vh * 0.15 + i * 27 : L.vh * 0.2 + (i % 3) * 36, tbx = narrow ? 16 + lw + 8 : ax;
-      const tl = narrow ? 16 : tbx - lw / 2, tt = narrow ? tby - lh / 2 : tby - lh - 6;
+      const tby = chip[i].y + chip[i].h / 2, tbx = chip[i].x;
+      const tl = tbx - lw / 2, tt = tby - lh - 6;
       const bx = lerp(pbx, tbx, ph.tilt), by = lerp(pby, tby, ph.tilt), left = lerp(pl, tl, ph.tilt), tY = lerp(pt, tt, ph.tilt);
       const op = ph.lab * (1 - Math.sin(Math.PI * ph.tilt) * 0.95) * (1 - IX.fk);
-      el.style.transform = `translate(${left.toFixed(1)}px,${tY.toFixed(1)}px)`; el.style.opacity = op.toFixed(3);
+      const leftC = Math.min(Math.max(left, 8), L.vw - lw - 8); el.style.transform = `translate(${leftC.toFixed(1)}px,${tY.toFixed(1)}px)`; el.style.opacity = op.toFixed(3);
       svg += `<g opacity="${op.toFixed(3)}"><line x1="${ax.toFixed(1)}" y1="${ay.toFixed(1)}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}"/><circle cx="${ax.toFixed(1)}" cy="${ay.toFixed(1)}" r="3.2"/></g>`;
     });
     if (ph.dim > 0.001 && !narrow) {      // cabin length, along the starboard side in the plan
@@ -4907,7 +5184,7 @@ if (LAND) {
   const pp0 = V3(), pp1 = V3();
   function sheetTick(y) {
     const on = cur === overlay && y > L.sheet.top - L.vh && y < L.sheet.top + L.sheet.h;
-    if (!on) { if (canvas.style.clipPath) canvas.style.clipPath = ''; if (CUT.y < 9) { CUT.y = 1.33; CUT.a = 9.9; CUT.b = 11.6; CUT.open = false; CUT.zc = 99; if (interiorG) interiorG.visible = false; planUI.style.opacity = '0'; } return; }
+    if (!on) { if (window.__rwDraw) window.__rwDraw.enabled = false; if (window.__rwDwgHide) window.__rwDwgHide(); if (canvas.style.clipPath) canvas.style.clipPath = ''; if (CUT.y < 9) { CUT.y = 1.33; CUT.a = 9.9; CUT.b = 11.6; CUT.open = false; CUT.zc = 99; if (interiorG) interiorG.visible = false; planUI.style.opacity = '0'; } return; }
     const { sw, wipe } = sheetPhase(y), narrow = L.vw / L.vh < 0.9;
     sheetWords.style.transform = `translateY(${(sw * 100).toFixed(2)}%)`;
     const ph3 = sheetPhase(y); sheetSpec.style.transform = `translateY(calc(${((sw - 1) * 100 - ph3.out * 110).toFixed(2)}% - ${((1 - sw) * 160).toFixed(0)}px))`; sheetSpec.style.visibility = sw > 0.002 && ph3.out < 0.999 ? 'visible' : 'hidden';
@@ -4961,6 +5238,7 @@ if (LAND) {
       if (o && o.fov) fov = o.fov;
       S.gearT = rr > 0.3 ? 1 : 0; if (rr <= 0.3) S.gear = 0;
       STUDIO.air = S.air = rr > 0.02 ? 1 - smooth(inv(0.2, 0.9, rr)) : 1; STUDIO.alt = S.alt = rr > 0.02 ? 0 : 900; STUDIO.spin = lerp(1, 0.3, rr);
+      S.takeoff = !!(o && o.takeoff > 0); if (S.takeoff) S.gearT = 0;
       rampFade(fd);
       if (!(o && o.fade > 0)) rampFade(0);
     } else {
@@ -4982,7 +5260,7 @@ if (LAND) {
       STUDIO.pitch = S.pitch = o.pitch; S.bank = o.bank;
     }
     // out of sight: draw one empty frame, then rest
-    const gone = !o || o.sy < -0.7 || o.sy > 1.7 || y < L.hero.top + L.hero.h - H * 0.04 || (W / H < 0.9 && y > L.stats.top - H * 1.15 && y < L.overlayEnd);   // phones: she stays away from the night   // the hero belongs to the film
+    const gone = !o || o.sy < -0.7 || o.sy > 1.7 || y < L.hero.top + L.hero.h - H * 0.04 || (W / H < 0.9 && y > L.jetOut - H * 1.15 && y < L.overlayEnd);   // phones: she stays away from the night   // the hero belongs to the film
     if (gone) { if (jet.visible) jet.visible = false; else S.blank = true; } else { jet.visible = true; S.blank = false; }
   };
 
@@ -5298,10 +5576,10 @@ if (LAND) {
   let navDark = null, pillOff = null;
   const localFmt = () => { try { localEl.textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'America/Toronto', hour: '2-digit', minute: '2-digit', hour12: false }).replace(/\s?h\s?/, ':'); } catch (e) { } };
   localFmt(); setInterval(localFmt, 10000);
-  const rwLightEls = [...document.querySelectorAll('#onboard, #voices, #landing, #contact')];   // v26: light sections inside the dark run
+  const rwLightEls = [...document.querySelectorAll('#onboard, #voices, #landing, #contact, #howto')];   // v26: light sections inside the dark run
   const rwLight = () => rwLightEls.some(e => { const r = e.getBoundingClientRect(); return r.top < NAV * 0.6 && r.bottom > NAV * 0.6; });
   function chromeTick(y) {
-    const vh = L.vh, dark = (y > L.hublot.top - NAV * 0.6 && y < L.hublot.top + L.hublot.h - NAV * 0.6) || (y > L.stats.top - NAV * 0.6 && y < L.stats.top + L.stats.h - NAV * 0.6) || (y > L.world.top - NAV * 0.6 && !rwLight());
+    const vh = L.vh, dark = (y > L.hublot.top - NAV * 0.6 && y < L.hublot.top + L.hublot.h - NAV * 0.6) || (y > L.stats.top - L.vh * 0.72 && y < L.stats.top + L.stats.h - L.vh - NAV * 0.6) || (y > L.world.top - NAV * 0.6 && !rwLight());
     if (dark !== navDark) { navDark = dark; navEl.classList.toggle('dark', dark); }
     navEl.classList.toggle('solid', y > L.world.top + L.worldPin * 0.5);   // over the form and the footer the bar gets its own ground
     const dayEl = document.getElementById('day');
@@ -5338,7 +5616,7 @@ if (LAND) {
     const key = innerWidth + 'x' + innerHeight;
     if (key !== sizeKey && innerWidth > 2 && innerHeight > 2) { sizeKey = key; measure(); }
     if (introT < 0) {                                                             // the count, then the page opens
-      window.__rwPreStop = 1; const p0 = window.__rwPre || 0; const v = Math.min(document.fonts.status === 'loaded' || lastFrame - loadT0 > 6000 ? 100 : 96, Math.floor(p0 + (100 - p0) * ease(clamp((lastFrame - loadT0) / 420, 0, 1))));
+      window.__rwPreStop = 1; const p0 = window.__rwPre || 0; const v = Math.min(document.fonts.status === 'loaded' || lastFrame - loadT0 > 6000 ? 100 : 96, Math.floor(p0 + (100 - p0) * ease(clamp((lastFrame - loadT0) / 300, 0, 1))));
       countEl.textContent = v; if (v >= 100 && !window.__rwTorn) { window.__rwTorn = 1; (window.__rwTear || (f => f()))(() => { introT = 0; start(); }); }
     } else introT += dt;
     scroll.tick(dt);
@@ -5364,8 +5642,7 @@ if (LAND) {
     if (innerWidth < 3 || innerHeight < 3) { setTimeout(boot, 200); return; }
     measure();
     warming = true;
-    for (const st of [explore, cabin, flight, hublot]) { enter(st); tickFrame(); tickFrame(); capture(st); }
-    shootStills();
+    for (const st of [explore]) { enter(st); tickFrame(); tickFrame(); capture(st); }
     warming = false;
     enter(pick(scrollY));
     if (NO_INTRO) start();
@@ -5412,11 +5689,28 @@ if (LAND) {
 
 
 { // hero film, driven by scroll: the pin's progress is the film's time
-  const v = document.getElementById('hero-vid'), hero = document.getElementById('hero'), word = document.querySelector('.hero-title');
+  let v = document.getElementById('hero-vid'); const hero = document.getElementById('hero'), word = document.querySelector('.hero-title');
   const small = innerWidth < 900 || (navigator.connection && navigator.connection.saveData);
-  const file = small ? 'redwing-hero-scrub-m.mp4' : 'redwing-hero-scrub.mp4';
-  v.src = file;
-  fetch(file).then(r => r.ok ? r.blob() : Promise.reject()).then(b => { const t = v.currentTime; v.src = URL.createObjectURL(b); v.currentTime = t; }).catch(() => {});   // whole file in memory: seeks never wait on the network
+  const save = navigator.connection && navigator.connection.saveData;
+  const first = small ? 'redwing-hero-scrub-m.mp4' : 'redwing-hero-scrub-1080.mp4';
+  const best = !small && !save && innerWidth * Math.min(2, devicePixelRatio || 1) >= 2400 ? 'redwing-hero-scrub-2160.mp4' : first;
+  // swap to a new source on a twin <video>, already seeked to the same time, then trade places: no blank frame
+  const swapTo = url => new Promise(res => {
+    const n = v.cloneNode(false); n.removeAttribute('id'); n.muted = true; n.playsInline = true; n.preload = 'auto';
+    n.style.opacity = '1'; n.src = url;
+    n.addEventListener('loadeddata', () => { n.currentTime = v.currentTime; n.addEventListener('seeked', () => {
+      v.parentNode.insertBefore(n, v.nextSibling);
+      requestAnimationFrame(() => { const old = v.src; v.replaceWith(n); n.id = 'hero-vid'; v = n; window.__heroVid = v; if (old.startsWith('blob:')) URL.revokeObjectURL(old); res(); });
+    }, { once: true }); }, { once: true });
+  });
+  const pull = url => fetch(url).then(r => r.ok ? r.blob() : Promise.reject()).then(b => swapTo(URL.createObjectURL(b)));   // whole file in memory: seeks never wait on the network
+  // once the loader has gone, or 3.5 s after this script at the latest (a stuck or paused loader must never keep the film away)
+  const afterLoad = f => { let ran = false; const go = () => { if (!ran) { ran = true; f(); } };
+    const L = document.getElementById('loader'); if (!L || L.classList.contains('gone')) return go();
+    new MutationObserver((_, o) => { if (L.classList.contains('gone')) { o.disconnect(); go(); } }).observe(L, { attributes: true, attributeFilter: ['class'] });
+    setTimeout(go, 3500); };
+  // nothing of the film is downloaded while the loader is up (the poster is the film's first frame)
+  afterLoad(() => { v.src = first; setTimeout(() => pull(first).then(() => best !== first && pull(best)).catch(() => {}), 300); });
   let shown = 0, last = performance.now();
   const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
   const tick = now => {
@@ -5881,6 +6175,155 @@ if (LAND) {
     pops.pax.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) setP(+E.pax.value + +b.dataset.d); });
     setP(+E.pax.value || 4); label();
   }
+}
+</script>
+<script type="module">
+  // A day at 15,000 m: the warp carousel turns with the scroll; mounted only when the section comes near
+  import { mountWarp } from './warp-day.js';
+  const ITEMS = [
+    { t: '0:35', h: 'Coffee in the lounge', l: 'Club seats that turn to the window.', img: 'img/ob-coffee.jpg' },
+    { t: '1:50', h: 'A table to work', l: 'Four seats, power at each, Wi-Fi all the way.', img: 'img/ob-work.jpg' },
+    { t: '3:40', h: 'Lunch, plated aboard', l: 'Cooked in the galley, served on linen.', img: 'img/ob-lunch.jpg' },
+    { t: '5:10', h: 'The long divan', l: 'Room to stretch out with a book.', img: 'img/ob-divan.jpg' },
+    { t: '6:30', h: 'The Alps come up', l: 'Every seat has its own window.', img: 'img/ob-alps.jpg' },
+    { t: '7:15', h: 'Cabin altitude', l: '', fig: 1 },
+    { t: '8:00', h: 'The suite', l: 'A queen bed, and a door that closes.', img: 'img/ob-suite.jpg' },
+    { t: '10:40', h: 'A real shower', l: 'Marble, hot water, real towels.', img: 'img/ob-shower.jpg' },
+    { t: '11:30', h: 'Wheels down in Dubai', l: '', end: 1 },
+  ];
+  const sec = document.getElementById('onboard'), host = document.getElementById('wd-warp'), route = document.getElementById('wd-route'), cta = document.getElementById('wd-cta');
+  const mins = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; }, TOTAL = mins('11:30'), N = ITEMS.length;
+  route.innerHTML = `<span>YUL</span><div class="ln"><i></i>${ITEMS.map(it => `<s style="left:${(mins(it.t) / TOTAL * 100).toFixed(2)}%"></s>`).join('')}</div><span>DWC</span><span class="now">0:35</span>`;
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), ease = t => t * t * (3 - 2 * t);
+  let w = null, mounting = false;
+  const tick = () => {
+    const r = sec.getBoundingClientRect();
+    if (!w && !mounting && r.top < innerHeight * 2.5 && r.bottom > -innerHeight) { mounting = true; mountWarp(host, ITEMS, { bg: '#fdfdfd' }).then(x => { w = x; tick(); }); }
+    const p = clamp(-r.top / (sec.offsetHeight - innerHeight), 0, 1), fr = p * (N - 1), i = Math.floor(fr), f = Math.min(N - 1, i + ease(clamp((fr - i - 0.2) / 0.6, 0, 1)));
+    if (w) w.set(f);
+    const a = mins(ITEMS[Math.floor(f)].t), b = mins(ITEMS[Math.min(N - 1, Math.floor(f) + 1)].t), m = Math.round(a + (b - a) * (f - Math.floor(f)));
+    route.querySelector('i').style.width = (m / TOTAL * 100).toFixed(2) + '%'; route.querySelector('.now').textContent = `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`;
+    cta.classList.toggle('on', f > N - 1.3);
+  };
+  addEventListener('scroll', tick, { passive: true }); addEventListener('resize', tick); tick();
+  window.__rwWarp = () => w;
+</script>
+<script>
+{ // ownership passes: dealt from one stack, then they tilt towards the pointer
+  const sec = document.getElementById('own'), cards = sec ? [...sec.querySelectorAll('.pl')] : [];
+  if (cards.length) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, touch = matchMedia('(hover: none)').matches;
+    cards.forEach((c, i) => {
+      for (const part of c.querySelectorAll('.pl-body, .pl-stub')) {
+        const g = document.createElement('i'); g.className = 'pl-gl'; part.appendChild(g);
+        if (i === 1) { const f = document.createElement('i'); f.className = 'pl-fo'; part.appendChild(f); }
+      }
+    });
+    const ROT = [-9, 2.5, 11], tilt = cards.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
+    const cl = (x, a, b) => Math.min(b, Math.max(a, x)), ease = t => 1 - Math.pow(1 - t, 3);
+    cards.forEach((c, i) => {
+      if (touch) return;
+      c.addEventListener('pointermove', e => {
+        const r = c.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+        tilt[i].tx = (px - 0.5) * 14; tilt[i].ty = (0.5 - py) * 10; c.classList.add('tilt');
+        for (const part of c.querySelectorAll('.pl-body, .pl-stub')) { const q = part.getBoundingClientRect();
+          part.style.setProperty('--gx', (e.clientX - q.left) + 'px'); part.style.setProperty('--gy', (e.clientY - q.top) + 'px'); part.style.setProperty('--fx', (px * 100) + '%'); }
+      });
+      c.addEventListener('pointerleave', () => { tilt[i].tx = tilt[i].ty = 0; c.classList.remove('tilt'); });
+    });
+    const tick = () => {
+      requestAnimationFrame(tick);
+      const r = sec.getBoundingClientRect(); if (r.bottom < -200 || r.top > innerHeight + 200) return;
+      const g = sec.querySelector('.pl-grid').getBoundingClientRect(), one = cards.length > 1 && Math.abs(cards[0].getBoundingClientRect().top - cards[1].getBoundingClientRect().top) > 40;
+      cards.forEach((c, i) => {
+        const t = tilt[i]; t.x += (t.tx - t.x) * 0.12; t.y += (t.ty - t.y) * 0.12;
+        let tf = '';
+        if (!reduce) {
+          if (!one) {      // wide: deal from one stack in the middle of the grid
+            const p = ease(cl((innerHeight * 0.98 - g.top) / (innerHeight * 0.62), 0, 1));
+            const base = c.offsetLeft + c.offsetWidth / 2, mid = (sec.querySelector('.pl-grid').clientWidth) / 2;
+            const dx = (mid - base) * (1 - p), dy = (1 - p) * (60 + Math.abs(i - 1) * 18), rz = ROT[i] * (1 - p), z = (1 - p) * (i === 1 ? 40 : 0);
+            tf = `translate3d(${dx.toFixed(1)}px,${dy.toFixed(1)}px,${z.toFixed(1)}px) rotate(${rz.toFixed(2)}deg)`;
+            c.style.zIndex = String(i === 1 ? 3 : 2 - i * 0);
+            c.classList.toggle('dealt', p > 0.98);
+          } else {         // phones: each pass swings in as it arrives
+            const q = c.getBoundingClientRect(), p = ease(cl((innerHeight * 1.02 - q.top) / (innerHeight * 0.45), 0, 1));
+            tf = `translate3d(0,${((1 - p) * 70).toFixed(1)}px,0) rotate(${((1 - p) * (i % 2 ? 5 : -5)).toFixed(2)}deg)`;
+          }
+        }
+        if (Math.abs(t.x) > 0.01 || Math.abs(t.y) > 0.01) tf += ` rotateY(${t.x.toFixed(2)}deg) rotateX(${t.y.toFixed(2)}deg) translateZ(${(Math.hypot(t.x, t.y) * 1.6).toFixed(1)}px)`;
+        c.style.transform = tf;
+      });
+    };
+    requestAnimationFrame(tick);
+    window.__rwOwnTilt = (i, px, py) => { tilt[i].tx = (px - 0.5) * 14; tilt[i].ty = (0.5 - py) * 10; cards[i].classList.add('tilt'); };
+  }
+}
+</script>
+<script>
+{ // how a flight comes together: the scroll flies the jet from step to step
+  const sec = document.getElementById('howto'), fr = document.getElementById('ht-map');
+  if (sec && fr) {
+    const steps = [...sec.querySelectorAll('.ht-s')], bar = sec.querySelector('.ht-bar i'), N = steps.length;
+    let cur = -1, last = -1;
+    const cl = (x, a, b) => Math.min(b, Math.max(a, x)), sm = t => t * t * (3 - 2 * t);
+    const tick = () => {
+      requestAnimationFrame(tick);
+      const r = sec.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+      const p = Math.min(1, Math.max(0, -r.top / (sec.offsetHeight - innerHeight)));
+      bar.style.width = (p * 100).toFixed(1) + '%';
+      const w = fr.contentWindow, st = w && w.stepper, ok = st && st.scrub && w.document.querySelector('#map.ready');   // the chart lays itself out first
+      if (!ok) return;
+      if (Math.abs(p - last) < 1e-4) return; last = p;
+      // the flight takes the first 80 % of the scroll, the zoom onto the destination the rest
+      const s = sm(cl(p / 0.8, 0, 1)) * 0.6 + cl(p / 0.8, 0, 1) * 0.4;
+      const pt = st.scrub(s);
+      const follow = sm(cl(p / 0.12, 0, 1)), land = sm(cl((p - 0.8) / 0.2, 0, 1));
+      st.zoom(1 + 0.22 * follow + 1.35 * land, pt.x, pt.y);
+      const i = st.index;
+      if (i !== cur) { cur = i; steps.forEach((el, k) => el.classList.toggle('on', k === i)); }
+    };
+    requestAnimationFrame(tick);
+  }
+}
+</script>
+<script>
+{ // ramp -> globe: night falls under the 3D layer, then dissolves into the globe section's own night
+  const sky = document.createElement('div'); sky.className = 'rw-night'; sky.setAttribute('aria-hidden', 'true'); document.body.appendChild(sky);
+  const cl = (x, a, b) => Math.min(b, Math.max(a, x)), sm = (a, b, x) => { const t = cl((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+  let shown = '';
+  const tick = () => {
+    requestAnimationFrame(tick);
+    const A = window.__app, L = A && A.land && A.land.L; if (!L || !L.sheet) return;
+    const H = L.vh, a = (scrollY - (L.sheet.top + L.sheetPin)) / H;
+    // the sky covers everything above the globe section's top edge, so the globe rises into it with no seam
+    const gt = document.getElementById('stats').getBoundingClientRect().top, o = gt <= 0 ? 0 : sm(-0.30, 0.25, a);
+    const key = o.toFixed(3) + ':' + Math.round(gt); if (key === shown) return; shown = key;
+    sky.style.visibility = o > 0.002 ? 'visible' : 'hidden'; sky.style.opacity = o.toFixed(3);
+    sky.style.clipPath = gt < innerHeight ? `inset(0 0 ${Math.max(0, innerHeight - gt).toFixed(0)}px 0)` : '';
+    sky.style.setProperty('--st', sm(0.05, 0.5, a).toFixed(3));
+  };
+  requestAnimationFrame(tick);
+}
+</script>
+<script>
+{ // seams: the hero film dissolves into the page; the globe's night turns to dawn before Three ways
+  const cl = (x, a, b) => Math.min(b, Math.max(a, x)), sm = (a, b, x) => { const t = cl((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+  const hero = document.getElementById('hero'), card = hero && hero.querySelector('.hero-card');
+  const stats = document.getElementById('stats'), night = stats && stats.querySelector('.world-sticky');
+  const mk = (host, cls) => { if (!host) return null; const d = document.createElement('div'); d.className = cls; d.setAttribute('aria-hidden', 'true'); host.appendChild(d); return d; };
+  const dis = mk(card, 'rw-dissolve'), dawn = null;
+  let last = '';
+  const tick = () => {
+    requestAnimationFrame(tick);
+    const vh = innerHeight;
+    const hb = hero ? hero.getBoundingClientRect().bottom / vh : 9, sb = stats ? stats.getBoundingClientRect().bottom / vh : 9;
+    const a = dis ? sm(1.2, 0.72, hb) : 0, b = dawn ? sm(1.55, 0.78, sb) : 0;
+    const key = a.toFixed(3) + b.toFixed(3); if (key === last) return; last = key;
+    if (dis) dis.style.opacity = a.toFixed(3);
+    if (dawn) dawn.style.opacity = b.toFixed(3);
+  };
+  requestAnimationFrame(tick);
 }
 </script>
 </body>

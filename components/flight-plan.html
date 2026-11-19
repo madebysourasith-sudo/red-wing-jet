@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flight Path Stepper</title>
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* FLIGHT PATH STEPPER: a booking progress stepper drawn as a flight route on a printed relief chart. The jet sits at the
+   current step; Continue / Back (or a click on a visited marker, or stepper.go(i)) flies it along the great-circle arc,
+   laying a contrail behind it and stamping each marker it leaves with a check. Map, relief and labels are procedural. */
+:root{--sans:"Switzer","Helvetica Neue",Arial,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --ink:#1e1618;--accent:#c8102e;--ink2:#5d574f;--muted:#8d867c;--paper:#f3f0ea;--line:rgba(38,35,31,.12);--foot:68px}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--paper)}
+body{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#grain{position:fixed;inset:0;width:100%;height:100%;opacity:.06;mix-blend-mode:overlay;pointer-events:none;z-index:50}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+#stepper{position:fixed;inset:0;display:grid;grid-template-rows:minmax(0,1fr) var(--foot)}
+#map{position:relative;overflow:hidden;background:var(--paper)}
+#map canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+#cv-map{opacity:0;transition:opacity .9s ease}
+#map.ready #cv-map{opacity:1}
+#cv-air,#cv-jet{pointer-events:none}
+.cap{position:absolute;left:24px;bottom:14px;margin:0;font:500 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);opacity:.8;pointer-events:none}
+
+/* step markers: printed on the chart, under the jet */
+#markers{position:absolute;inset:0;margin:0;padding:0;list-style:none;pointer-events:none}
+.mk{position:absolute;left:0;top:0;width:0;height:0}
+.mkb{position:absolute;left:-20px;top:-20px;width:40px;height:40px;margin:0;padding:0;border:0;background:none;border-radius:50%;
+  color:var(--ink);font:inherit;cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent}
+.mkb:focus{outline:none}
+.mkb[aria-disabled="true"]{cursor:default}
+.ring{position:absolute;left:13px;top:13px;width:14px;height:14px;border-radius:50%;border:1.1px solid currentColor;background:var(--paper);
+  box-shadow:0 0 0 2px rgba(243,240,234,.75);transition:transform .35s cubic-bezier(.3,1.6,.5,1),color .3s,border-width .2s}
+.ring svg{position:absolute;inset:-1.1px;width:14px;height:14px;overflow:visible}
+.ring path{fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10;stroke-dashoffset:10;transition:stroke-dashoffset .38s cubic-bezier(.5,0,.2,1) .06s}
+.mk.done .ring path{stroke-dashoffset:0}
+.mk.done .ring{border-width:1.25px;color:var(--accent)}
+.mk.stamp .ring{animation:stamp .5s cubic-bezier(.2,.9,.3,1)}
+@keyframes stamp{0%{transform:scale(1.75) rotate(-14deg);opacity:.2}45%{transform:scale(.9) rotate(2deg);opacity:1}100%{transform:none}}
+.mk.future .ring{color:#8f887e}
+.mk.future .lab{color:#8a8379}
+.mk.cur .ring{color:var(--accent);background:var(--accent);box-shadow:0 0 0 2px rgba(243,240,234,.75),inset 0 0 0 3px var(--paper)}
+.lab{position:absolute;left:20px;top:20px;white-space:nowrap;transform-origin:0 0;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+  padding:4px 5px;text-shadow:0 0 2px var(--paper),0 0 4px var(--paper),0 0 8px rgba(243,240,234,.9);will-change:transform;transition:color .25s}
+.lab b{font-weight:500;color:#776f65;margin-right:.55em}
+.mkb:not([aria-disabled="true"]):hover .ring{transform:scale(1.22)}
+.mkb:focus-visible .ring{box-shadow:0 0 0 3px var(--paper),0 0 0 4.2px var(--ink)}
+.mkb:focus-visible .lab{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.city{text-shadow:0 0 2px var(--paper),0 0 5px var(--paper);position:absolute;left:0;top:0;white-space:nowrap;font:500 10px/1.35 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);pointer-events:none}
+.city span{display:block;color:var(--muted);font-size:9px;letter-spacing:.18em}
+
+/* title cartouche, printed like a chart's title block */
+.cart{position:absolute;left:24px;top:22px;margin:0;padding:13px 17px 12px;background:rgba(244,241,235,.9);border:1px solid rgba(38,35,31,.55);color:var(--ink);pointer-events:none}
+.cart::before{content:"";position:absolute;inset:3px;border:.5px solid rgba(38,35,31,.3);pointer-events:none}
+.cart p{margin:0;white-space:nowrap}
+.cart .k{font:500 9px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.cart .r{display:flex;align-items:center;gap:12px;margin-top:9px;font:300 27px/1 var(--sans);letter-spacing:.04em}
+.cart .ln{position:relative;width:34px;height:1px;background:currentColor;opacity:.7}
+.cart .ln::after{content:"";position:absolute;right:-1px;top:-3px;width:6px;height:6px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg)}
+.cart .n{margin-top:7px;font:400 12px/1.2 var(--sans);letter-spacing:.02em;color:var(--ink2)}
+.cart .f{margin-top:9px;padding-top:8px;border-top:.5px solid rgba(38,35,31,.25);font:500 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+@media (max-width:640px){
+  .cart{left:14px;top:14px;padding:9px 12px 9px}
+  .cart .k{font-size:8px}
+  .cart .r{font-size:20px;margin-top:7px;gap:9px}
+  .cart .ln{width:24px}
+  .cart .n{font-size:11px;margin-top:5px}
+  .cart .f{font-size:8.5px;margin-top:7px;padding-top:6px;letter-spacing:.1em}
+}
+@media (min-width:1700px){.cart{left:32px;top:28px;padding:15px 20px 14px}.cart .r{font-size:31px}.cart .n{font-size:13px}.cart .f{font-size:10px}}
+/* quiet controls under the map */
+.bar{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-top:1px solid var(--line);background:#f1eee7}
+.txt{appearance:none;border:0;background:none;margin:0;padding:0 34px;font:500 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink);cursor:pointer;
+  display:flex;align-items:center;gap:.8em;transition:color .2s,background .3s}
+#back{border-right:1px solid var(--line)}
+#next{border-left:1px solid var(--line)}
+.txt .u{position:relative}
+.txt .u::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.5,0,.2,1)}
+.txt:hover .u::after,.txt:focus-visible .u::after{transform:none}
+.txt:hover{background:rgba(38,35,31,.025)}
+.txt:focus{outline:none}
+.txt:focus-visible{box-shadow:inset 0 0 0 1px var(--ink)}
+.txt:disabled{color:#b3ada4;cursor:default;background:none}
+.txt:disabled .u::after{display:none}
+.txt .ar{display:inline-block;transition:transform .35s cubic-bezier(.5,0,.2,1)}
+#next:not(:disabled):hover .ar{transform:translateX(3px)}
+#back:not(:disabled):hover .ar{transform:translateX(-3px)}
+.status{margin:0;display:flex;align-items:center;justify-content:center;gap:1.1em;font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink2)}
+.status .pg{display:flex;gap:5px}
+.status .pg i{width:14px;height:1px;background:#c9c3b9;transition:background .4s}
+.status .pg i.on{background:var(--ink)}
+@media (max-width:640px){
+  :root{--foot:60px}
+  .txt{padding:0 18px;font-size:11px;letter-spacing:.14em}
+  .status{gap:.7em;font-size:9.5px}
+  .status .pg{display:none}
+  .lab{font-size:10px}
+  .cap{left:16px;bottom:12px;font-size:9px}
+}
+@media (prefers-reduced-motion:reduce){
+  .ring,.ring path,.lab,.txt .ar,.txt .u::after{transition:none}
+  .mk.stamp .ring{animation:none}
+  #cv-map{transition:none}
+}
+html.embed #stepper{grid-template-rows:minmax(0,1fr) 0}
+html.embed .bar,html.embed .cap{display:none}
+.zoomer{position:absolute;inset:0;transform-origin:0 0;will-change:transform}
+.zoomer canvas{position:absolute;left:0;top:0}
+html.embed .cart{top:calc(80px + 18px)}
+@media (max-width:700px){html.embed .cart{top:calc(76px + 12px)}}
+html.embed #grain{opacity:.04}
+</style>
+<script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
+</head>
+<body>
+<div id="stepper">
+  <div id="map">
+    <canvas id="cv-map" role="img"></canvas>
+    <canvas id="cv-air" aria-hidden="true"></canvas>
+    <nav id="nav"><ol id="markers"></ol></nav>
+    <div id="cities" aria-hidden="true"></div>
+    <div class="cart" id="cart"><p class="k"></p><p class="r"><span class="o"></span><i class="ln" aria-hidden="true"></i><span class="d"></span></p><p class="n"></p><p class="f"></p></div>
+    <canvas id="cv-jet" aria-hidden="true"></canvas>
+    <p class="cap">Flight Path · Stepper</p>
+  </div>
+  <div class="bar">
+    <button id="back" class="txt" type="button"><span class="ar" aria-hidden="true">&larr;</span><span class="u"></span></button>
+    <p class="status" id="status" aria-live="polite"></p>
+    <button id="next" class="txt" type="button"><span class="u"></span><span class="ar" aria-hidden="true">&rarr;</span></button>
+  </div>
+</div>
+<svg id="grain" aria-hidden="true"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1 0"/></filter><rect width="100%" height="100%" filter="url(#noise)"/></svg>
+<script>
+/* =====================================================================================================================
+   FLIGHT PATH STEPPER
+   CONFIG (below) holds every word on the page:
+   - origin / destination: { name, code } printed at the ends of the arc (and used for the map's accessible name).
+   - steps: one label per step, in order. Markers are spread evenly along the arc; the first sits on the origin,
+     the last on the destination. 2 to 8 steps read well.
+   - current: index (0-based) of the step the jet starts on. Steps before it are drawn completed (contrail + check).
+   - labels: button / status copy. {n} {total} {step} are replaced in `status`.
+   - chart.kicker / flight { date, time, number, duration }: the title cartouche, top left.
+   - seed: changes the hand of the procedural chart (relief noise, rivers). The geography layout itself is fixed.
+   API (window.stepper):
+     stepper.go(i)   fly to step i (any index; the flight passes, stamps or un-stamps the markers in between)
+     stepper.next()  / stepper.back()
+     stepper.index   current step index (read-only)
+     stepper.el      the root element (#stepper)
+   Events, dispatched on #stepper (bubbling):
+     "stepchange"  detail { index, previous, step }   fired as soon as the step changes (the flight follows)
+     "arrive"      detail { index, step }             fired when the jet lands on the marker
+     "complete"    detail { index }                   fired when Continue is pressed on the last step
+   Markers are buttons in an ordered list inside <nav>; the current one has aria-current="step". Visited markers are
+   clickable (a completed one flies back); later, unvisited markers are aria-disabled. Arrow keys / Home / End move
+   between markers, Enter / Space activates. prefers-reduced-motion: the jet jumps instead of flying.
+   ===================================================================================================================== */
+const CONFIG = {
+  origin: { name: 'Montréal', code: 'YUL' },
+  destination: { name: 'Nice', code: 'NCE' },
+  steps: ['Call', 'Quote', 'Board', 'Arrive'],
+  current: 0,
+  labels: {
+    back: 'Back', next: 'Continue', finish: 'Confirm', nav: 'Booking progress',
+    status: 'Step {n} / {total} · {step}', completed: 'completed', map: 'Route map, {origin} to {destination}'
+  },
+  // the chart cartouche (top left). Any field can be '' to drop it.
+  chart: { kicker: 'Red Wing · Flight plan' },
+  flight: { date: '', time: 'Any day', number: 'RW 001', duration: '7 h 40' },
+  seed: 11
+};
+
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const root = $('#stepper'), mapEl = $('#map'), cvMap = $('#cv-map'), cvAir = $('#cv-air'), cvJet = $('#cv-jet');
+const listEl = $('#markers'), citiesEl = $('#cities'), statusEl = $('#status'), btnBack = $('#back'), btnNext = $('#next');
+const mq = matchMedia('(prefers-reduced-motion: reduce)');
+let reduce = mq.matches; mq.addEventListener?.('change', e => { reduce = e.matches; });
+const N = Math.max(2, CONFIG.steps.length);
+const pad2 = n => String(n).padStart(2, '0');
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const lerp = (a, b, t) => a + (b - a) * t;
+
+/* ---------------------------------------------------------------- noise */
+function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const rnd = mulberry((CONFIG.seed | 0) || 11);
+const PERM = new Uint8Array(512), GX = new Float32Array(256), GY = new Float32Array(256);
+{ const p = [...Array(256).keys()]; for (let i = 255; i > 0; i--) { const j = (rnd() * (i + 1)) | 0; [p[i], p[j]] = [p[j], p[i]]; }
+  for (let i = 0; i < 512; i++) PERM[i] = p[i & 255];
+  for (let i = 0; i < 256; i++) { const a = rnd() * Math.PI * 2; GX[i] = Math.cos(a); GY[i] = Math.sin(a); } }
+function noise(x, y) {
+  const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, X = xi & 255, Y = yi & 255;
+  const aa = PERM[PERM[X] + Y], ab = PERM[PERM[X] + Y + 1], ba = PERM[PERM[X + 1] + Y], bb = PERM[PERM[X + 1] + Y + 1];
+  const u = xf * xf * xf * (xf * (xf * 6 - 15) + 10), v = yf * yf * yf * (yf * (yf * 6 - 15) + 10);
+  const n00 = GX[aa] * xf + GY[aa] * yf, n10 = GX[ba] * (xf - 1) + GY[ba] * yf;
+  const n01 = GX[ab] * xf + GY[ab] * (yf - 1), n11 = GX[bb] * (xf - 1) + GY[bb] * (yf - 1);
+  const a = n00 + (n10 - n00) * u, b = n01 + (n11 - n01) * u;
+  return (a + (b - a) * v) * 1.41;
+}
+function fbm(x, y, o) { let s = 0, a = .5, f = 1, n = 0; for (let i = 0; i < o; i++) { s += a * noise(x * f, y * f); n += a; a *= .5; f *= 2.03; } return s / n; }
+function ridged(x, y, o) { let s = 0, a = .5, f = 1, w = 1, n = 0;
+  for (let i = 0; i < o; i++) { let r = 1 - Math.abs(noise(x * f + i * 17.3, y * f)); r *= r; r *= w; w = clamp(r * 1.7, 0, 1); s += r * a; n += a; a *= .5; f *= 2.07; }
+  return s / n; }
+
+/* ---------------------------------------------------------------- geography (world units: origin (0,0), destination (1,.78)) */
+const O = [0, 0], D = [1, .78];
+const ARC_C = (() => { const mx = .5, my = .39, dx = D[0], dy = D[1], l = Math.hypot(dx, dy); return [mx + dy / l * .16 * l, my - dx / l * .16 * l]; })();
+const NRM = [.41, .912];
+function coastRaw(x, y) {
+  const wx = x + .085 * fbm(x * 1.5 + 11.2, y * 1.5 + 3.1, 3), wy = y + .085 * fbm(x * 1.5 + 7.7, y * 1.5 + 19.4, 3);
+  let c = (wx - D[0]) * NRM[0] + (wy - D[1]) * NRM[1];
+  c += .04 * fbm(wx * 4.2 + 2, wy * 4.2 + 9, 4) + .009 * fbm(x * 16 + 40, y * 16, 2);
+  c -= .055 * Math.exp(-((x - 1.3) ** 2 + (y - .66) ** 2) / .0035);      // headland east
+  c -= .03 * Math.exp(-((x - 1.13) ** 2 + (y - .79) ** 2) / .0012);       // small cape
+  c -= .05 * Math.exp(-((x - .55) ** 2 + (y - 1.02) ** 2) / .008);        // peninsula west
+  c += .018 * Math.exp(-((x - .93) ** 2 + (y - .84) ** 2) / .004);        // the bay
+  return c;
+}
+const C0 = coastRaw(D[0], D[1]) + .011;
+const coast = (x, y) => coastRaw(x, y) - C0;
+// the long crescent lake at the origin, plus three small valley lakes
+const LAKE = (() => { const P0 = [.006, -.004], P1 = [.2, -.205], P2 = [.45, -.085], pts = [];
+  for (let i = 0; i <= 30; i++) { const t = i / 30, a = (1 - t) ** 2, b = 2 * t * (1 - t), c = t * t;
+    pts.push([a * P0[0] + b * P1[0] + c * P2[0], a * P0[1] + b * P1[1] + c * P2[1], .005 + .043 * sstep(.04, .6, t) * (1 - .45 * sstep(.86, 1, t))]); }
+  return pts; })();
+const SMALL_LAKES = [[.17, .27, .016, .055, .25], [-.21, .33, .014, .04, -.3], [.66, .63, .01, .022, .9], [1.22, .26, .008, .03, .4], [.36, .74, .006, .014, 1.2]];
+function lake(x, y) {
+  let best = -1;
+  if (x > -.06 && x < .52 && y > -.28 && y < .06) {
+    let dm = 1e9, wm = 0;
+    for (let i = 0; i < LAKE.length - 1; i++) { const a = LAKE[i], b = LAKE[i + 1], vx = b[0] - a[0], vy = b[1] - a[1];
+      const t = clamp(((x - a[0]) * vx + (y - a[1]) * vy) / (vx * vx + vy * vy), 0, 1), px = a[0] + vx * t - x, py = a[1] + vy * t - y, d = px * px + py * py;
+      if (d < dm) { dm = d; wm = a[2] + (b[2] - a[2]) * t; } }
+    best = wm - Math.sqrt(dm) + .003 * noise(x * 60, y * 60);
+  }
+  for (const [cx, cy, a, b, r] of SMALL_LAKES) { const dx = x - cx, dy = y - cy, hb = Math.max(a, b) * (1 + .03 / Math.min(a, b)); if (Math.abs(dx) > hb || Math.abs(dy) > hb) continue;
+    const cs = Math.cos(r), sn = Math.sin(r), u = (dx * cs + dy * sn) / a, v = (-dx * sn + dy * cs) / b;
+    const q = (1 - Math.sqrt(u * u + v * v)) * a + .002 * noise(x * 90, y * 90); if (q > best) best = q; }
+  return best;
+}
+const BELT = [[.4, -.7], [.55, -.12], [.7, .3], [.95, .5], [1.4, .42], [1.8, .3]];
+function distPoly(P, x, y) { let dm = 1e9;
+  for (let i = 0; i < P.length - 1; i++) { const a = P[i], b = P[i + 1], vx = b[0] - a[0], vy = b[1] - a[1];
+    const t = clamp(((x - a[0]) * vx + (y - a[1]) * vy) / (vx * vx + vy * vy), 0, 1), px = a[0] + vx * t - x, py = a[1] + vy * t - y;
+    dm = Math.min(dm, px * px + py * py); } return Math.sqrt(dm); }
+function height(x, y, c, l) {
+  const d = distPoly(BELT, x + .06 * noise(x * 2 + 5, y * 2), y);
+  const belt = Math.exp(-(d * d) / .06);
+  const r = ridged(x * 4.4 + 3.3, y * 4.4 + 1.7, 5);
+  let h = belt * (.18 + .95 * r) + .2 * (fbm(x * 2.4 + 20, y * 2.4, 4) + .45) * (.6 + .4 * belt) + .07 * ridged(x * 9 + 2, y * 9, 3) * (.3 + belt);
+  h *= sstep(0, .17, -c);
+  if (l > -.045) h *= .62 + .38 * sstep(0, .045, -l);
+  return h;
+}
+
+/* ---------------------------------------------------------------- layout */
+// on tall screens the chart turns track-up (rotated) so the route runs down the screen
+const view = { W: 0, H: 0, S: 1, ox: 0, oy: 0, dpr: 1, jl: 70, rot: 0, cr: 1, sr: 0 };
+const W2S = (x, y) => [view.ox + (x * view.cr - y * view.sr) * view.S, view.oy + (x * view.sr + y * view.cr) * view.S];
+const S2W = (sx, sy) => { const dx = (sx - view.ox) / view.S, dy = (sy - view.oy) / view.S; return [dx * view.cr + dy * view.sr, -dx * view.sr + dy * view.cr]; };
+const arcBox = () => { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (let i = 0; i <= 64; i++) { const q = bez(i / 64), p = [q[0] * view.cr - q[1] * view.sr, q[0] * view.sr + q[1] * view.cr]; x0 = Math.min(x0, p[0]); x1 = Math.max(x1, p[0]); y0 = Math.min(y0, p[1]); y1 = Math.max(y1, p[1]); } return { x0, x1, y0, y1 }; };
+function bez(t) { const a = (1 - t) ** 2, b = 2 * t * (1 - t), c = t * t; return [a * O[0] + b * ARC_C[0] + c * D[0], a * O[1] + b * ARC_C[1] + c * D[1]]; }
+// what must breathe inside the frame: the whole arc and the lake at the origin
+const FIT_PTS = (() => { const P = []; for (let i = 0; i <= 40; i++) P.push(bez(i / 40)); for (const l of LAKE) P.push([l[0], l[1] - l[2] - .012], [l[0], l[1] + l[2] + .006]); return P; })();
+const cartEl = $('#cart');
+let cartRect = null;
+function layout() {
+  const r = mapEl.getBoundingClientRect(); view.W = Math.round(r.width); view.H = Math.round(r.height);
+  view.dpr = document.documentElement.classList.contains('embed') ? Math.min((window.devicePixelRatio || 1) * (view.W < 700 ? 1.25 : 2), 3) : Math.min(window.devicePixelRatio || 1, 2);
+  const W = view.W, H = view.H, tall = H > W * 1.25;
+  view.rot = tall ? .62 : 0; view.cr = Math.cos(view.rot); view.sr = Math.sin(view.rot);
+  let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+  for (const q of FIT_PTS) { const x = q[0] * view.cr - q[1] * view.sr, y = q[0] * view.sr + q[1] * view.cr; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+  const bw = x1 - x0, bh = y1 - y0;
+  cartRect = [cartEl.offsetLeft, cartEl.offsetTop, cartEl.offsetLeft + cartEl.offsetWidth, cartEl.offsetTop + cartEl.offsetHeight];
+  let pl, pr, pt, pb;
+  if (tall) { pl = 44; pr = 70; pt = cartRect[3] + 56; pb = 92; }
+  else { pl = Math.max(cartRect[2] + 40, W * .17); pr = Math.max(190, W * .16); pt = Math.max(64, H * .085); pb = Math.max(112, H * .145); }
+  view.S = Math.min((W - pl - pr) / bw, (H - pt - pb) / bh);
+  view.ox = pl + (W - pl - pr - view.S * bw) / 2 - view.S * x0;
+  view.oy = pt + (H - pt - pb - view.S * bh) / 2 - view.S * y0;
+  view.jl = clamp(view.S * .118, 52, 104);
+  for (const cv of [cvMap, cvAir, cvJet]) { cv.width = Math.round(W * view.dpr); cv.height = Math.round(H * view.dpr); }
+  buildArc(); resetGhost(); labelsSnap = true;
+}
+// arc lookup in screen space
+const arc = { pts: [], len: [], L: 1 };
+function buildArc() {
+  const n = 720; arc.pts = []; arc.len = [0];
+  for (let i = 0; i <= n; i++) { const p = bez(i / n); arc.pts.push(W2S(p[0], p[1])); if (i) { const a = arc.pts[i - 1], b = arc.pts[i]; arc.len.push(arc.len[i - 1] + Math.hypot(b[0] - a[0], b[1] - a[1])); } }
+  arc.L = arc.len[n];
+}
+function at(s) { // s in px along the arc -> {x,y,tx,ty}
+  s = clamp(s, 0, arc.L); const L = arc.len; let lo = 0, hi = L.length - 1;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (L[m] < s) lo = m; else hi = m; }
+  const a = arc.pts[lo], b = arc.pts[hi], seg = L[hi] - L[lo] || 1, t = (s - L[lo]) / seg, dx = b[0] - a[0], dy = b[1] - a[1], dl = Math.hypot(dx, dy) || 1;
+  return { x: a[0] + dx * t, y: a[1] + dy * t, tx: dx / dl, ty: dy / dl };
+}
+function distToArc(x, y) { let d = 1e9; for (let i = 0; i < arc.pts.length; i += 6) { const p = arc.pts[i]; d = Math.min(d, Math.hypot(p[0] - x, p[1] - y)); } return d; }
+const uOf = i => i / (N - 1);
+
+/* ---------------------------------------------------------------- the printed chart */
+let paperTile = null;
+function makePaper() {
+  const c = document.createElement('canvas'); c.width = c.height = 384; const g = c.getContext('2d'), r = mulberry(5);
+  const id = g.createImageData(384, 384), d = id.data;
+  for (let i = 0; i < d.length; i += 4) { const v = 128 + (r() - .5) * 26; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
+  g.putImageData(id, 0, 0);
+  g.globalAlpha = .11; g.lineCap = 'round';
+  for (let i = 0; i < 520; i++) { const x = r() * 384, y = r() * 384, a = r() * Math.PI, l = 3 + r() * 14; g.strokeStyle = r() < .5 ? '#000' : '#fff'; g.lineWidth = .4 + r() * .5;
+    g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + Math.cos(a) * l * .5 + (r() - .5) * 3, y + Math.sin(a) * l * .5 + (r() - .5) * 3, x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); }
+  paperTile = c;
+}
+function march(F, gw, gh, st, lvl, path, g, skip) {
+  for (let j = 0; j + st < gh; j += st) { const r0 = j * gw, r1 = (j + st) * gw;
+    for (let i = 0; i + st < gw; i += st) {
+      const a = F[r0 + i], b = F[r0 + i + st], c = F[r1 + i + st], d = F[r1 + i];
+      const k = (a > lvl ? 8 : 0) | (b > lvl ? 4 : 0) | (c > lvl ? 2 : 0) | (d > lvl ? 1 : 0);
+      if (k === 0 || k === 15) continue;
+      if (skip && skip(r0 + i, r1 + i + st)) continue;
+      const x = i * g, y = j * g, s = st * g;
+      const T = () => [x + s * (lvl - a) / (b - a), y], R = () => [x + s, y + s * (lvl - b) / (c - b)],
+            B = () => [x + s * (lvl - d) / (c - d), y + s], Lf = () => [x, y + s * (lvl - a) / (d - a)];
+      const seg = (p, q) => { path.moveTo(p[0], p[1]); path.lineTo(q[0], q[1]); };
+      switch (k) {
+        case 1: case 14: seg(Lf(), B()); break; case 2: case 13: seg(B(), R()); break; case 3: case 12: seg(Lf(), R()); break;
+        case 4: case 11: seg(T(), R()); break; case 6: case 9: seg(T(), B()); break; case 7: case 8: seg(Lf(), T()); break;
+        case 5: seg(Lf(), T()); seg(B(), R()); break; case 10: seg(T(), R()); seg(Lf(), B()); break;
+      }
+    }
+  }
+}
+function displace(pts, depth, amp, r) { // fractal meanders between control points
+  let P = pts.map(p => p.slice());
+  for (let k = 0; k < depth; k++) { const Q = [];
+    for (let i = 0; i < P.length - 1; i++) { const a = P[i], b = P[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy), o = (r() - .5) * amp * l;
+      Q.push(a, [(a[0] + b[0]) / 2 - dy / l * o, (a[1] + b[1]) / 2 + dx / l * o]); }
+    Q.push(P[P.length - 1]); P = Q; }
+  for (let k = 0; k < 2; k++) { const Q = [P[0]]; for (let i = 0; i < P.length - 1; i++) { const a = P[i], b = P[i + 1]; Q.push([a[0] * .75 + b[0] * .25, a[1] * .75 + b[1] * .25], [a[0] * .25 + b[0] * .75, a[1] * .25 + b[1] * .75]); } Q.push(P[P.length - 1]); P = Q; }
+  return P;
+}
+const TOWNS = [
+  ['Vervaux', .2, -.235, 1], ['Saint-Aurel', .5, -.06, 1], ['Aubreval', .23, .33, 1], ['Castel-Oriol', -.28, .34, 1], ['Brévigny', .4, .56, 0],
+  ['Montclar', -.06, .7, 1], ['Pradelle', .62, .78, 0], ['Cap Ferrel', .8, .88, 0], ['Menthor', 1.22, .6, 1], ['Val-Chaudon', .98, .28, 0],
+  ['Les Aiguettes', .72, .02, 0], ['Valdoria', 1.32, .16, 1], ['Nantal', -.4, -.12, 0], ['Castelvero', 1.52, .34, 0], ['Sorène', -.12, .14, 0],
+  ['Lanvière', .1, .96, 0], ['Rocaval', 1.05, -.2, 0], ['Ostre', -.48, .6, 0],
+];
+const REGIONS = [
+  ['Massif du Vercel', .74, .16, 12, .2, 'land'], ['Préalpes', .02, .54, 12, .5, 'land'], ['Haute-Arve', 1.08, -.06, 11, .5, 'land'],
+  ['Mer Ligure', 1.18, .98, 13, .8, 'sea'], ["Lac d'Arvel", .24, -.112, 9.5, .35, 'lake'],
+];
+// fictional lat/long for the graticule and scale bar
+const LAT0 = 46.4, LON0 = 5.95, DLAT = 2.95, DLON = 1.95, KM_PER_UNIT = DLAT * 111.2;
+const worldOfLatLon = (la, lo) => { const y = (LAT0 - la) / DLAT, x0 = (lo - LON0) / DLON; return [x0 + (x0 - .5) * .035 * y, y + .025 * (x0 - .5) ** 2]; };
+
+let RIVNET = null;
+function buildRivers() { // priority-flood (breaching) the height field, route every cell to the sea, keep the cells that drain enough land
+  if (RIVNET) return RIVNET;
+  const X0 = -1.4, Y0 = -1.6, ST = .009, NX = Math.ceil(3.9 / ST), NY = Math.ceil(3.7 / ST), n = NX * NY;
+  const E = new Float32Array(n), kind = new Uint8Array(n);
+  for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const x = X0 + i * ST, y = Y0 + j * ST, k = j * NX + i, c = coast(x, y);
+    if (c > 0) { E[k] = -1; continue; }
+    // relief + a gentle fall to the sea + rolling lowland valleys, so streams wander instead of running straight
+    const l = lake(x, y), h = height(x, y, c, l), tilt = .2 * Math.min(-c, 1.6);
+    const roll = .07 * fbm(x * 4.5 + 31, y * 4.5 + 7, 3) + .025 * fbm(x * 13 + 5, y * 13 + 61, 2);
+    if (l > 0) { kind[k] = 2; E[k] = h * .4 + tilt + roll - .03; } else { kind[k] = 1; E[k] = h + tilt + roll; } }
+  const hk = new Float32Array(n), hi = new Int32Array(n); let hn = 0;
+  const push = (k, e) => { let i = hn++; while (i > 0) { const q = (i - 1) >> 1; if (hk[q] <= e) break; hk[i] = hk[q]; hi[i] = hi[q]; i = q; } hk[i] = e; hi[i] = k; };
+  const pop = () => { const top = hi[0], e = hk[--hn], k = hi[hn]; let i = 0;
+    for (;;) { let c = 2 * i + 1; if (c >= hn) break; if (c + 1 < hn && hk[c + 1] < hk[c]) c++; if (hk[c] >= e) break; hk[i] = hk[c]; hi[i] = hi[c]; i = c; }
+    if (hn) { hk[i] = e; hi[i] = k; } return top; };
+  const down = new Int32Array(n).fill(-1), seen = new Uint8Array(n), order = new Int32Array(n); let on = 0;
+  for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const k = j * NX + i;
+    if (kind[k] === 0 || i === 0 || j === 0 || i === NX - 1 || j === NY - 1) { seen[k] = 1; push(k, E[k]); } }
+  const NB = [-1, 1, -NX, NX, -NX - 1, -NX + 1, NX - 1, NX + 1];
+  while (hn) { const k = pop(); order[on++] = k; const i = k % NX;
+    for (let t = 0; t < 8; t++) { const nb = k + NB[t], ni = i + (t === 0 || t === 4 || t === 6 ? -1 : t === 1 || t === 5 || t === 7 ? 1 : 0);
+      if (ni < 0 || ni >= NX || nb < 0 || nb >= n || seen[nb]) continue;
+      seen[nb] = 1; down[nb] = k; push(nb, E[nb]); } } // ordered by raw height: pits are breached along their lowest route, flats follow the terrain
+  const acc = new Float32Array(n); for (let k = 0; k < n; k++) acc[k] = kind[k] ? 1 : 0;
+  for (let q = on - 1; q >= 0; q--) { const k = order[q], d = down[k]; if (d >= 0 && kind[k]) acc[d] += acc[k]; }
+  const T = 380, isR = k => kind[k] === 1 && acc[k] >= T;
+  const upc = new Uint8Array(n), vis = new Uint8Array(n);
+  for (let k = 0; k < n; k++) if (isR(k)) { const d = down[k]; if (d >= 0 && isR(d)) upc[d]++; }
+  const lakeIn = new Int32Array(n).fill(-1); for (let k = 0; k < n; k++) if (kind[k] === 2 && down[k] >= 0 && kind[down[k]] === 1) lakeIn[down[k]] = k;
+  const nets = [], P = k => [X0 + (k % NX) * ST, Y0 + Math.floor(k / NX) * ST, acc[k]];
+  for (let k0 = 0; k0 < n; k0++) { if (!isR(k0) || upc[k0]) continue;
+    const path = []; if (lakeIn[k0] >= 0) path.push(P(lakeIn[k0]));
+    let k = k0; path.push(P(k)); vis[k] = 1;
+    for (;;) { const d = down[k]; if (d < 0) break; const pd = P(d); if (!kind[d] || !isR(d)) { pd[2] = acc[k]; path.push(pd); break; } path.push(pd); if (vis[d]) break; vis[d] = 1; k = d; }
+    if (path.length < 3) continue;
+    // drop the 8-direction staircase, round it off, then warp by a smooth field (same warp everywhere, so junctions stay joined)
+    let Q = path.filter((q, i) => i === 0 || i === path.length - 1 || i % 3 === 0);
+    for (let it = 0; it < 3; it++) { const R = [Q[0]]; for (let i = 0; i < Q.length - 1; i++) { const a = Q[i], b = Q[i + 1];
+      R.push([a[0] * .75 + b[0] * .25, a[1] * .75 + b[1] * .25, a[2] * .75 + b[2] * .25], [a[0] * .25 + b[0] * .75, a[1] * .25 + b[1] * .75, a[2] * .25 + b[2] * .75]); } R.push(Q[Q.length - 1]); Q = R; }
+    for (const q of Q) { const wx = q[0], wy = q[1];
+      q[0] += .011 * fbm(wx * 17 + 3.1, wy * 17 + 9.2, 2) + .004 * noise(wx * 55, wy * 55 + 4);
+      q[1] += .011 * fbm(wx * 17 + 21.7, wy * 17 + 1.4, 2) + .004 * noise(wx * 55 + 9, wy * 55); }
+    nets.push(Q); }
+  return RIVNET = nets;
+}
+
+async function drawMap() {
+  const { W, H, S, ox, oy, dpr } = view;
+  const g = W * H > 1.4e6 ? 2 : 1.5, gw = Math.ceil(W / g) + 2, gh = Math.ceil(H / g) + 2, n = gw * gh;
+  const C = new Float32Array(n), Lk = new Float32Array(n), Hh = new Float32Array(n);
+  for (let j = 0; j < gh; j++) {
+    for (let i = 0; i < gw; i++) { const [x, y] = S2W(i * g, j * g), k = j * gw + i;
+      const c = coast(x, y), l = lake(x, y); C[k] = c; Lk[k] = l; Hh[k] = c > .03 ? 0 : height(x, y, c, l); } }
+  // raster: paper, hypsometric tint, hillshade, water
+  const img = new ImageData(gw, gh), d = img.data, gwld = g / S, aaW = gwld * .9;
+  const lx = -.52, ly = -.7, lz = .49, kz = .03;
+  const stops = [[0, 245, 242, 236], [.2, 242, 238, 230], [.42, 236, 230, 217], [.66, 230, 222, 206], [.9, 232, 226, 214], [1.25, 241, 238, 232]];
+  for (let j = 0; j < gh; j++) {
+    for (let i = 0; i < gw; i++) { const k = j * gw + i, [x, y] = S2W(i * g, j * g), h = Hh[k];
+      let s = 0; while (s < stops.length - 2 && h > stops[s + 1][0]) s++;
+      const A = stops[s], B = stops[s + 1], t = clamp((h - A[0]) / (B[0] - A[0]), 0, 1);
+      let r = lerp(A[1], B[1], t), gg = lerp(A[2], B[2], t), b = lerp(A[3], B[3], t);
+      const hx = (Hh[j * gw + Math.min(i + 1, gw - 1)] - Hh[j * gw + Math.max(i - 1, 0)]) / (2 * gwld);
+      const hy = (Hh[Math.min(j + 1, gh - 1) * gw + i] - Hh[Math.max(j - 1, 0) * gw + i]) / (2 * gwld);
+      const nx = -kz * hx, ny = -kz * hy, nl = Math.hypot(nx, ny, 1), dd = (nx * lx + ny * ly + lz) / nl - lz;
+      const sh = dd < 0 ? dd * .62 : dd * .3;
+      r *= 1 + sh * .86; gg *= 1 + sh * .9; b *= 1 + sh * 1.0;
+      const m = 1 + .016 * noise(x * 1.7 + 50, y * 1.7) + .008 * noise(x * 7, y * 7 + 30);
+      r *= m; gg *= m; b *= m;
+      // water
+      const c = C[k], l = Lk[k], w = Math.max(sstep(-aaW, aaW, c), sstep(-aaW, aaW, l));
+      if (w > 0) {
+        const deep = c > 0 ? sstep(.004, .09, c) : sstep(.0, .03, l) * .6;
+        const wr = lerp(225, 210, deep), wg = lerp(229, 216, deep), wb = lerp(229, 219, deep), wm = 1 + .012 * noise(x * 3, y * 3 + 9);
+        r = lerp(r, wr * wm, w); gg = lerp(gg, wg * wm, w); b = lerp(b, wb * wm, w);
+      }
+      const o = k * 4; d[o] = r; d[o + 1] = gg; d[o + 2] = b; d[o + 3] = 255; } }
+  await new Promise(r => setTimeout(r, 0));
+  const oc = document.createElement('canvas'); oc.width = gw; oc.height = gh; oc.getContext('2d').putImageData(img, 0, 0);
+  const ctx = cvMap.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(oc, -g / 2, -g / 2, gw * g, gh * g);
+  // paper fibre
+  ctx.save(); ctx.globalCompositeOperation = 'soft-light'; ctx.globalAlpha = .55; ctx.fillStyle = ctx.createPattern(paperTile, 'repeat'); ctx.fillRect(0, 0, W, H); ctx.restore();
+
+  const water = (i0, i1) => C[i0] > 0 || Lk[i0] > 0 || C[i1] > 0 || Lk[i1] > 0;
+  // graticule
+  ctx.save(); ctx.lineWidth = .6; ctx.strokeStyle = 'rgba(96,88,78,.17)'; ctx.setLineDash([]);
+  const cw = [S2W(0, 0), S2W(W, 0), S2W(0, H), S2W(W, H)], wx0 = Math.min(...cw.map(c => c[0])), wx1 = Math.max(...cw.map(c => c[0])), wy0 = Math.min(...cw.map(c => c[1])), wy1 = Math.max(...cw.map(c => c[1]));
+  const gl = [], latMin = LAT0 - DLAT * (wy1 + .3), latMax = LAT0 - DLAT * (wy0 - .3), lonMin = LON0 + DLON * (wx0 - .3), lonMax = LON0 + DLON * (wx1 + .3);
+  const fmt = (v, p, q) => { const a = Math.abs(v), dg = Math.floor(a + 1e-6), mn = Math.round((a - dg) * 60); return `${dg}°${mn ? pad2(mn) + '′' : ''}${v >= 0 ? p : q}`; };
+  for (let lo = Math.ceil(lonMin * 2) / 2; lo <= lonMax; lo += .5) { ctx.beginPath(); for (let k = 0; k <= 40; k++) { const la = latMax - (latMax - latMin) * k / 40, [wx, wy] = worldOfLatLon(la, lo), [sx, sy] = W2S(wx, wy); k ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); } ctx.stroke(); gl.push(['lon', lo]); }
+  for (let la = Math.ceil(latMin * 2) / 2; la <= latMax; la += .5) { ctx.beginPath(); for (let k = 0; k <= 40; k++) { const lo = lonMin + (lonMax - lonMin) * k / 40, [wx, wy] = worldOfLatLon(la, lo), [sx, sy] = W2S(wx, wy); k ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); } ctx.stroke(); gl.push(['lat', la]); }
+  ctx.restore();
+  // contours (index contour every 5th)
+  ctx.save(); ctx.lineCap = 'round';
+  const lv0 = .09, dl = .052;
+  for (let q = 0, lv = lv0; lv < 1.4; q++, lv += dl) {
+    const p = new Path2D(); march(Hh, gw, gh, 2, lv, p, g, water);
+    const idx = q % 5 === 4; ctx.lineWidth = idx ? .75 : .5; ctx.strokeStyle = idx ? 'rgba(120,100,76,.34)' : 'rgba(128,110,88,.2)'; ctx.stroke(p);
+  }
+  ctx.restore();
+  // water lines along coasts and lake shores (engraved echoes)
+  ctx.save(); ctx.lineCap = 'round';
+  [[.0045, .30], [.0105, .22], [.018, .16], [.028, .11], [.041, .075], [.058, .05]].forEach(([lv, a]) => { const p = new Path2D(); march(C, gw, gh, 1, lv, p, g); ctx.lineWidth = .55; ctx.strokeStyle = `rgba(104,120,124,${a})`; ctx.stroke(p); });
+  [[.0035, .22], [.009, .12]].forEach(([lv, a]) => { const p = new Path2D(); march(Lk, gw, gh, 1, lv, p, g); ctx.lineWidth = .5; ctx.strokeStyle = `rgba(104,120,124,${a})`; ctx.stroke(p); });
+  ctx.restore();
+  // rivers: drainage network traced on the relief (see buildRivers)
+  { const net = buildRivers(), wk = clamp(S / 760, .72, 1.25);
+    ctx.save(); ctx.lineCap = 'round'; ctx.strokeStyle = 'rgb(146,166,174)';
+    for (const R of net) { let prev = W2S(R[0][0], R[0][1]);
+      for (let k = 1; k < R.length; k++) { const q = W2S(R[k][0], R[k][1]);
+        if (!((prev[0] < -20 && q[0] < -20) || (prev[0] > W + 20 && q[0] > W + 20) || (prev[1] < -20 && q[1] < -20) || (prev[1] > H + 20 && q[1] > H + 20))) {
+          ctx.lineWidth = (.28 + 1.3 * Math.sqrt(Math.min(1, (R[k][2] + R[k - 1][2]) / 2 / 14000))) * wk;
+          ctx.beginPath(); ctx.moveTo(prev[0], prev[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); }
+        prev = q; } }
+    ctx.restore(); }
+  // border: pale band + dash-dot line
+  ctx.save(); ctx.lineCap = 'round';
+  const bP = displace([[.42, -.9], [.6, -.42], [.8, -.12], [.94, .2], [1.06, .44], [1.17, .62], [1.18, .74]], 5, .35, mulberry(77)).filter(([x, y]) => coast(x, y) < 0);
+  const bpath = new Path2D(); bP.forEach(([x, y], k) => { const s = W2S(x, y); k ? bpath.lineTo(...s) : bpath.moveTo(...s); });
+  ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(176,160,140,.13)'; ctx.stroke(bpath);
+  ctx.lineWidth = .8; ctx.strokeStyle = 'rgba(112,100,88,.48)'; ctx.setLineDash([6, 2.5, 1, 2.5]); ctx.stroke(bpath); ctx.restore();
+  // shorelines
+  ctx.save(); ctx.lineCap = 'round';
+  let p = new Path2D(); march(C, gw, gh, 1, 0, p, g); ctx.lineWidth = .85; ctx.strokeStyle = 'rgba(92,100,100,.72)'; ctx.stroke(p);
+  p = new Path2D(); march(Lk, gw, gh, 1, 0, p, g); ctx.lineWidth = .75; ctx.strokeStyle = 'rgba(92,100,100,.66)'; ctx.stroke(p);
+  ctx.restore();
+
+  // ---- type
+  const halo = (txt, x, y, font, color, ls = 0, align = 'left', alpha = 1) => { ctx.font = font; ctx.letterSpacing = ls + 'px'; ctx.textAlign = align; ctx.textBaseline = 'middle';
+    ctx.globalAlpha = alpha; ctx.lineJoin = 'round'; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(243,240,233,.85)'; ctx.strokeText(txt, x, y); ctx.fillStyle = color; ctx.fillText(txt, x, y); ctx.globalAlpha = 1; };
+  const narrow = W < 640, mono = narrow ? 8.5 : 9, inside = (x, y, m = 20) => x > m && x < W - m && y > m && y < H - m;
+  const occupied = [];
+  const free = (x, y, w, h) => !occupied.some(r => x < r[2] && x + w > r[0] && y < r[3] && y + h > r[1]);
+  // keep type away from the route and its labels
+  for (let i = 0; i < N; i++) { const p = at(uOf(i) * arc.L); occupied.push([p.x - 70, p.y - 46, p.x + 120, p.y + 46]);
+    // where the jet (and its shadow) will park
+    const fp = footprint(p.x, p.y, Math.atan2(p.ty, p.tx), 1.08, []); for (let q = 0; q < fp.length; q += 2) occupied.push([fp[q] - 5, fp[q + 1] - 5, fp[q] + 5, fp[q + 1] + 5]); }
+  if (cartRect) occupied.push([cartRect[0] - 10, cartRect[1] - 10, cartRect[2] + 14, cartRect[3] + 12]);
+  // regions
+  for (const [name, x, y, size, rot, kind] of REGIONS) { const [sx, sy] = W2S(x, y); if (!inside(sx, sy, 60)) continue;
+    const s = narrow ? size * .85 : size, rw = name.length * s * 1.25;
+    if (kind !== 'lake' && !free(sx - rw / 2, sy - s, rw, s * 2)) continue; ctx.save(); ctx.translate(sx, sy); ctx.rotate((kind === 'lake' ? -.32 : 0) + view.rot);
+    const col = kind === 'land' ? 'rgba(106,94,80,.62)' : 'rgba(84,104,110,.7)';
+    halo(name.toUpperCase(), 0, 0, `${kind === 'land' ? 300 : 'italic 300'} ${s}px Switzer, sans-serif`, col, s * (kind === 'lake' ? .28 : .55), 'center');
+    ctx.restore(); }
+  // peaks: local maxima of the relief
+  const peaks = [];
+  for (let j = 8; j < gh - 8; j += 4) for (let i = 8; i < gw - 8; i += 4) { const h = Hh[j * gw + i]; if (h < .62) continue; let top = true;
+    for (let v = -8; v <= 8 && top; v += 2) for (let u = -8; u <= 8; u += 2) if (Hh[(j + v) * gw + i + u] > h) { top = false; break; }
+    if (top) peaks.push([i * g, j * g, h]); }
+  peaks.sort((a, b) => b[2] - a[2]);
+  let np = 0;
+  for (const [x, y, h] of peaks) { if (np >= (narrow ? 4 : 8) || !inside(x, y, 40) || distToArc(x, y) < 50) continue;
+    const txt = (Math.round(h * 3600 + 400)).toLocaleString('fr-FR').replace(/ | /g, ' ');
+    if (!free(x - 6, y - 8, 52, 16)) continue; occupied.push([x - 10, y - 10, x + 56, y + 10]); np++;
+    ctx.fillStyle = 'rgba(82,72,60,.78)'; ctx.beginPath(); ctx.moveTo(x, y - 3); ctx.lineTo(x + 3, y + 2); ctx.lineTo(x - 3, y + 2); ctx.closePath(); ctx.fill();
+    halo(txt, x + 6, y, `500 ${mono - 1}px "JetBrains Mono", monospace`, 'rgba(96,86,74,.85)', .4); }
+  // towns
+  for (const [name, x, y, rank] of TOWNS) { const [sx, sy] = W2S(x, y); if (!inside(sx, sy, 40) || coast(x, y) > -.004 || lake(x, y) > -.004 || distToArc(sx, sy) < 36) continue;
+    ctx.font = `500 ${mono}px "JetBrains Mono", monospace`; ctx.letterSpacing = '1.4px'; const tw = ctx.measureText(name.toUpperCase()).width;
+    const left = sx + tw + 14 > W - 8, tx = left ? sx - 7 - tw : sx + 7;
+    if (!free(tx - 4, sy - 7, tw + 12, 14)) continue; occupied.push([tx - 6, sy - 9, tx + tw + 8, sy + 9]);
+    ctx.fillStyle = 'rgba(60,54,46,.8)'; ctx.beginPath(); ctx.arc(sx, sy, rank ? 1.9 : 1.4, 0, 7); ctx.fill();
+    if (rank) { ctx.strokeStyle = 'rgba(60,54,46,.6)'; ctx.lineWidth = .6; ctx.beginPath(); ctx.arc(sx, sy, 3.4, 0, 7); ctx.stroke(); }
+    halo(name.toUpperCase(), tx, sy + .5, `500 ${mono}px "JetBrains Mono", monospace`, rank ? 'rgba(62,56,48,.9)' : 'rgba(102,94,84,.85)', 1.4); }
+  // graticule ticks at the edges
+  ctx.font = `500 ${mono - 1}px "JetBrains Mono", monospace`;
+  if (!document.documentElement.classList.contains('embed')) for (const [kind, v] of gl) {   // embedded on the page: no lat/long numbers (the chart is a stylised one)
+    if (kind === 'lon') { // find where the meridian meets the top edge
+      for (let k = 0; k <= 80; k++) { const la = latMax - (latMax - latMin) * k / 80, [wx, wy] = worldOfLatLon(la, v), [sx, sy] = W2S(wx, wy); if (sy >= 0) { if (sx > 30 && sx < W - 60 && free(sx, 4, 52, 14)) halo(fmt(v, 'E', 'W'), sx + 4, 11, ctx.font, 'rgba(108,100,90,.8)', .8); break; } }
+    } else {
+      for (let k = 0; k <= 80; k++) { const lo = lonMin + (lonMax - lonMin) * k / 80, [wx, wy] = worldOfLatLon(v, lo), [sx, sy] = W2S(wx, wy); if (sx >= 0) { if (sy > 30 && sy < H - 50 && free(4, sy - 14, 52, 14)) halo(fmt(v, 'N', 'S'), 8, sy - 7, ctx.font, 'rgba(108,100,90,.8)', .8); break; } }
+    }
+  }
+  // scale bar
+  if (!document.documentElement.classList.contains('embed')) { const kmStep = S / KM_PER_UNIT * 25 > 34 ? 25 : 50, seg = S / KM_PER_UNIT * kmStep, x0 = narrow ? 16 : 24, y0 = H - 40;
+    ctx.save(); ctx.lineWidth = .8; ctx.strokeStyle = 'rgba(52,47,41,.75)';
+    for (let k = 0; k < 4; k++) { ctx.fillStyle = k % 2 ? 'rgba(243,240,233,.9)' : 'rgba(52,47,41,.72)'; ctx.fillRect(x0 + k * seg / 2, y0, seg / 2, 3); }
+    ctx.strokeRect(x0, y0, seg * 2, 3);
+    ctx.font = `500 ${mono - 1}px "JetBrains Mono", monospace`; ctx.letterSpacing = '.8px'; ctx.fillStyle = 'rgba(80,72,62,.85)'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ['0', kmStep, (kmStep * 2) + ' km'].forEach((t, k) => ctx.fillText(String(t), x0 + k * seg + (k === 2 ? 8 : 0), y0 - 4));
+    ctx.restore(); }
+  mapEl.classList.add('ready');
+}
+
+/* ---------------------------------------------------------------- the jet (top-down, local units: length 100, nose at +x) */
+const JET = (() => {
+  const fus = new Path2D();
+  fus.moveTo(51, 0); fus.bezierCurveTo(51, 2.5, 46, 4.6, 37, 5.05); fus.lineTo(-12, 5.15); fus.bezierCurveTo(-27, 5.15, -40, 3.7, -49.2, 1.35); fus.quadraticCurveTo(-51.2, .7, -51.2, 0);
+  fus.quadraticCurveTo(-51.2, -.7, -49.2, -1.35); fus.bezierCurveTo(-40, -3.7, -27, -5.15, -12, -5.15); fus.lineTo(37, -5.05); fus.bezierCurveTo(46, -4.6, 51, -2.5, 51, 0); fus.closePath();
+  const wing = new Path2D(), stab = new Path2D(), eng = new Path2D(), pyl = new Path2D(), lines = new Path2D(), fin = new Path2D();
+  for (const s of [1, -1]) {
+    wing.moveTo(13, 4.4 * s); wing.quadraticCurveTo(5.5, 6.8 * s, 1.5, 12.2 * s); wing.lineTo(-15.4, 44.4 * s); wing.quadraticCurveTo(-16.3, 46.2 * s, -18.3, 46.3 * s);
+    wing.lineTo(-21.3, 46.3 * s); wing.quadraticCurveTo(-22.3, 46 * s, -21.9, 45 * s); wing.lineTo(-11.6, 15.3 * s); wing.quadraticCurveTo(-10.2, 9 * s, -10.6, 4.4 * s); wing.closePath();
+    stab.moveTo(-40.2, 1 * s); stab.lineTo(-48.3, 16.4 * s); stab.quadraticCurveTo(-49, 17.6 * s, -50.4, 17.6 * s); stab.lineTo(-52.7, 17.6 * s); stab.quadraticCurveTo(-53.4, 17.2 * s, -53.1, 16.2 * s); stab.lineTo(-51, 1 * s); stab.closePath();
+    eng.roundRect(-35.2, s > 0 ? 7 : -14.2, 18.4, 7.2, 3.5);
+    pyl.rect(-30.5, s > 0 ? 4.2 : -7.6, 8.5, 3.4);
+    // flap hinge, aileron and spoiler lines
+    lines.moveTo(-7.3, 5.2 * s); lines.lineTo(-8.9, 15.4 * s); lines.lineTo(-17.9, 42.6 * s);
+    lines.moveTo(-14.3, 31.5 * s); lines.lineTo(-17.2, 32 * s); lines.moveTo(-10.6, 22 * s); lines.lineTo(-13.8, 22.6 * s);
+    lines.moveTo(-5.6, 9 * s); lines.lineTo(-2.8, 14 * s); lines.moveTo(-1.6, 9.5 * s);
+    lines.moveTo(-46.2, 6.5 * s); lines.lineTo(-51.8, 6.6 * s);
+  }
+  fin.moveTo(-26, 0); fin.quadraticCurveTo(-37, 1.25, -52.6, .95); fin.lineTo(-52.6, -.95); fin.quadraticCurveTo(-37, -1.25, -26, 0); fin.closePath();
+  const wsh = new Path2D(); wsh.moveTo(41.6, -3.4); wsh.quadraticCurveTo(46.3, 0, 41.6, 3.4); wsh.lineTo(39.3, 3.85); wsh.quadraticCurveTo(43.3, 0, 39.3, -3.85); wsh.closePath();
+  const sil = new Path2D(); sil.addPath(fus); sil.addPath(wing); sil.addPath(stab); sil.addPath(eng); sil.addPath(pyl);
+  return { fus, wing, stab, eng, pyl, lines, fin, wsh, sil };
+})();
+let shadowSprite = null;
+function makeShadow() {
+  const k = view.jl / 100, pad = Math.ceil(view.jl * .14), w = Math.ceil(view.jl * 1.08) + pad * 2, h = Math.ceil(view.jl * .96) + pad * 2, dpr = view.dpr;
+  const c = document.createElement('canvas'); c.width = w * dpr; c.height = h * dpr; const g = c.getContext('2d');
+  g.setTransform(dpr * k, 0, 0, dpr * k, dpr * w / 2, dpr * h / 2); g.filter = `blur(${(view.jl * .018 * dpr).toFixed(2)}px)`;
+  g.fillStyle = '#231d17'; g.fill(JET.sil, 'nonzero');
+  shadowSprite = { c, w, h };
+}
+const LIGHT = [-.55, -.83];
+// points inside the silhouette, used to keep labels out from under the jet and its shadow
+let FOOT = null;
+function footprint(x, y, ang, alt, out) {
+  if (!FOOT) { const c = document.createElement('canvas').getContext('2d'); FOOT = [];
+    for (let v = -48; v <= 48; v += 3.5) for (let u = -54; u <= 52; u += 3.5) if (c.isPointInPath(JET.sil, u, v)) FOOT.push(u, v); }
+  const k = view.jl / 100, cs = Math.cos(ang) * k, sn = Math.sin(ang) * k, [sx, sy] = shadowOffset(alt); out.length = 0;
+  for (let i = 0; i < FOOT.length; i += 2) { const px = FOOT[i] * cs - FOOT[i + 1] * sn, py = FOOT[i] * sn + FOOT[i + 1] * cs; out.push(x + px, y + py, x + px + sx, y + py + sy); }
+  return out;
+}
+function drawJet(ctx, x, y, ang, k, roll, t) {
+  const lx = LIGHT[0] * Math.cos(ang) + LIGHT[1] * Math.sin(ang), ly = -LIGHT[0] * Math.sin(ang) + LIGHT[1] * Math.cos(ang);
+  const px = 1 / k; // one css px in local units
+  ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(k, k * Math.cos(roll));
+  // wings & tailplane: matte white, a soft chordwise falloff, contact shade at the root
+  const wg = ctx.createLinearGradient(0, -46, 0, 46);
+  wg.addColorStop(0, ly < 0 ? '#fbfbfa' : '#e9ebec'); wg.addColorStop(.42, '#f4f5f5'); wg.addColorStop(.5, '#eceeef'); wg.addColorStop(.58, '#f4f5f5'); wg.addColorStop(1, ly > 0 ? '#fbfbfa' : '#e9ebec');
+  ctx.fillStyle = wg; ctx.fill(JET.wing); ctx.fill(JET.stab);
+  ctx.lineWidth = .55 * px; ctx.strokeStyle = 'rgba(64,72,82,.42)'; ctx.stroke(JET.wing); ctx.stroke(JET.stab);
+  ctx.lineWidth = .4 * px; ctx.strokeStyle = 'rgba(70,80,92,.26)'; ctx.stroke(JET.lines);
+  // winglets read as a darker sliver at each tip
+  ctx.fillStyle = '#c8102e'; for (const s of [1, -1]) { ctx.beginPath(); ctx.moveTo(-16.6, 45.7 * s); ctx.lineTo(-21.5, 45.9 * s); ctx.lineTo(-21.2, 46.6 * s); ctx.lineTo(-17.6, 46.6 * s); ctx.fill(); }
+  // pylons + nacelles
+  ctx.fillStyle = '#dfe2e5'; ctx.fill(JET.pyl);
+  ctx.save(); ctx.shadowColor = 'rgba(30,36,44,.28)'; ctx.shadowBlur = 2.2 * k * px * 3; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+  // fuselage: cylindrical shading turned toward the light
+  const f = .5 + .3 * ly, eA = .26 + .18 * ly, eB = .26 - .18 * ly, edge = a => `rgb(${Math.round(255 - 96 * a)},${Math.round(255 - 88 * a)},${Math.round(255 - 76 * a)})`;
+  const fg = ctx.createLinearGradient(0, -5.2, 0, 5.2);
+  fg.addColorStop(0, edge(eA + .25)); fg.addColorStop(.16, edge(eA * .55)); fg.addColorStop(clamp(f, .25, .75), '#ffffff'); fg.addColorStop(.84, edge(eB * .55)); fg.addColorStop(1, edge(eB + .25));
+  ctx.fillStyle = fg; ctx.fill(JET.fus); ctx.restore();
+  // nose highlight + tail cone falloff
+  const lg = ctx.createLinearGradient(51, 0, -51, 0); lg.addColorStop(0, 'rgba(255,255,255,0)'); lg.addColorStop(.75, 'rgba(255,255,255,0)'); lg.addColorStop(1, 'rgba(120,130,140,.18)');
+  ctx.fillStyle = lg; ctx.fill(JET.fus);
+  ctx.lineWidth = .55 * px; ctx.strokeStyle = 'rgba(60,68,78,.45)'; ctx.stroke(JET.fus);
+  // cabin windows: barely visible on the curve of the hull
+  ctx.fillStyle = 'rgba(40,48,58,.42)';
+  for (let i = 0; i < 7; i++) { const wx = 27 - i * 5.4; for (const s of [1, -1]) { ctx.beginPath(); ctx.ellipse(wx, 4.45 * s, 1.05, .42, 0, 0, 7); ctx.fill(); } }
+  ctx.fillStyle = 'rgba(40,48,58,.3)'; ctx.fillRect(33.5, 3.9, 2.2, .8); // door
+  // windshield
+  const wsg = ctx.createLinearGradient(39, -3, 45, 3); wsg.addColorStop(0, '#1d242c'); wsg.addColorStop(.55, '#3a4652'); wsg.addColorStop(.62, '#7d8994'); wsg.addColorStop(.7, '#2a333c'); wsg.addColorStop(1, '#161c22');
+  ctx.fillStyle = wsg; ctx.fill(JET.wsh);
+  ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = .35 * px; ctx.beginPath(); ctx.moveTo(43.1, 0); ctx.lineTo(40.6, 0); ctx.stroke();
+  // fin ridge seen from above
+  const fng = ctx.createLinearGradient(0, -1.2, 0, 1.2); fng.addColorStop(0, ly < 0 ? '#e8243f' : '#8e0b20'); fng.addColorStop(1, ly > 0 ? '#e8243f' : '#8e0b20');
+  ctx.fillStyle = fng; ctx.fill(JET.fin); ctx.lineWidth = .4 * px; ctx.strokeStyle = 'rgba(60,68,78,.35)'; ctx.stroke(JET.fin);
+  // T-tail on top of the fin
+  ctx.fillStyle = '#f6f7f7'; ctx.fill(JET.stab); ctx.lineWidth = .55 * px; ctx.strokeStyle = 'rgba(64,72,82,.45)'; ctx.stroke(JET.stab);
+  // nacelles, with an intake lip and a dark exhaust
+  for (const s of [1, -1]) {
+    const cy = 10.6 * s, ng = ctx.createLinearGradient(0, cy - 3.6, 0, cy + 3.6), fl = .5 + .3 * ly;
+    ng.addColorStop(0, '#7e0a1d'); ng.addColorStop(clamp(fl, .2, .8), '#e3203b'); ng.addColorStop(1, '#7e0a1d');
+    ctx.save(); ctx.shadowColor = 'rgba(30,36,44,.3)'; ctx.shadowBlur = 2.5 * k * px * 3;
+    ctx.beginPath(); ctx.roundRect(-35.2, cy - 3.6, 18.4, 7.2, 3.5); ctx.fillStyle = ng; ctx.fill(); ctx.restore();
+    ctx.lineWidth = .5 * px; ctx.strokeStyle = 'rgba(60,68,78,.45)'; ctx.stroke();
+    ctx.fillStyle = '#2b3239'; ctx.beginPath(); ctx.ellipse(-17.4, cy, .75, 2.7, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(90,96,104,.85)'; ctx.beginPath(); ctx.ellipse(-35, cy, .9, 2.5, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = 'rgba(70,80,92,.28)'; ctx.lineWidth = .35 * px; ctx.beginPath(); ctx.moveTo(-22, cy - 3.4); ctx.lineTo(-22, cy + 3.4); ctx.stroke();
+  }
+  // navigation lights: red port, green starboard, white tail strobe
+  const nav = (x, y, col, r) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); };
+  nav(-19.4, -46.2, 'rgba(196,74,62,.85)', .62); nav(-19.4, 46.2, 'rgba(62,150,104,.85)', .62);
+  if (!reduce && (t % 2.2) < .06) { const sg = ctx.createRadialGradient(-51.2, 0, 0, -51.2, 0, 3.2); sg.addColorStop(0, 'rgba(255,255,255,.8)'); sg.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(-51.2, 0, 3.2, 0, 7); ctx.fill(); }
+  const beacon = !reduce && ((t + 1.1) % 2.2) < .08;
+  nav(-4, 0, beacon ? 'rgba(232,90,72,.9)' : 'rgba(160,80,70,.45)', beacon ? .8 : .5);
+  ctx.restore();
+}
+
+/* ---------------------------------------------------------------- flight state + contrail */
+const st = { s: 0, from: 0, to: 0, t0: 0, dur: 0, flying: false, dir: 1, head: 0, headV: 0, roll: 0, airDirty: true, alt: 1 };
+let index = clamp(CONFIG.current | 0, 0, N - 1), maxReached = index;
+const easeFlight = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+function shadowOffset(alt) { const j = view.jl; return [j * .4 * alt, j * .6 * alt]; }
+const GHOST_MS = 1150, ghost = { step: 2.5, T: null, H: null };
+function resetGhost() { const nb = Math.ceil(arc.L / ghost.step) + 2; ghost.T = new Float64Array(nb).fill(-1e9); ghost.H = new Float32Array(nb); }
+// width of the vapour at arc position ss, a = distance behind the engines in jet lengths, age = same over the route length
+const trailW = (a, age, ss) => view.jl * (.012 + .034 * sstep(.05, 2.6, a) + .055 * sstep(2, 14, a) + .07 * Math.pow(age, 1.3)) * sstep(-.05, .9, a) * (.18 + .82 * sstep(0, view.jl * 1.6, ss));
+function ribbon(S, mul, dx = 0, dy = 0) { const P = new Path2D(); if (S.length < 2) return P;
+  for (let i = 0; i < S.length; i++) { const q = S[i], x = q[0] + q[2] * q[4] * mul + dx, y = q[1] + q[3] * q[4] * mul + dy; i ? P.lineTo(x, y) : P.moveTo(x, y); }
+  for (let i = S.length - 1; i >= 0; i--) { const q = S[i]; P.lineTo(q[0] - q[2] * q[4] * mul + dx, q[1] - q[3] * q[4] * mul + dy); }
+  P.closePath(); return P; }
+function trailSample(sides, ss, head, time, spread, k0) {
+  const { jl } = view, p = at(ss), a = (head - ss) / jl, age = (head - ss) / arc.L, nx = -p.ty, ny = p.tx;
+  const sep = jl * .106 * (1 - sstep(.2, 3.2, a)) * (1 - spread);
+  const drift = jl * (.05 * age + .012 * sstep(1, 6, a)) * noise(ss * .007, 3.3) + spread * jl * .09 * noise(ss * .013, 8.1);
+  const w = trailW(a, age, ss) * (1 + 1.8 * spread);
+  for (let k = 0; k < 2; k++) { const sg = k ? -1 : 1, wob = 1 + .16 * noise(ss * .035 + k * 9, time * .00006 + k), off = sg * sep + drift;
+    sides[k].push([p.x + nx * off, p.y + ny * off, nx, ny, w * wob]); }
+}
+function drawAir(now) {
+  const ctx = cvAir.getContext('2d'), { W, H, dpr, jl } = view; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+  const sj = st.s * arc.L, [sx, sy] = shadowOffset(1.0);
+  let live = false;
+  // remaining route: fine dotted line
+  ctx.fillStyle = 'rgba(38,35,31,.6)';
+  const dotGap = 5.2, s0 = Math.ceil((sj + 2) / dotGap) * dotGap;
+  for (let s = s0; s <= arc.L; s += dotGap) { const p = at(s); ctx.beginPath(); ctx.arc(p.x, p.y, .85, 0, 7); ctx.fill(); }
+  // vapour the jet has flown back through: it spreads and evaporates instead of vanishing
+  if (!reduce && ghost.T) {
+    const b0 = Math.max(0, Math.floor(sj / ghost.step)), nb = ghost.T.length;
+    let chunk = null;
+    const flush = () => { if (!chunk || chunk.sides[0].length < 2) { chunk = null; return; }
+      const f = chunk.f / chunk.n, al = Math.pow(1 - f, 1.25);
+      ctx.save(); ctx.filter = `blur(${(jl * .035 + f * 3).toFixed(1)}px)`; ctx.fillStyle = `rgba(70,58,44,${(.1 * al).toFixed(3)})`;
+      ctx.fill(ribbon(chunk.sides[0], 1.05, sx, sy)); ctx.fill(ribbon(chunk.sides[1], 1.05, sx, sy)); ctx.restore();
+      for (const [mul, a, flt] of [[2.1, .2, 'blur(2px)'], [1.0, .55, 'blur(1px)']]) { ctx.save(); ctx.filter = flt; ctx.fillStyle = `rgba(255,255,255,${(a * al).toFixed(3)})`;
+        ctx.fill(ribbon(chunk.sides[0], mul)); ctx.fill(ribbon(chunk.sides[1], mul)); ctx.restore(); }
+      chunk = null; };
+    for (let b = b0; b < nb; b++) { const s = b * ghost.step; if (s < sj) continue; const f = (now - ghost.T[b]) / GHOST_MS;
+      if (f < 0 || f >= 1 || s > arc.L) { flush(); continue; }
+      live = true;
+      if (!chunk) chunk = { sides: [[], []], f: 0, n: 0 };
+      trailSample(chunk.sides, s, ghost.H[b], now, f, 0); chunk.f += f; chunk.n++;
+      if (chunk.n >= 7) { const keep = chunk.sides.map(S => S[S.length - 1]); flush(); chunk = { sides: [[keep[0]], [keep[1]]], f: 0, n: 0 }; } }
+    flush();
+  }
+  if (sj < jl * .5) return live;
+  // flown route: a hairline under the contrail so it stays legible on pale ground
+  ctx.beginPath(); for (let s = 0; s <= sj; s += 3) { const p = at(s); s ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
+  ctx.lineWidth = .7; ctx.strokeStyle = 'rgba(38,35,31,.2)'; ctx.stroke();
+  // twin contrails from the engines, merging and spreading with age, tapering into the departure
+  const start = sj - jl * .36, step = 2.5, sides = [[], []];
+  for (let s = start; s > -step; s -= step) { const ss = Math.max(s, 0); trailSample(sides, ss, sj, now, 0, 0); if (s <= 0) break; }
+  const a0 = at(0), aj = at(sj), f0 = clamp(jl * 1.5 / sj, .03, .3);
+  ctx.save(); ctx.filter = `blur(${(jl * .035).toFixed(1)}px)`;
+  const shg = ctx.createLinearGradient(a0.x, a0.y, aj.x, aj.y); shg.addColorStop(0, 'rgba(70,58,44,0)'); shg.addColorStop(Math.max(f0, .35), 'rgba(70,58,44,.05)'); shg.addColorStop(1, 'rgba(70,58,44,.12)');
+  ctx.fillStyle = shg; const sp = new Path2D(); sp.addPath(ribbon(sides[0], 1.05, sx, sy)); sp.addPath(ribbon(sides[1], 1.05, sx, sy)); ctx.fill(sp, 'nonzero'); ctx.restore();
+  for (const [mul, a, flt] of [[2.1, .2, 'blur(1.6px)'], [1.0, .62, 'blur(.6px)'], [.42, .7, 'none']]) {
+    const gr = ctx.createLinearGradient(a0.x, a0.y, aj.x, aj.y);
+    gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(f0, `rgba(255,255,255,${a * .42})`); gr.addColorStop(Math.max(f0 + .01, .45), `rgba(255,255,255,${a * .85})`); gr.addColorStop(1, `rgba(255,255,255,${a})`);
+    ctx.save(); ctx.filter = flt; ctx.fillStyle = gr; ctx.fill(ribbon(sides[0], mul)); ctx.fill(ribbon(sides[1], mul)); ctx.restore();
+  }
+  return live;
+}
+
+/* ---------------------------------------------------------------- markers (DOM) */
+const marks = [];
+function buildMarkers() {
+  $('#nav').setAttribute('aria-label', CONFIG.labels.nav);
+  cvMap.setAttribute('aria-label', CONFIG.labels.map.replace('{origin}', CONFIG.origin.name).replace('{destination}', CONFIG.destination.name));
+  listEl.innerHTML = ''; marks.length = 0;
+  for (let i = 0; i < N; i++) {
+    const li = document.createElement('li'); li.className = 'mk';
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'mkb';
+    b.innerHTML = `<span class="ring" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M4 7.3l2 1.9 4.1-4.4"/></svg></span><span class="lab"><b>${pad2(i + 1)}</b>${CONFIG.steps[i] ?? ''}</span><span class="sr st"></span>`;
+    b.addEventListener('click', () => { if (b.getAttribute('aria-disabled') === 'true') return; go(i); });
+    b.addEventListener('keydown', e => {
+      const k = e.key; let j = null;
+      if (k === 'ArrowRight' || k === 'ArrowDown') j = Math.min(N - 1, i + 1); else if (k === 'ArrowLeft' || k === 'ArrowUp') j = Math.max(0, i - 1);
+      else if (k === 'Home') j = 0; else if (k === 'End') j = N - 1;
+      if (j !== null) { e.preventDefault(); marks[j].b.focus(); setRoving(j); }
+    });
+    li.appendChild(b); listEl.appendChild(li);
+    marks.push({ li, b, lab: b.querySelector('.lab'), sr: b.querySelector('.st'), done: false, lw: 0, lh: 0 });
+  }
+  citiesEl.innerHTML = '';
+  for (const [k, c] of [[0, CONFIG.origin], [N - 1, CONFIG.destination]]) {
+    const el = document.createElement('div'); el.className = 'city'; el.innerHTML = `${c.name}<span>${c.code}</span>`; citiesEl.appendChild(el); marks[k].city = el;
+  }
+}
+function setRoving(j) { marks.forEach((m, i) => m.b.tabIndex = i === j ? 0 : -1); }
+function syncMarkers() {
+  marks.forEach((m, i) => {
+    const cur = i === index, done = i < index, reach = i <= maxReached;
+    m.b.toggleAttribute('aria-current', cur); if (cur) m.b.setAttribute('aria-current', 'step');
+    m.b.setAttribute('aria-disabled', reach && !cur ? 'false' : 'true');
+    m.sr.textContent = done ? `, ${CONFIG.labels.completed}` : '';
+    m.li.classList.toggle('future', i > maxReached);
+    m.li.classList.toggle('cur', cur);
+  });
+  setRoving(index);
+  const t = CONFIG.labels;
+  statusEl.innerHTML = `<span>${t.status.replace('{n}', pad2(index + 1)).replace('{total}', pad2(N)).replace('{step}', CONFIG.steps[index] ?? '')}</span><span class="pg" aria-hidden="true">${CONFIG.steps.map((_, i) => `<i class="${i <= index ? 'on' : ''}"></i>`).join('')}</span>`;
+  btnBack.disabled = index === 0;
+  btnBack.querySelector('.u').textContent = t.back;
+  btnNext.querySelector('.u').textContent = index === N - 1 ? t.finish : t.next;
+}
+function measureLabels() { for (const m of marks) { m.lw = m.lab.offsetWidth; m.lh = m.lab.offsetHeight; if (m.city) { m.cw = m.city.offsetWidth; m.ch = m.city.offsetHeight; } } }
+function fillCart() {
+  const f = CONFIG.flight || {}, c = CONFIG.chart || {};
+  cartEl.querySelector('.k').textContent = c.kicker || ''; cartEl.querySelector('.k').hidden = !c.kicker;
+  cartEl.querySelector('.o').textContent = CONFIG.origin.code; cartEl.querySelector('.d').textContent = CONFIG.destination.code;
+  cartEl.querySelector('.n').textContent = `${CONFIG.origin.name} — ${CONFIG.destination.name}`;
+  const line = [f.date, f.time, f.number, f.duration].filter(Boolean).join(' · ');
+  cartEl.querySelector('.f').textContent = line; cartEl.querySelector('.f').hidden = !line;
+  cartEl.setAttribute('aria-label', `${CONFIG.origin.name} to ${CONFIG.destination.name}${line ? ', ' + line : ''}`);
+}
+const DIRS = [...Array(8)].map((_, k) => [Math.cos(k * Math.PI / 4), Math.sin(k * Math.PI / 4)]);
+let labelsSnap = true;
+const FOOTBUF = [];
+function placeMarkers(jet, dt) {
+  const { W, H, jl } = view;
+  const foot = footprint(jet.x, jet.y, jet.ang, jet.alt, FOOTBUF);
+  const pts = marks.map((m, i) => at(uOf(i) * arc.L));
+  const route = []; for (let s = 0; s <= arc.L; s += 9) { const p = at(s); route.push(p.x, p.y); }
+  const placed = [];
+  const score = (x, y, w, h, own) => {
+    let sc = 0;
+    if (x < 8 || y < 8 || x + w > W - 8 || y + h > H - 8) sc += 2000;
+    if (cartRect && x < cartRect[2] + 8 && x + w > cartRect[0] - 8 && y < cartRect[3] + 8 && y + h > cartRect[1] - 8) sc += 2000;
+    const x0 = x - 7, y0 = y - 7, x1 = x + w + 7, y1 = y + h + 7;
+    for (let i = 0; i < foot.length; i += 2) { const px = foot[i], py = foot[i + 1]; if (px > x0 && px < x1 && py > y0 && py < y1) sc += 90; }
+    for (const q of placed) if (x < q[2] + 5 && x + w > q[0] - 5 && y < q[3] + 5 && y + h > q[1] - 5) sc += 1200;
+    pts.forEach((p, i) => { if (i !== own && p.x > x - 10 && p.x < x + w + 10 && p.y > y - 10 && p.y < y + h + 10) sc += 600; });
+    for (let i = 0; i < route.length; i += 2) if (route[i] > x - 3 && route[i] < x + w + 3 && route[i + 1] > y - 3 && route[i + 1] < y + h + 3) sc += 30;
+    return sc; };
+  const choose = (L, p, w, h, pref, own) => {
+    let best = null, bs = 1e18;
+    for (let di = 0; di < 8; di++) for (let ri = 0; ri < 3; ri++) {
+      const d = DIRS[di], diag = Math.abs(d[0]) > .3 && Math.abs(d[1]) > .3, dist = (diag ? 8 : 12) + ri * jl * .32;
+      const kx = Math.abs(d[0]) < .3 ? 0 : Math.sign(d[0]), ky = Math.abs(d[1]) < .3 ? 0 : Math.sign(d[1]);
+      const x = p.x + d[0] * dist - w * (.5 - .5 * kx), y = p.y + d[1] * dist - h * (.5 - .5 * ky);
+      let sc = score(x, y, w, h, own) + (1 - (d[0] * pref[0] + d[1] * pref[1])) * 9 + ri * 7;
+      if (L.choice === di * 3 + ri) sc -= 10;
+      if (sc < bs) { bs = sc; best = [x, y, di * 3 + ri]; } }
+    L.choice = best[2];
+    if (labelsSnap || !L.cur || reduce) L.cur = [best[0], best[1]];
+    else { const e = 1 - Math.exp(-dt * 11); L.cur[0] += (best[0] - L.cur[0]) * e; L.cur[1] += (best[1] - L.cur[1]) * e; }
+    placed.push([L.cur[0], L.cur[1], L.cur[0] + w, L.cur[1] + h]);
+    return L.cur; };
+  marks.forEach((m, i) => {
+    const p = pts[i];
+    m.li.style.transform = `translate(${p.x.toFixed(2)}px,${p.y.toFixed(2)}px)`;
+    // step label: prefers the outside of the bow
+    let nx = p.ty, ny = -p.tx; if (i === 0) { nx = .2; ny = -1; } if (i === N - 1) { nx = 1; ny = -.3; }
+    const nl = Math.hypot(nx, ny), c = choose(m.L || (m.L = {}), p, m.lw, m.lh, [nx / nl, ny / nl], i);
+    m.lab.style.transform = `translate(${(c[0] - p.x).toFixed(1)}px,${(c[1] - p.y).toFixed(1)}px)`;
+  });
+  marks.forEach((m, i) => { // city names: inside of the bow, after the step labels
+    if (!m.city) return; const p = pts[i];
+    let nx = -p.ty, ny = p.tx; const nl = Math.hypot(nx, ny);
+    const c = choose(m.C || (m.C = {}), p, m.cw, m.ch, [nx / nl, ny / nl], i);
+    m.city.style.transform = `translate(${c[0].toFixed(1)}px,${c[1].toFixed(1)}px)`;
+  });
+  labelsSnap = false;
+  // check state follows the jet: a marker is stamped once the jet has left it behind
+  marks.forEach((m, i) => {
+    const done = uOf(i) < st.s - .5 * jl / arc.L || (i < index && !st.flying);
+    if (done !== m.done) { m.done = done; m.li.classList.toggle('done', done); if (done && !reduce) { m.li.classList.remove('stamp'); void m.li.offsetWidth; m.li.classList.add('stamp'); } }
+  });
+}
+
+/* ---------------------------------------------------------------- API */
+function go(i) {
+  i = clamp(Math.round(i), 0, N - 1); if (i === index) return;
+  const previous = index; index = i; maxReached = Math.max(maxReached, i);
+  const target = uOf(i), now = performance.now();
+  st.from = st.s; st.to = target; st.t0 = now; st.dir = target > st.s ? 1 : -1;
+  st.dur = reduce ? 0 : clamp(750 + 1500 * Math.sqrt(Math.abs(target - st.s)), 700, 3000);
+  st.flying = true; st.airDirty = true;
+  syncMarkers();
+  root.dispatchEvent(new CustomEvent('stepchange', { bubbles: true, detail: { index, previous, step: CONFIG.steps[index] } }));
+}
+const next = () => { if (index === N - 1) root.dispatchEvent(new CustomEvent('complete', { bubbles: true, detail: { index } })); else go(index + 1); };
+const back = () => go(index - 1);
+btnNext.addEventListener('click', next); btnBack.addEventListener('click', back);
+// embed API: scrub(s) puts the jet at s (0 origin .. 1 destination) along the route, the page scroll driving it;
+// zoom(k, x, y) scales the chart k times around chart point (x, y), kept inside the frame
+function scrub(s) {
+  s = clamp(s, 0, 1); const i = Math.min(N - 1, Math.floor(s * (N - 1) + 1e-4));
+  st.dir = s >= st.s ? 1 : -1; st.s = st.from = st.to = s; st.flying = false; st.airDirty = true;
+  if (i !== index || maxReached !== i) { index = i; maxReached = i; syncMarkers(); }
+  return at(s * arc.L);
+}
+let zoomer = null;
+function zoom(k, fx, fy) {
+  if (!zoomer) { zoomer = document.createElement('div'); zoomer.className = 'zoomer'; mapEl.insertBefore(zoomer, mapEl.firstChild);
+    for (const el of [cvMap, cvAir, $('#nav'), citiesEl, cvJet]) zoomer.appendChild(el); }
+  const W = view.W, H = view.H; let tx = W / 2 - fx * k, ty = H / 2 - fy * k;
+  tx = clamp(tx, W - W * k, 0); ty = clamp(ty, H - H * k, 0);
+  zoomer.style.transform = `translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) scale(${k.toFixed(4)})`;
+}
+window.stepper = { go, next, back, scrub, zoom, get index() { return index; }, el: root };
+
+/* ---------------------------------------------------------------- frame loop */
+let lastT = performance.now(), ready = false;
+function frame(now) {
+  const dt = Math.min(.05, (now - lastT) / 1000); lastT = now;
+  if (ready) {
+    const { W, H, dpr, jl } = view;
+    let lift = 0;
+    if (st.flying) {
+      const p = st.dur ? clamp((now - st.t0) / st.dur, 0, 1) : 1, e = easeFlight(p), prevS = st.s;
+      st.s = lerp(st.from, st.to, e); lift = Math.sin(Math.PI * p);
+      if (st.s < prevS && ghost.T) { // mark the vapour the jet just flew back over; it evaporates from now
+        const head = st.from * arc.L, lim = head - jl * .36;
+        for (let b = Math.floor(st.s * arc.L / ghost.step); b * ghost.step <= prevS * arc.L && b < ghost.T.length; b++) { const s = b * ghost.step;
+          if (s >= st.s * arc.L && s <= lim && now - ghost.T[b] > GHOST_MS) { ghost.T[b] = now; ghost.H[b] = head; } } }
+      st.airDirty = true;
+      if (p >= 1) { st.flying = false; st.s = st.to; root.dispatchEvent(new CustomEvent('arrive', { bubbles: true, detail: { index, step: CONFIG.steps[index] } })); }
+    }
+    const pt = at(st.s * arc.L), tw = now / 1000;
+    // heading spring toward the direction of travel (turns round when flying back)
+    const target = Math.atan2(pt.ty, pt.tx) + (st.flying && st.dir < 0 ? Math.PI : 0); // at rest it yaws back to face the route ahead
+    let dA = target - st.head; dA = Math.atan2(Math.sin(dA), Math.cos(dA));
+    if (reduce) { st.head = target; st.headV = 0; } else { const kS = st.flying ? 46 : 5, kD = 2 * Math.sqrt(kS) * (st.flying ? .95 : 1.05); st.headV += (kS * dA - kD * st.headV) * dt; st.head += st.headV * dt; }
+    st.roll = reduce ? 0 : clamp(lerp(st.roll, -st.headV * .45, Math.min(1, dt * 6)), -.5, .5);
+    const bob = reduce ? 0 : .03 * Math.sin(tw * 1.3) + .015 * Math.sin(tw * 2.9 + 1);
+    const alt = 1 + .38 * lift + bob;
+    const sway = reduce ? 0 : .007 * Math.sin(tw * .9);
+    const drift = reduce ? 0 : 1.2 * Math.sin(tw * .7);
+    const jx = pt.x - pt.ty * drift, jy = pt.y + pt.tx * drift;
+    if (st.airDirty) st.airDirty = drawAir(now);
+    placeMarkers({ x: jx, y: jy, ang: st.head, alt }, dt);
+    const ctx = cvJet.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    // ground shadow: offset grows with altitude, softens and fades a touch
+    const [ox, oy] = shadowOffset(alt), ang = st.head + sway, sc = 1 + .07 * (alt - 1);
+    ctx.save(); ctx.globalAlpha = .34 / (1 + 1.2 * (alt - 1)); ctx.translate(jx + ox, jy + oy); ctx.rotate(ang); ctx.scale(1 + .03 * (alt - 1), Math.cos(st.roll) * (1 + .03 * (alt - 1)));
+    ctx.drawImage(shadowSprite.c, -shadowSprite.w / 2, -shadowSprite.h / 2, shadowSprite.w, shadowSprite.h); ctx.restore();
+    drawJet(ctx, jx, jy, ang, jl / 100 * sc, st.roll, tw);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------------------------------------------------------------- boot */
+let rT = 0;
+async function rebuild() {
+  layout(); makeShadow(); measureLabels();
+  st.airDirty = true;
+  await drawMap();
+}
+async function boot() {
+  makePaper(); buildMarkers(); syncMarkers(); fillCart();
+  st.s = uOf(index); st.from = st.to = st.s;
+  const fontWait = Promise.all([document.fonts.load('500 10px "JetBrains Mono"'), document.fonts.load('300 12px Switzer'), document.fonts.load('500 12px Switzer')]).catch(() => {});
+  await Promise.race([fontWait, new Promise(r => setTimeout(r, 2500))]);
+  layout(); const p0 = at(st.s * arc.L); st.head = Math.atan2(p0.ty, p0.tx);
+  makeShadow(); measureLabels(); marks.forEach((m, i) => { if (i < index) { m.done = true; m.li.classList.add('done'); } });
+  ready = true;
+  await drawMap();
+  window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(rebuild, 140); });
+}
+boot();
+requestAnimationFrame(frame);
+})();
+</script>
+</body></html>
