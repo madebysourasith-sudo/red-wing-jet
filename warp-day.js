@@ -4,7 +4,7 @@
 // mountWarp(host, items, { bg }) -> { set(f) }   f = continuous card index (0 .. items.length - 1)
 import * as THREE from 'three';
 
-const loadImg = src => new Promise(res => { const i = new Image(); i.decoding = 'async'; i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+const loadImg = src => new Promise(res => { const i = new Image(); i.decoding = 'async'; i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
 
 function cardCanvas(it, img, W, H) {
   const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
@@ -39,7 +39,7 @@ function cardCanvas(it, img, W, H) {
 }
 
 const avgColour = cv => { const s = document.createElement('canvas'); s.width = s.height = 8; const g = s.getContext('2d'); g.drawImage(cv, 0, 0, 8, 8);
-  const d = g.getImageData(0, 0, 8, 8).data; let r = 0, gg = 0, b = 0; for (let i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; } const n = d.length / 4;
+  let d; try { d = g.getImageData(0, 0, 8, 8).data; } catch (e) { return new THREE.Color('#c8102e'); }   /* unreadable canvas: brand red rim */ let r = 0, gg = 0, b = 0; for (let i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; } const n = d.length / 4;
   const c = new THREE.Color(r / n / 255, gg / n / 255, b / n / 255); const hsl = {}; c.getHSL(hsl); c.setHSL(hsl.h, Math.min(1, hsl.s * 1.6 + 0.15), 0.55); return c; };
 
 export async function mountWarp(host, items, opts = {}) {

@@ -329,7 +329,7 @@ input[type=date]::-webkit-calendar-picker-indicator{opacity:.5;cursor:pointer}
 .stats-tag{position:absolute;left:50%;top:-80px;transform:translateX(-50%);white-space:nowrap;color:var(--ink-64);letter-spacing:.09em}
 
 /* ---------- data sheet: the jet from above ---------- */
-#sheet{position:relative;height:calc(100svh + 900vh);background:linear-gradient(180deg,#fdfdfd 0,var(--panel) 12%,var(--panel) 88%,#fff 100%)}
+#sheet{position:relative;height:calc(100svh + 1140vh);background:linear-gradient(180deg,#fdfdfd 0,var(--panel) 12%,var(--panel) 88%,#fff 100%)}
 .sheet-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
 .sheet-words,.sheet-spec{position:absolute;left:var(--pad);right:var(--pad);top:0;bottom:0;will-change:transform}
 .sheet-words .words-row{position:absolute;left:0;right:0;top:calc(var(--nav-h) + 3vh);bottom:6vh;display:flex;flex-direction:column;justify-content:space-between}
@@ -1674,6 +1674,17 @@ main section#explore{display:none!important}
 .wd-cta{position:absolute;left:50%;bottom:clamp(56px,9vh,84px);transform:translate(-50%,12px);z-index:6;opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;
   padding:14px 22px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;font:500 15px/1 var(--sans);box-shadow:0 14px 30px -12px rgba(200,16,46,.6)}
 .wd-cta.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+
+/* board her on the scroll: room chip */
+.rw-board-cap{position:fixed;left:50%;bottom:clamp(24px,5vh,48px);z-index:99999;display:flex;align-items:center;gap:12px;padding:10px 18px 10px 10px;border-radius:999px;pointer-events:none;
+  transform:translate(-50%,12px);opacity:0;transition:opacity .45s,transform .45s;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.25));-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.7);box-shadow:0 14px 34px -14px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.85);color:#fff;white-space:nowrap}
+.rw-board-cap.show{opacity:1;transform:translate(-50%,0)}
+.rw-board-cap b{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:var(--accent);font:500 11px/1 var(--deck,var(--mono));letter-spacing:.04em}
+.rw-board-cap span{font:500 16px/1 var(--sans);text-shadow:0 1px 10px rgba(0,0,0,.35)}
+.rw-board-cap small{font:400 14px/1 var(--sans);opacity:.85;text-shadow:0 1px 10px rgba(0,0,0,.35)}
+@media (max-width:700px){.rw-board-cap small{display:none}}
 
 /* ---- ownership passes: dealt out, tilt + glare, foil on the red one ---- */
 #own .pl-grid{perspective:1400px}
@@ -4622,7 +4633,7 @@ function exportSkin() {
   return JSON.stringify({ targets: targets.map(m => ({ name: m.name, p: tri(m) })), occ });
 }
 function isInside(o) { for (let p = o; p; p = p.parent) if (p === interior || p === xr) return true; return false; }
-window.__app = { ready: false, tickFrame, SCROLL, EXPLORE, X, exploreClick: (x, y) => exploreClick({ clientX: x, clientY: y }), exploreExit, doorHit: (x, y) => doorHit({ clientX: x, clientY: y }), SEQ, scrollP: () => scrollP, exportSkin, S, go, CAM, STAGES, U, renderer, scene, camera, jet, cam, set: (k, v) => { S[k] = v; }, fps: () => frames };
+window.__app = { ready: false, tickFrame, poseOf, place, setFade: v => { if (fadeEl) fadeEl.style.opacity = v; }, SCROLL, EXPLORE, X, exploreClick: (x, y) => exploreClick({ clientX: x, clientY: y }), exploreExit, doorHit: (x, y) => doorHit({ clientX: x, clientY: y }), SEQ, scrollP: () => scrollP, exportSkin, S, go, CAM, STAGES, U, renderer, scene, camera, jet, cam, set: (k, v) => { S[k] = v; }, fps: () => frames };
 
 /* ───────────────────────── landing page ───────────────────────── */
 // One canvas, moved between hosts as the page scrolls: a transparent overlay (the jet floating over the hero, the
@@ -5894,7 +5905,7 @@ if (LAND) {
     const tick = now => {
       const A = window.__app, L = A && A.land && A.land.L;
       if (L && L.sheet) {
-        const u = (scrollY - L.sheet.top) / L.vh * 100, want = u > 802 && u < 892;
+        const u = (scrollY - L.sheet.top) / L.vh * 100, want = u > 802 && u < 1132;
         if (want !== on) {
           on = want; host.classList.toggle('on', on);
           if (on && A.X) { A.X.door = A.X.doorT = 1; since = now; }      // she is parked with the door open: one click steps aboard
@@ -6209,6 +6220,48 @@ if (LAND) {
   window.__rwWarp = () => w;
 </script>
 <script>
+{ // board her on the scroll (patch_board.py)
+  const A0 = () => window.__app;
+  const DEGR = Math.PI / 180, cl = (x, a, b) => Math.min(b, Math.max(a, x)), sm = t => t * t * (3 - 2 * t), inv = (a, b, x) => cl((x - a) / (b - a), 0, 1);
+  const cap = document.createElement('div'); cap.className = 'rw-board-cap'; cap.innerHTML = '<b></b><span></span><small></small>'; document.body.appendChild(cap);
+  const ROOMS = { cabinAft: ['01', 'Aboard', 'the club seats, looking aft'], xLounge: ['03', 'Lounge', 'divan for 3, 42-inch screen'], xState: ['05', 'Stateroom', 'a full bed behind a door'], xLav: ['06', 'Private bath', 'stone vanity and a shower'] };
+  const WALK = ['cabinAft', 'xLounge', 'xState', 'xLav'];
+  const dirOf = (az, el) => ({ x: Math.sin(az * DEGR) * Math.cos(el * DEGR), y: Math.sin(el * DEGR), z: Math.cos(az * DEGR) * Math.cos(el * DEGR) });
+  // blend two poses: outside, the target and the distance blend; inside, the eye moves in a straight line and the gaze turns
+  const mix = (a, b, k) => {
+    const A = A0(), pa = A.poseOf(A.CAM[a]), pb = A.poseOf(A.CAM[b]), inside = !!A.CAM[a].inside;
+    const d = pa.dir.clone().lerp(pb.dir, k).normalize();
+    const az = Math.atan2(d.x, d.z) / DEGR, el = Math.asin(cl(d.y, -1, 1)) / DEGR, fov = pa.fov + (pb.fov - pa.fov) * k;
+    if (!inside) return { t: pa.t.clone().lerp(pb.t, k), az, el, d: pa.d + (pb.d - pa.d) * k, fov };
+    const ea = pa.dir.clone().multiplyScalar(pa.d).add(pa.t), eb = pb.dir.clone().multiplyScalar(pb.d).add(pb.t);
+    return { t: ea.lerp(eb, k), az, el, d: 0, fov, inside: true };
+  };
+  const set = pose => { const A = A0(), c = A.cam; c.to = pose; c.from = null; c.k = 1; c.fromInside = !!pose.inside; A.S.yaw = A.S.yawT = 0; A.S.pit = A.S.pitT = 0; A.S.zoom = A.S.zoomT = 1; };
+  let was = false;
+  const tick = () => {
+    requestAnimationFrame(tick);
+    const A = A0(), L = A && A.land && A.land.L; if (!L || !L.sheet || !A.poseOf) return;
+    const u = (scrollY - L.sheet.top) / L.vh * 100, on = u > 892 && u < 1100;
+    const hint = document.getElementById('xhint'), cue = document.querySelector('.rw-ramp-cue');
+    if (!on) { if (was) { was = false; A.setFade('0'); cap.classList.remove('show'); if (hint) hint.style.opacity = ''; if (cue) cue.style.opacity = ''; if (u >= 1100) A.place('xHero'); } return; }
+    was = true; if (hint) hint.style.opacity = '0'; if (cue) cue.style.opacity = '0';
+    A.X.door = A.X.doorT = 1;
+    // the dips to black: in at 935-950 (swap at 942), out at 1085-1100 (swap at 1092)
+    const dip = Math.max(1 - Math.abs(u - 942) / 7.5, 1 - Math.abs(u - 1092) / 7.5, 0);
+    A.setFade(sm(cl(dip, 0, 1)).toFixed(3));
+    let room = null;
+    if (u < 942) set(mix('xHero', 'xDoor', sm(inv(892, 935, u))));
+    else if (u < 1092) {
+      const w = inv(950, 1085, u) * (WALK.length - 1), i = Math.min(WALK.length - 2, Math.floor(w)), k = sm(cl((w - i - 0.15) / 0.7, 0, 1));
+      set(mix(WALK[i], WALK[i + 1], k)); room = k < 0.5 ? WALK[i] : WALK[i + 1];
+    } else set(mix('xHero', 'xHero', 0));
+    if (room && u > 946) { const r = ROOMS[room]; cap.children[0].textContent = r[0]; cap.children[1].textContent = r[1]; cap.children[2].textContent = r[2]; cap.classList.add('show'); }
+    else cap.classList.remove('show');
+  };
+  requestAnimationFrame(tick);
+}
+</script>
+<script>
 { // ownership passes: dealt from one stack, then they tilt towards the pointer
   const sec = document.getElementById('own'), cards = sec ? [...sec.querySelectorAll('.pl')] : [];
   if (cards.length) {
@@ -6272,17 +6325,17 @@ if (LAND) {
       const r = sec.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
       const p = Math.min(1, Math.max(0, -r.top / (sec.offsetHeight - innerHeight)));
       bar.style.width = (p * 100).toFixed(1) + '%';
-      const w = fr.contentWindow, st = w && w.stepper, ok = st && st.scrub && w.document.querySelector('#map.ready');   // the chart lays itself out first
-      if (!ok) return;
+      // the chart runs the flight itself; it only needs the scroll progress. postMessage, not fr.contentWindow.stepper:
+      // inside a sandboxed embed (Aura) the page and its frames are opaque origins and cannot touch each other
       if (Math.abs(p - last) < 1e-4) return; last = p;
-      // the flight takes the first 80 % of the scroll, the zoom onto the destination the rest
-      const s = sm(cl(p / 0.8, 0, 1)) * 0.6 + cl(p / 0.8, 0, 1) * 0.4;
-      const pt = st.scrub(s);
-      const follow = sm(cl(p / 0.12, 0, 1)), land = sm(cl((p - 0.8) / 0.2, 0, 1));
-      st.zoom(1 + 0.22 * follow + 1.35 * land, pt.x, pt.y);
-      const i = st.index;
-      if (i !== cur) { cur = i; steps.forEach((el, k) => el.classList.toggle('on', k === i)); }
+      if (fr.contentWindow) fr.contentWindow.postMessage({ rwFlightPlan: p }, '*');
     };
+    addEventListener('message', e => {
+      if (e.source !== fr.contentWindow || !e.data || typeof e.data.rwFlightPlanStep !== 'number') return;
+      const i = e.data.rwFlightPlanStep;
+      if (i !== cur) { cur = i; steps.forEach((el, k) => el.classList.toggle('on', k === i)); }
+    });
+    fr.addEventListener('load', () => { last = -1; });   // a late-loading chart gets the current progress
     requestAnimationFrame(tick);
   }
 }

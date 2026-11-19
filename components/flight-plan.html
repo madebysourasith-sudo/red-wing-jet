@@ -847,6 +847,21 @@ function zoom(k, fx, fy) {
   zoomer.style.transform = `translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) scale(${k.toFixed(4)})`;
 }
 window.stepper = { go, next, back, scrub, zoom, get index() { return index; }, el: root };
+// embedded in the landing: the page posts its scroll progress (0..1); the flight takes the first 80 %, the zoom onto the
+// destination the rest, and the current step goes back to the page (works across opaque origins, e.g. a sandboxed embed)
+{ let want = -1, queued = false;
+  const cl = (x, a, b) => Math.min(b, Math.max(a, x)), sm = t => t * t * (3 - 2 * t);
+  const run = () => {
+    queued = false; if (want < 0) return;
+    if (!mapEl.classList.contains('ready')) { queued = true; requestAnimationFrame(run); return; }
+    const p = want; want = -1;
+    const s = sm(cl(p / 0.8, 0, 1)) * 0.6 + cl(p / 0.8, 0, 1) * 0.4, pt = scrub(s);
+    const follow = sm(cl(p / 0.12, 0, 1)), land = sm(cl((p - 0.8) / 0.2, 0, 1));
+    zoom(1 + 0.22 * follow + 1.35 * land, pt.x, pt.y);
+    if (parent !== window) parent.postMessage({ rwFlightPlanStep: index }, '*');
+  };
+  addEventListener('message', e => { if (e.data && typeof e.data.rwFlightPlan === 'number') { want = e.data.rwFlightPlan; if (!queued) run(); } });
+}
 
 /* ---------------------------------------------------------------- frame loop */
 let lastT = performance.now(), ready = false;
